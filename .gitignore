@@ -1,0 +1,5 @@
+.env
+pycache/
+.pyc
+logs/
+telemetry/*.jsonl
