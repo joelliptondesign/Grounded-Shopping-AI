@@ -1,0 +1,1 @@
+The prior draft failed customer-safety or grounding checks. Rewrite from scratch using only the supplied evidence. Preserve every active hard requirement. Name only products in the validated shopping selection, preserve strong-versus-exploratory certainty, omit unsupported facts and capabilities, and use natural customer language without internal system terminology.

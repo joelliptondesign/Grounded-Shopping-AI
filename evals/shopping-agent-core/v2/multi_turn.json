@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "shopping-agent-core",
+  "suite_version": "v2",
+  "suite": "multi_turn",
+  "cases": [
+    {
+      "case_id": "v2_priority_change_explanation_001", "category": "context_and_reranking",
+      "dimensions": ["understanding", "decision_correctness", "conversation_quality"], "severity_if_failed": "major",
+      "tags": ["gold_08", "gold_09", "priority_change", "reference"],
+      "turns": [
+        {"user": "Cooling matters most.", "fixture_update": {"directions": {"cooling": "higher"}, "priorities": {"cooling": "critical"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"directions": {"cooling": "higher"}, "priorities": {"cooling": "critical"}}}},
+        {"user": "Actually motion isolation matters more now. My partner moves a lot.", "fixture_update": {"directions": {"motion_isolation": "higher"}, "priorities": {"cooling": "medium", "motion_isolation": "critical"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"directions": {"cooling": "higher", "motion_isolation": "higher"}, "priorities": {"cooling": "medium", "motion_isolation": "critical"}}}},
+        {"user": "Why did the result change?", "fixture_update": {}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"priorities": {"cooling": "medium", "motion_isolation": "critical"}}}, "qualitative": {"criteria": ["context_resolution", "ranking_change_explanation"]}}
+      ]
+    },
+    {
+      "case_id": "v2_pronoun_and_topic_continuity_001", "category": "reference_resolution",
+      "dimensions": ["understanding", "grounding", "conversation_quality"], "severity_if_failed": "critical",
+      "tags": ["gold_10", "gold_11", "pronoun", "topic_continuity"],
+      "turns": [
+        {"user": "What do owners say about Metro Cool Comfort?", "fixture_update": {"intent": "product_question", "turn_context": {"product_names": ["Metro Cool Comfort"], "information_source": "reviews", "review_topic": "general"}}, "expected": {"intent": "product_question", "modality": "conversation", "state": {}}},
+        {"user": "Does it sleep hot?", "fixture_update": {"intent": "product_question", "turn_context": {"product_names": ["Metro Cool Comfort"], "information_source": "reviews", "review_topic": "cooling"}}, "expected": {"intent": "product_question", "modality": "conversation", "state": {}}},
+        {"user": "Does Polar Motion Elite include California haul-away?", "fixture_update": {"intent": "service_question", "turn_context": {"product_names": ["Polar Motion Elite"], "service_attribute": "haul_away"}}, "expected": {"intent": "service_question", "modality": "conversation", "state": {}}},
+        {"user": "What about Metro Cool Comfort?", "fixture_update": {"intent": "service_question", "turn_context": {"product_names": ["Metro Cool Comfort"], "service_attribute": "haul_away"}}, "expected": {"intent": "service_question", "modality": "conversation", "state": {}}}
+      ]
+    },
+    {
+      "case_id": "v2_correction_and_partial_information_001", "category": "state_updates",
+      "dimensions": ["understanding", "decision_correctness"], "severity_if_failed": "major",
+      "tags": ["gold_12", "gold_18", "correction", "partial_information"],
+      "turns": [
+        {"user": "I need a king. I sleep hot and my partner moves a lot.", "fixture_update": {"hard_constraints": {"size": "king"}, "directions": {"cooling": "higher", "motion_isolation": "higher"}, "priorities": {"cooling": "high", "motion_isolation": "high"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"size": "king"}, "directions": {"cooling": "higher", "motion_isolation": "higher"}}}},
+        {"user": "Sorry, I meant queen.", "fixture_update": {"hard_constraints": {"size": "queen"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"size": "queen"}, "directions": {"cooling": "higher", "motion_isolation": "higher"}}}}
+      ]
+    },
+    {
+      "case_id": "v2_casual_accept_reject_harden_001", "category": "natural_updates",
+      "dimensions": ["understanding", "robustness_and_recovery", "conversation_quality"], "severity_if_failed": "major",
+      "tags": ["gold_15", "gold_16", "gold_26", "gold_27", "gold_28", "casual_language"],
+      "turns": [
+        {"user": "I'd like to stay around $900.", "fixture_update": {"soft_preferences": {"budget_target": 900}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"soft_preferences": {"budget_target": 900}}}},
+        {"user": "Yeah, $1,149 is fine. Show me.", "fixture_update": {"soft_preferences": {"budget_flex_max": 1149}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"soft_preferences": {"budget_target": 900, "budget_flex_max": 1149}}}},
+        {"user": "Nah, I really need to stay under $900.", "fixture_update": {"hard_constraints": {"max_price": 900}, "priorities": {"price": "critical"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"max_price": 900}, "priorities": {"price": "critical"}}}},
+        {"user": "And I hate firm beds.", "fixture_update": {"directions": {"firmness": "lower"}, "priorities": {"firmness": "critical"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"max_price": 900}, "directions": {"firmness": "lower"}}}}
+      ]
+    },
+    {
+      "case_id": "v2_compare_and_pick_001", "category": "comparison_context",
+      "dimensions": ["understanding", "presentation", "conversation_quality"], "severity_if_failed": "major",
+      "invariants": ["generated_language_cannot_replace_selection"],
+      "tags": ["gold_23", "gold_24", "comparison", "ordinal"],
+      "turns": [
+        {"user": "I need a cool king mattress.", "fixture_update": {"hard_constraints": {"size": "king"}, "directions": {"cooling": "higher"}, "priorities": {"cooling": "critical"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"size": "king"}}}},
+        {"user": "Compare the first two.", "fixture_update": {"intent": "compare", "turn_context": {"product_names": ["Night Drift Hybrid", "CalmWave Hybrid"]}}, "expected": {"intent": "compare", "modality": "comparison_table", "state": {"directions": {"cooling": "higher"}}}},
+        {"user": "Which one would you pick for me?", "fixture_update": {"intent": "recommend", "turn_context": {"product_names": ["Night Drift Hybrid", "CalmWave Hybrid"]}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "winner": "S04", "state": {"priorities": {"cooling": "critical"}}}, "qualitative": {"criteria": ["uses_comparison_context", "brief_rationale"]}}
+      ]
+    },
+    {
+      "case_id": "v2_loosen_price_and_off_topic_001", "category": "state_updates",
+      "dimensions": ["understanding", "conversation_quality", "robustness_and_recovery"], "severity_if_failed": "major",
+      "tags": ["gold_25", "gold_29", "priority", "off_topic"],
+      "turns": [
+        {"user": "I'd like to stay around $1,000.", "fixture_update": {"soft_preferences": {"budget_target": 1000}, "priorities": {"price": "high"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"soft_preferences": {"budget_target": 1000}, "priorities": {"price": "high"}}}},
+        {"user": "Price isn't that important anymore. Cooling matters more.", "fixture_update": {"directions": {"cooling": "higher"}, "priorities": {"price": "low", "cooling": "critical"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"max_price": null}, "priorities": {"price": "low", "cooling": "critical"}}}},
+        {"user": "What's the weather tomorrow?", "fixture_update": {"intent": "off_topic"}, "expected": {"intent": "off_topic", "modality": "conversation", "state": {"soft_preferences": {"budget_target": 1000}, "directions": {"cooling": "higher"}}}}
+      ]
+    },
+    {
+      "case_id": "v2_extraction_failure_preserves_state_001", "category": "failure_safety",
+      "dimensions": ["robustness_and_recovery", "conversation_quality"], "severity_if_failed": "critical",
+      "invariants": ["preserve_state_after_extraction_failure"],
+      "tags": ["gold_30", "generation_failure", "state_preservation"],
+      "turns": [
+        {"user": "I need a latex-free queen.", "fixture_update": {"hard_constraints": {"size": "queen", "exclude_latex": true}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"size": "queen", "exclude_latex": true}}}},
+        {"user": "Actually make that king.", "fixture_error": "structured extraction unavailable", "expected": {"intent": "recommend", "modality": "conversation", "extraction_error": true, "state": {"hard_constraints": {"size": "queen", "exclude_latex": true}}}}
+      ]
+    }
+  ]
+}

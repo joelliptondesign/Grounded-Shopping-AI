@@ -1,0 +1,21 @@
+{
+  "name": "Cards to comparison to fact to recovery",
+  "turns": [
+    {
+      "shopper": "I need a king around $2,000. Cooling matters most.",
+      "expected_modality": "recommendation_cards"
+    },
+    {
+      "shopper": "Compare the first two for me.",
+      "expected_modality": "comparison_table"
+    },
+    {
+      "shopper": "Does the first one contain latex?",
+      "expected_modality": "conversation"
+    },
+    {
+      "shopper": "Actually I need California haul-away and have to stay under $1,000.",
+      "expected_modality": "recovery_choices"
+    }
+  ]
+}

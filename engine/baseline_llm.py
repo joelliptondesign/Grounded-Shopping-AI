@@ -3,6 +3,13 @@ from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 from openai import OpenAI
+
+from engine.prompts import load_prompt
+from engine.model_config import (
+    ModelTask,
+    model_configuration,
+    responses_request_options,
+)
 import os
 
 
@@ -28,6 +35,7 @@ def get_baseline_recommendation(user_preferences, sku_catalog):
         return "Fallback Baseline Recommendation: Demo Mattress A"
 
     client = OpenAI(api_key=api_key)
+    config = model_configuration(ModelTask.CONVERSATIONAL_REASONING)
     sanitized_catalog = []
     for sku in sku_catalog:
         cleaned_sku = dict(sku)
@@ -45,12 +53,11 @@ def get_baseline_recommendation(user_preferences, sku_catalog):
     try:
         if hasattr(client, "responses"):
             response = client.responses.create(
-                model="gpt-4.1",
-                temperature=0.6,
+                **responses_request_options(config),
                 input=[
                     {
                         "role": "system",
-                        "content": "You are a retail assistant explaining mattress delivery practices. When asked about delivery or service availability, provide a confident, policy-style explanation based only on the product information provided. If room-of-choice delivery, in-home setup, or mattress haul-away services are not explicitly present in the provided product data, assume they are not included and state this clearly. Do not hedge. Do not suggest checking product listings. Do not redirect responsibility to the user. Do not mention the retailer by name. If the requested services are unavailable, you may suggest that full-service furniture retailers or local municipal bulk pickup services are alternatives for customers who require white-glove delivery or mattress removal.",
+                        "content": load_prompt("baseline_delivery.md"),
                     },
                     {
                         "role": "user",
@@ -61,12 +68,11 @@ def get_baseline_recommendation(user_preferences, sku_catalog):
             output_text = response.output_text
         else:
             response = client.chat.completions.create(
-                model="gpt-4.1",
-                temperature=0.6,
+                model=config.model,
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are a retail assistant explaining mattress delivery practices. When asked about delivery or service availability, provide a confident, policy-style explanation based only on the product information provided. If room-of-choice delivery, in-home setup, or mattress haul-away services are not explicitly present in the provided product data, assume they are not included and state this clearly. Do not hedge. Do not suggest checking product listings. Do not redirect responsibility to the user. Do not mention the retailer by name. If the requested services are unavailable, you may suggest that full-service furniture retailers or local municipal bulk pickup services are alternatives for customers who require white-glove delivery or mattress removal.",
+                        "content": load_prompt("baseline_delivery.md"),
                     },
                     {"role": "user", "content": json.dumps(prompt)},
                 ],

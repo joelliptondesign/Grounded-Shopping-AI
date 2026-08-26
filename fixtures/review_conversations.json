@@ -1,0 +1,6 @@
+[
+  {"name": "General review question", "shopper": "What do people say about Metro Cool Comfort?", "product": "Metro Cool Comfort", "topic": "general"},
+  {"name": "Specific review topic", "shopper": "Do owners think Metro Cool Comfort sleeps hot?", "product": "Metro Cool Comfort", "topic": "cooling"},
+  {"name": "Catalog and review disagreement", "shopper": "How firm do owners find Metro Cool Comfort?", "product": "Metro Cool Comfort", "topic": "firmness"},
+  {"name": "Unknown review topic", "shopper": "What do reviews say about edge support on Metro Cool Comfort?", "product": "Metro Cool Comfort", "topic": "edge_support"}
+]

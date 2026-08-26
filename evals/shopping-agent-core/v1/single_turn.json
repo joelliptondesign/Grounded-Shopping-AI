@@ -1,0 +1,391 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "shopping-agent-core",
+  "suite_version": "v1",
+  "suite": "single_turn",
+  "cases": [
+    {
+      "case_id": "understanding_intent_recommend_001",
+      "kind": "understanding",
+      "category": "intent",
+      "dimensions": ["understanding", "presentation"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "intent", "recommend"],
+      "turns": [{"user": "Show me the best mattresses for a king bed.", "fixture_update": {"hard_constraints": {"size": "king"}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"size": "king"}}, "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "understanding_intent_compare_001",
+      "kind": "understanding",
+      "category": "intent",
+      "dimensions": ["understanding", "presentation"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "intent", "comparison"],
+      "turns": [{"user": "Compare Metro Cool Comfort and Urban Rest Core.", "fixture_update": {"intent": "compare", "turn_context": {"product_names": ["Metro Cool Comfort", "Urban Rest Core"]}}, "expected": {"intent": "compare", "state": {}, "modality": "comparison_table"}}]
+    },
+    {
+      "case_id": "understanding_intent_product_question_001",
+      "kind": "understanding",
+      "category": "intent",
+      "dimensions": ["understanding", "presentation", "grounding"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "intent", "product_fact"],
+      "turns": [{"user": "Does Metro Cool Comfort contain latex?", "fixture_update": {"intent": "product_question", "turn_context": {"product_names": ["Metro Cool Comfort"], "product_attribute": "contains_latex", "information_source": "catalog"}}, "expected": {"intent": "product_question", "state": {}, "modality": "conversation"}}]
+    },
+    {
+      "case_id": "understanding_intent_service_001",
+      "kind": "understanding",
+      "category": "intent",
+      "dimensions": ["understanding", "grounding"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "intent", "service"],
+      "turns": [{"user": "Is California haul-away available for Polar Motion Elite?", "fixture_update": {"intent": "service_question", "turn_context": {"product_names": ["Polar Motion Elite"], "service_attribute": "haul_away"}}, "expected": {"intent": "service_question", "state": {}, "modality": "conversation"}}]
+    },
+    {
+      "case_id": "understanding_intent_off_topic_001",
+      "kind": "understanding",
+      "category": "intent",
+      "dimensions": ["understanding", "robustness_and_recovery"],
+      "severity_if_failed": "minor",
+      "tags": ["single_turn", "intent", "off_topic"],
+      "turns": [{"user": "Write me a pasta recipe.", "fixture_update": {"intent": "off_topic"}, "expected": {"intent": "off_topic", "state": {}, "modality": "conversation"}}]
+    },
+    {
+      "case_id": "hard_constraint_latex_001",
+      "kind": "understanding",
+      "category": "hard_constraints",
+      "dimensions": ["understanding", "decision_correctness"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_recommend_ineligible_product"],
+      "tags": ["single_turn", "hard", "latex", "allergy"],
+      "turns": [{"user": "I'm allergic to latex. It can't contain latex.", "fixture_update": {"hard_constraints": {"exclude_latex": true}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"exclude_latex": true}}, "decision": "ALLOW", "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "hard_constraint_size_001",
+      "kind": "understanding",
+      "category": "hard_constraints",
+      "dimensions": ["understanding", "decision_correctness"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_recommend_ineligible_product"],
+      "tags": ["single_turn", "hard", "size"],
+      "turns": [{"user": "It has to fit a California king bed.", "fixture_update": {"hard_constraints": {"size": "cal_king"}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"size": "cal_king"}}, "decision": "ALLOW", "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "hard_constraint_budget_001",
+      "kind": "understanding",
+      "category": "hard_vs_soft_distinction",
+      "dimensions": ["understanding", "decision_correctness"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_silently_relax_hard_requirement"],
+      "tags": ["single_turn", "hard", "budget"],
+      "turns": [{"user": "I absolutely cannot go over $1,500.", "fixture_update": {"hard_constraints": {"max_price": 1500}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"max_price": 1500}, "soft_preferences": {"budget_target": null}}, "decision": "ALLOW", "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "soft_budget_001",
+      "kind": "understanding",
+      "category": "hard_vs_soft_distinction",
+      "dimensions": ["understanding", "decision_correctness"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "soft", "budget"],
+      "turns": [{"user": "I'd like to stay around $1,500, but I'd spend more for the right one.", "fixture_update": {"soft_preferences": {"budget_target": 1500}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"max_price": null}, "soft_preferences": {"budget_target": 1500}}, "decision": "ALLOW", "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "soft_preference_negation_001",
+      "kind": "understanding",
+      "category": "soft_preferences",
+      "dimensions": ["understanding"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "soft", "negation", "firmness", "adversarial"],
+      "turns": [{"user": "I don't like very firm mattresses.", "fixture_update": {"soft_preferences": {"firmness_target": 4}}, "expected": {"intent": "recommend", "state": {"soft_preferences": {"firmness_target": 4}}, "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "semantic_priority_cooling_001",
+      "kind": "understanding",
+      "category": "semantic_priority",
+      "dimensions": ["understanding", "decision_correctness"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "priority", "cooling", "multiple_preferences"],
+      "turns": [{"user": "Cooling matters more than price; I'd like a king around $1,800.", "fixture_update": {"hard_constraints": {"size": "king"}, "soft_preferences": {"budget_target": 1800, "cooling_target": 9}, "priorities": {"price": "low", "cooling": "critical"}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"size": "king", "max_price": null}, "soft_preferences": {"budget_target": 1800, "cooling_target": 9}, "priorities": {"price": "low", "cooling": "critical"}}, "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "ambiguity_budget_blocking_001",
+      "kind": "understanding",
+      "category": "ambiguity",
+      "dimensions": ["understanding", "conversation_quality", "robustness_and_recovery"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "ambiguity", "budget"],
+      "turns": [{"user": "Keep it under $2,000, or maybe $2,500 is actually my real max.", "fixture_update": {"needs_clarification": true, "clarification_question": "Which amount should I treat as your maximum: $2,000 or $2,500?"}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"max_price": null}, "needs_clarification": true}, "modality": "conversation"}}],
+      "qualitative": {"criteria": ["useful_clarification", "forward_progress"]}
+    },
+    {
+      "case_id": "optional_information_no_block_001",
+      "kind": "understanding",
+      "category": "ambiguity",
+      "dimensions": ["understanding", "conversation_quality"],
+      "severity_if_failed": "minor",
+      "tags": ["single_turn", "ambiguity", "no_overclarification"],
+      "turns": [{"user": "I'd prefer something cooler.", "fixture_update": {"soft_preferences": {"cooling_target": 8}}, "expected": {"intent": "recommend", "state": {"soft_preferences": {"cooling_target": 8}, "needs_clarification": false}, "modality": "recommendation_cards"}}]
+    },
+
+    {
+      "case_id": "decision_latex_unknown_excluded_001",
+      "kind": "decision",
+      "category": "eligibility",
+      "dimensions": ["decision_correctness", "grounding"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_recommend_ineligible_product", "never_treat_missing_evidence_as_false"],
+      "tags": ["single_turn", "hard", "latex", "unknown", "adversarial"],
+      "catalog": [{"sku_id": "SAFE", "name": "Safe", "available_sizes": ["queen"], "price": 1200, "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "contains_latex": false, "haul_away_CA_available": false}, {"sku_id": "LATEX", "name": "Latex", "available_sizes": ["queen"], "price": 1000, "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "contains_latex": true, "haul_away_CA_available": false}, {"sku_id": "UNKNOWN", "name": "Unknown", "available_sizes": ["queen"], "price": 900, "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "haul_away_CA_available": false}],
+      "preferences": {"exclude_latex": true},
+      "expected": {"decision": "ALLOW", "candidate_ids": ["SAFE"], "winner": "SAFE"}
+    },
+    {
+      "case_id": "decision_size_eligibility_001",
+      "kind": "decision",
+      "category": "eligibility",
+      "dimensions": ["decision_correctness"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_recommend_ineligible_product"],
+      "tags": ["single_turn", "hard", "size"],
+      "catalog_sku_ids": ["S10", "S15", "S20"],
+      "preferences": {"requested_size": "king"},
+      "expected": {"decision": "ALLOW", "candidate_ids": ["S15"], "winner": "S15"}
+    },
+    {
+      "case_id": "decision_hard_max_price_001",
+      "kind": "decision",
+      "category": "eligibility",
+      "dimensions": ["decision_correctness"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_recommend_ineligible_product"],
+      "tags": ["single_turn", "hard", "budget"],
+      "catalog_sku_ids": ["S14", "S15", "S02"],
+      "preferences": {"max_price": 1500},
+      "expected": {"decision": "ALLOW", "candidate_ids": ["S14", "S15", "S02"], "winner": "S14"}
+    },
+    {
+      "case_id": "decision_required_haulaway_001",
+      "kind": "decision",
+      "category": "eligibility",
+      "dimensions": ["decision_correctness", "grounding"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_present_unknown_service_as_known", "never_recommend_ineligible_product"],
+      "tags": ["single_turn", "hard", "service"],
+      "catalog_sku_ids": ["S14", "S15", "S17"],
+      "preferences": {"require_CA_haul_away": true},
+      "expected": {"decision": "ALLOW", "candidate_ids": ["S17", "S15"], "winner": "S17"}
+    },
+    {
+      "case_id": "decision_priority_rerank_001",
+      "kind": "decision",
+      "category": "ranking",
+      "dimensions": ["decision_correctness"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "soft", "priority", "cooling"],
+      "catalog_sku_ids": ["S04", "S07", "S14"],
+      "preferences": {"requested_size": "king", "cooling_preference": 9, "priorities": {"cooling": "critical"}},
+      "expected": {"decision": "ALLOW", "candidate_ids": ["S04", "S14", "S07"], "winner": "S04"}
+    },
+    {
+      "case_id": "decision_ranking_repeatable_001",
+      "kind": "decision",
+      "category": "ranking",
+      "dimensions": ["decision_correctness"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "determinism", "ranking"],
+      "catalog_sku_ids": ["S04", "S16", "S03"],
+      "preferences": {"requested_size": "king", "motion_isolation_preference": 9, "priorities": {"motion_isolation": "critical"}},
+      "expected": {"decision": "ALLOW", "candidate_ids": ["S04", "S16", "S03"], "winner": "S04", "repeat_order": true}
+    },
+    {
+      "case_id": "decision_zero_match_001",
+      "kind": "decision",
+      "category": "no_match",
+      "dimensions": ["decision_correctness", "robustness_and_recovery"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_recommend_ineligible_product", "never_silently_relax_hard_requirement"],
+      "tags": ["single_turn", "hard", "no_match", "recovery"],
+      "preferences": {"requested_size": "king", "max_price": 900, "require_CA_haul_away": true},
+      "expected": {"decision": "BLOCK", "candidate_ids": [], "winner": null, "violations": ["max_price", "require_CA_haul_away", "size_constraint"]}
+    },
+
+    {
+      "case_id": "grounding_valid_winner_001",
+      "kind": "grounding",
+      "category": "grounding_catalog",
+      "dimensions": ["grounding"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_invent_product_facts", "generated_language_cannot_replace_winner"],
+      "tags": ["single_turn", "grounding", "winner"],
+      "validator": "recommendation",
+      "catalog_sku_ids": ["S04", "S14"],
+      "preferences": {"requested_size": "king", "cooling_preference": 9, "priorities": {"cooling": "critical"}},
+      "response": "I recommend Night Drift Hybrid. Its listed cooling score is 8/10.",
+      "expected_valid": true
+    },
+    {
+      "case_id": "grounding_wrong_winner_001",
+      "kind": "grounding",
+      "category": "grounding_ranking",
+      "dimensions": ["grounding", "decision_correctness"],
+      "severity_if_failed": "critical",
+      "invariants": ["generated_language_cannot_replace_winner"],
+      "tags": ["single_turn", "grounding", "winner", "adversarial"],
+      "validator": "recommendation",
+      "catalog_sku_ids": ["S04", "S14"],
+      "preferences": {"requested_size": "king", "cooling_preference": 9, "priorities": {"cooling": "critical"}},
+      "response": "I recommend Urban Rest Core as the best option.",
+      "expected_valid": false,
+      "expected_reasons": ["different_product_recommended:S14"]
+    },
+    {
+      "case_id": "grounding_unknown_service_001",
+      "kind": "grounding",
+      "category": "grounding_service",
+      "dimensions": ["grounding", "robustness_and_recovery"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_present_unknown_service_as_known", "never_treat_missing_evidence_as_false"],
+      "tags": ["single_turn", "grounding", "service", "unknown"],
+      "validator": "recommendation",
+      "catalog_sku_ids": ["S14"],
+      "preferences": {},
+      "remove_selected_fields": ["haul_away_CA_available"],
+      "response": "I recommend Urban Rest Core. Haul-away isn't available.",
+      "expected_valid": false,
+      "expected_reasons": ["unverified_service_fact:CA_haul_away"]
+    },
+    {
+      "case_id": "grounding_review_polarity_001",
+      "kind": "grounding",
+      "category": "grounding_reviews",
+      "dimensions": ["grounding", "conversation_quality"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_invent_review_evidence"],
+      "tags": ["single_turn", "reviews", "negative_polarity", "clarity"],
+      "validator": "review",
+      "product_names": ["Metro Cool Comfort"],
+      "review_topic": "cooling",
+      "response": "Owners generally don't describe Metro Cool Comfort as sleeping hot; the represented feedback frequently describes cooler sleep than on traditional memory foam.",
+      "expected_valid": true
+    },
+    {
+      "case_id": "grounding_fabricated_review_count_001",
+      "kind": "grounding",
+      "category": "grounding_reviews",
+      "dimensions": ["grounding"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_invent_review_evidence"],
+      "tags": ["single_turn", "reviews", "fabrication", "adversarial"],
+      "validator": "review",
+      "product_names": ["Metro Cool Comfort"],
+      "review_topic": "cooling",
+      "response": "Across 9,999 reviews, owners say Metro Cool Comfort sleeps cool.",
+      "expected_valid": false,
+      "expected_reasons": ["unverified_review_count"]
+    },
+    {
+      "case_id": "grounding_unknown_review_topic_001",
+      "kind": "grounding",
+      "category": "grounding_reviews",
+      "dimensions": ["grounding", "robustness_and_recovery"],
+      "severity_if_failed": "critical",
+      "invariants": ["never_invent_review_evidence", "never_treat_missing_evidence_as_false"],
+      "tags": ["single_turn", "reviews", "unknown", "adversarial"],
+      "validator": "review",
+      "product_names": ["Metro Cool Comfort"],
+      "review_topic": "edge_support",
+      "response": "Owners say Metro Cool Comfort has excellent edge support.",
+      "expected_valid": false,
+      "expected_reasons": ["unrepresented_review_theme:edge_support"]
+    },
+
+    {
+      "case_id": "presentation_recommendation_cards_001",
+      "kind": "presentation",
+      "category": "presentation_modality",
+      "dimensions": ["presentation", "decision_correctness"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "presentation", "cards", "rank_order"],
+      "user": "Show me the best cool king options.",
+      "fixture_update": {"hard_constraints": {"size": "king"}, "soft_preferences": {"cooling_target": 9}, "priorities": {"cooling": "critical"}},
+      "expected": {"modality": "recommendation_cards", "product_ids": ["S04", "S16", "S03"]}
+    },
+    {
+      "case_id": "presentation_comparison_table_001",
+      "kind": "presentation",
+      "category": "presentation_modality",
+      "dimensions": ["presentation", "grounding"],
+      "severity_if_failed": "major",
+      "tags": ["single_turn", "presentation", "comparison", "row_relevance"],
+      "initial_state": {"intent": "recommend", "hard_constraints": {"size": "king", "max_price": null, "exclude_latex": null, "require_CA_haul_away": null}, "soft_preferences": {"budget_target": null, "firmness_target": null, "support_target": null, "cooling_target": 9, "motion_isolation_target": null}, "priorities": {"price": null, "firmness": null, "support": null, "cooling": "critical", "motion_isolation": null}, "needs_clarification": false, "clarification_question": null, "pending_recovery": null, "recent_product_names": []},
+      "user": "Compare Metro Cool Comfort and Urban Rest Core.",
+      "fixture_update": {"intent": "compare", "turn_context": {"product_names": ["Metro Cool Comfort", "Urban Rest Core"]}},
+      "expected": {"modality": "comparison_table", "product_ids": ["S06", "S14"], "first_row": "cooling"}
+    },
+    {
+      "case_id": "presentation_fact_conversation_001",
+      "kind": "presentation",
+      "category": "presentation_modality",
+      "dimensions": ["presentation", "grounding"],
+      "severity_if_failed": "minor",
+      "tags": ["single_turn", "presentation", "fact"],
+      "user": "Does Metro Cool Comfort contain latex?",
+      "fixture_update": {"intent": "product_question", "turn_context": {"product_names": ["Metro Cool Comfort"], "product_attribute": "contains_latex"}},
+      "expected": {"modality": "conversation"}
+    },
+    {
+      "case_id": "presentation_product_detail_001",
+      "kind": "presentation",
+      "category": "presentation_modality",
+      "dimensions": ["presentation", "grounding"],
+      "severity_if_failed": "minor",
+      "tags": ["single_turn", "presentation", "product_detail"],
+      "user": "Tell me more about Metro Cool Comfort.",
+      "fixture_update": {"intent": "product_question", "turn_context": {"product_names": ["Metro Cool Comfort"]}},
+      "expected": {"modality": "product_detail", "product_ids": ["S06"]}
+    },
+    {
+      "case_id": "presentation_recovery_choices_001",
+      "kind": "presentation",
+      "category": "presentation_modality",
+      "dimensions": ["presentation", "robustness_and_recovery"],
+      "severity_if_failed": "major",
+      "invariants": ["never_silently_relax_hard_requirement"],
+      "tags": ["single_turn", "presentation", "recovery", "no_match"],
+      "user": "I need a king under $900 with California haul-away.",
+      "fixture_update": {"hard_constraints": {"size": "king", "max_price": 900, "require_CA_haul_away": true}},
+      "expected": {"modality": "recovery_choices", "actions": ["approve_relaxation", "reject_relaxation"], "suggested_replies": true}
+    },
+
+    {
+      "case_id": "quality_product_explanation_001",
+      "kind": "qualitative",
+      "category": "conversation_quality",
+      "dimensions": ["conversation_quality", "grounding"],
+      "severity_if_failed": "minor",
+      "tags": ["single_turn", "qualitative", "information_density", "product_explanation"],
+      "initial_state": {"intent": "recommend", "hard_constraints": {"size": "king", "max_price": null, "exclude_latex": null, "require_CA_haul_away": null}, "soft_preferences": {"budget_target": 1800, "firmness_target": null, "support_target": null, "cooling_target": 9, "motion_isolation_target": null}, "priorities": {"price": "low", "firmness": null, "support": null, "cooling": "critical", "motion_isolation": null}, "needs_clarification": false, "clarification_question": null, "pending_recovery": null, "recent_product_names": ["Night Drift Hybrid"]},
+      "turns": [{"user": "Why might this work for me?", "fixture_update": {"intent": "recommend", "turn_context": {"product_names": ["Night Drift Hybrid"], "exact_product_request": true}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"size": "king"}, "priorities": {"cooling": "critical"}}, "modality": "recommendation_cards"}}],
+      "qualitative": {"rubric": "0-3", "criteria": ["relevant_fit", "tradeoff_explanation", "appropriate_information_density", "scanability"], "note": "Useful multi-sentence or two-paragraph answers are eligible for 3."}
+    },
+    {
+      "case_id": "quality_fuzzy_preference_001",
+      "kind": "qualitative",
+      "category": "conversation_quality",
+      "dimensions": ["conversation_quality", "understanding"],
+      "severity_if_failed": "minor",
+      "tags": ["single_turn", "qualitative", "fuzzy_preference", "clarification"],
+      "turns": [{"user": "I just don't want something that feels like my current mattress.", "fixture_update": {"needs_clarification": true, "clarification_question": "What bothers you most about your current mattress?"}, "expected": {"intent": "recommend", "state": {"needs_clarification": true}, "modality": "conversation"}}],
+      "qualitative": {"rubric": "0-3", "criteria": ["fuzzy_preference_support", "useful_examples", "shopper_language", "forward_progress"]}
+    },
+    {
+      "case_id": "quality_no_match_recovery_001",
+      "kind": "qualitative",
+      "category": "conversation_quality",
+      "dimensions": ["conversation_quality", "robustness_and_recovery"],
+      "severity_if_failed": "minor",
+      "tags": ["single_turn", "qualitative", "recovery", "no_match"],
+      "turns": [{"user": "I need a king under $900 with California haul-away.", "fixture_update": {"hard_constraints": {"size": "king", "max_price": 900, "require_CA_haul_away": true}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"size": "king", "max_price": 900, "require_CA_haul_away": true}}, "decision": "BLOCK", "modality": "recovery_choices"}}],
+      "qualitative": {"rubric": "0-3", "criteria": ["blocker_clarity", "valid_next_steps", "explicit_approval", "natural_tone"]}
+    }
+  ]
+}

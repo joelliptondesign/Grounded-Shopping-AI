@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "shopping-agent-core",
+  "suite_version": "v2",
+  "suite": "single_turn",
+  "cases": [
+    {
+      "case_id": "v2_flexible_budget_001", "kind": "understanding", "category": "preference_semantics",
+      "dimensions": ["understanding", "decision_correctness", "conversation_quality"], "severity_if_failed": "major",
+      "tags": ["gold_01", "budget", "clarification_restraint"],
+      "turns": [{"user": "I'm looking for a king. I'd like to stay around $2,000.", "fixture_update": {"hard_constraints": {"size": "king"}, "soft_preferences": {"budget_target": 2000}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"size": "king", "max_price": null}, "soft_preferences": {"budget_target": 2000}, "needs_clarification": false}, "decision": "ALLOW", "modality": "recommendation_cards"}}],
+      "qualitative": {"criteria": ["naturalness", "momentum", "clarification_restraint"]}
+    },
+    {
+      "case_id": "v2_flexible_budget_range_001", "kind": "understanding", "category": "preference_semantics",
+      "dimensions": ["understanding", "conversation_quality"], "severity_if_failed": "major",
+      "tags": ["gold_02", "budget", "no_clarification"],
+      "turns": [{"user": "Keep it around $2,000, but I could probably stretch to $2,500 for the right one.", "fixture_update": {"soft_preferences": {"budget_target": 2000, "budget_flex_max": 2500}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"max_price": null}, "soft_preferences": {"budget_target": 2000, "budget_flex_max": 2500}, "needs_clarification": false}, "decision": "ALLOW", "modality": "recommendation_cards"}}],
+      "qualitative": {"criteria": ["natural_understanding", "conversational_autonomy", "forward_momentum", "clarification_restraint", "decision_support"]}
+    },
+    {
+      "case_id": "v2_hard_budget_001", "kind": "decision", "category": "non_negotiables",
+      "dimensions": ["decision_correctness"], "severity_if_failed": "critical",
+      "invariants": ["never_recommend_ineligible_product", "never_silently_relax_hard_requirement"],
+      "tags": ["gold_03", "budget", "hard"],
+      "catalog": [{"sku_id": "OK", "name": "Budget Fit", "price": 1499, "available_sizes": ["king"], "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "contains_latex": false}, {"sku_id": "OVER", "name": "Over Budget", "price": 1700, "available_sizes": ["king"], "firmness": 6, "support": 9, "cooling": 9, "motion_isolation": 9, "contains_latex": false}],
+      "preferences": {"requested_size": "king", "max_price": 1500},
+      "expected": {"decision": "ALLOW", "candidate_ids": ["OK"], "winner": "OK"}
+    },
+    {
+      "case_id": "v2_allergy_unknown_safe_001", "kind": "decision", "category": "non_negotiables",
+      "dimensions": ["decision_correctness", "grounding"], "severity_if_failed": "critical",
+      "invariants": ["never_recommend_ineligible_product", "never_treat_missing_evidence_as_false"],
+      "tags": ["gold_04", "gold_14", "latex", "near_match"],
+      "catalog": [{"sku_id": "SAFE", "name": "Safe King", "price": 1149, "available_sizes": ["king"], "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "contains_latex": false}, {"sku_id": "LATEX", "name": "Latex Deal", "price": 850, "available_sizes": ["king"], "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "contains_latex": true}, {"sku_id": "UNKNOWN", "name": "Unknown Material", "price": 800, "available_sizes": ["king"], "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7}],
+      "preferences": {"requested_size": "king", "exclude_latex": true, "budget_target": 900},
+      "expected": {"decision": "ALLOW", "candidate_ids": ["SAFE"], "winner": "SAFE"}
+    },
+    {
+      "case_id": "v2_directional_cooling_001", "kind": "understanding", "category": "directional_preferences",
+      "dimensions": ["understanding", "decision_correctness"], "severity_if_failed": "major",
+      "tags": ["gold_05", "cooling", "directional"],
+      "turns": [{"user": "Cooling matters most.", "fixture_update": {"directions": {"cooling": "higher"}, "priorities": {"cooling": "critical"}}, "expected": {"intent": "recommend", "state": {"soft_preferences": {"cooling_target": null}, "directions": {"cooling": "higher"}, "priorities": {"cooling": "critical"}}, "decision": "ALLOW", "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "v2_directional_motion_001", "kind": "understanding", "category": "directional_preferences",
+      "dimensions": ["understanding", "decision_correctness"], "severity_if_failed": "major",
+      "tags": ["gold_06", "motion_isolation", "directional"],
+      "turns": [{"user": "My partner moves constantly. I really don't want to feel it.", "fixture_update": {"directions": {"motion_isolation": "higher"}, "priorities": {"motion_isolation": "critical"}}, "expected": {"intent": "recommend", "state": {"soft_preferences": {"motion_isolation_target": null}, "directions": {"motion_isolation": "higher"}, "priorities": {"motion_isolation": "critical"}}, "decision": "ALLOW", "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "v2_target_firmness_001", "kind": "understanding", "category": "target_preferences",
+      "dimensions": ["understanding", "decision_correctness"], "severity_if_failed": "major",
+      "tags": ["gold_07", "firmness", "target"],
+      "turns": [{"user": "I like medium-firm, maybe a 6 out of 10.", "fixture_update": {"soft_preferences": {"firmness_target": 6}, "priorities": {"firmness": "high"}}, "expected": {"intent": "recommend", "state": {"soft_preferences": {"firmness_target": 6}, "directions": {"firmness": null}}, "decision": "ALLOW", "modality": "recommendation_cards"}}]
+    },
+    {
+      "case_id": "v2_near_match_tradeoffs_001", "kind": "understanding", "category": "near_matches",
+      "dimensions": ["decision_correctness", "presentation", "conversation_quality"], "severity_if_failed": "major",
+      "invariants": ["never_recommend_ineligible_product", "never_invent_product_facts"],
+      "tags": ["gold_13", "near_match", "budget", "service"],
+      "catalog": [{"sku_id": "SERVICE", "name": "Service Option", "price": 1275, "available_sizes": ["king"], "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "contains_latex": false, "haul_away_CA_available": true}, {"sku_id": "BUDGET", "name": "Budget Option", "price": 875, "available_sizes": ["king"], "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "contains_latex": false, "haul_away_CA_available": false}],
+      "turns": [{"user": "I need a king around $900 with California haul-away.", "fixture_update": {"hard_constraints": {"size": "king"}, "soft_preferences": {"budget_target": 900, "prefer_CA_haul_away": true}}, "expected": {"intent": "recommend", "state": {"hard_constraints": {"size": "king", "max_price": null, "require_CA_haul_away": null}, "soft_preferences": {"budget_target": 900, "prefer_CA_haul_away": true}, "pending_recovery": null}, "decision": "ALLOW", "modality": "recommendation_cards"}}],
+      "qualitative": {"criteria": ["forward_momentum", "alternative_usefulness", "customer_language", "decision_support", "presentation_usefulness"]}
+    },
+    {
+      "case_id": "v2_fuzzy_complaint_001", "kind": "understanding", "category": "clarification",
+      "dimensions": ["understanding", "conversation_quality"], "severity_if_failed": "major",
+      "tags": ["gold_17", "clarification", "fuzzy"],
+      "turns": [{"user": "I just don't want something that feels like my current mattress.", "fixture_update": {"needs_clarification": true, "clarification_question": "What bugs you most: sinking in, feeling stuck, sleeping hot, or something else?"}, "expected": {"intent": "recommend", "state": {"needs_clarification": true}, "clarification_question_exact": false, "modality": "conversation"}}],
+      "qualitative": {"criteria": ["naturalness", "useful_clarification"]}
+    },
+    {
+      "case_id": "v2_review_catalog_distinction_001", "kind": "understanding", "category": "grounded_answers",
+      "dimensions": ["grounding", "conversation_quality"], "severity_if_failed": "major",
+      "tags": ["gold_19", "gold_20", "reviews", "polarity"],
+      "turns": [{"user": "Do owners think Metro Cool Comfort sleeps hot?", "fixture_update": {"intent": "product_question", "turn_context": {"product_names": ["Metro Cool Comfort"], "information_source": "reviews", "review_topic": "cooling"}}, "expected": {"intent": "product_question", "modality": "conversation"}}],
+      "qualitative": {"criteria": ["direct_answer", "negative_polarity", "source_distinction"]}
+    },
+    {
+      "case_id": "v2_unknown_review_001", "kind": "understanding", "category": "grounded_answers",
+      "dimensions": ["grounding", "conversation_quality"], "severity_if_failed": "critical",
+      "invariants": ["never_invent_review_evidence", "never_treat_missing_evidence_as_false"],
+      "tags": ["gold_21", "reviews", "unknown"],
+      "turns": [{"user": "Do people say Metro Cool Comfort helps back pain?", "fixture_update": {"intent": "product_question", "turn_context": {"product_names": ["Metro Cool Comfort"], "information_source": "reviews", "review_topic": "unknown"}}, "expected": {"intent": "product_question", "modality": "conversation"}}]
+    },
+    {
+      "case_id": "v2_unknown_service_001", "kind": "understanding", "category": "grounded_answers",
+      "dimensions": ["grounding", "conversation_quality"], "severity_if_failed": "critical",
+      "invariants": ["never_present_unknown_service_as_known", "never_treat_missing_evidence_as_false"],
+      "tags": ["gold_22", "service", "unknown"],
+      "catalog": [{"sku_id": "MYSTERY", "name": "Mystery Service Bed", "price": 1000, "available_sizes": ["king"], "firmness": 6, "support": 7, "cooling": 7, "motion_isolation": 7, "contains_latex": false}],
+      "turns": [{"user": "Does Mystery Service Bed include haul-away?", "fixture_update": {"intent": "service_question", "turn_context": {"product_names": ["Mystery Service Bed"], "service_attribute": "haul_away"}}, "expected": {"intent": "service_question", "modality": "conversation"}}]
+    }
+  ]
+}

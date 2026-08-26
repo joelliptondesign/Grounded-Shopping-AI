@@ -2,6 +2,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S01",
         "name": "Arctic Balance Hybrid",
+        "available_sizes": ["twin", "twin_xl", "full", "queen", "king", "cal_king"],
         "price": 1499,
         "firmness": 6,
         "support": 7,
@@ -16,6 +17,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S02",
         "name": "Polar Motion Elite",
+        "available_sizes": ["twin_xl", "full", "queen", "king", "cal_king"],
         "price": 1479,
         "firmness": 6,
         "support": 8,
@@ -30,6 +32,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S03",
         "name": "Cloud Harbor Medium",
+        "available_sizes": ["twin", "full", "queen", "king"],
         "price": 1399,
         "firmness": 6,
         "support": 7,
@@ -44,6 +47,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S04",
         "name": "Night Drift Hybrid",
+        "available_sizes": ["twin", "twin_xl", "full", "queen", "king"],
         "price": 1299,
         "firmness": 5,
         "support": 7,
@@ -58,6 +62,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S05",
         "name": "Summit Chill Pro",
+        "available_sizes": ["queen", "king", "cal_king"],
         "price": 1449,
         "firmness": 7,
         "support": 8,
@@ -72,6 +77,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S06",
         "name": "Metro Cool Comfort",
+        "available_sizes": ["twin", "full", "queen", "king"],
         "price": 1099,
         "firmness": 6,
         "support": 6,
@@ -86,6 +92,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S07",
         "name": "Serene Motion Max",
+        "available_sizes": ["full", "queen", "king", "cal_king"],
         "price": 1490,
         "firmness": 6,
         "support": 7,
@@ -100,6 +107,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S08",
         "name": "Everrest Breeze 8",
+        "available_sizes": ["twin", "twin_xl", "full", "queen", "king", "cal_king"],
         "price": 1349,
         "firmness": 6,
         "support": 7,
@@ -114,6 +122,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S09",
         "name": "Contour Quiet Hybrid",
+        "available_sizes": ["twin", "full", "queen", "king"],
         "price": 1249,
         "firmness": 6,
         "support": 7,
@@ -128,6 +137,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S10",
         "name": "AeroFlex Medium",
+        "available_sizes": ["twin", "twin_xl", "full", "queen"],
         "price": 999,
         "firmness": 5,
         "support": 6,
@@ -142,6 +152,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S11",
         "name": "Crescent Comfort Plus",
+        "available_sizes": ["twin", "full", "queen", "king"],
         "price": 1199,
         "firmness": 6,
         "support": 7,
@@ -156,6 +167,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S12",
         "name": "Pulse Support Hybrid",
+        "available_sizes": ["twin_xl", "queen", "king", "cal_king"],
         "price": 1450,
         "firmness": 7,
         "support": 9,
@@ -170,6 +182,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S13",
         "name": "Luma Chill Medium",
+        "available_sizes": ["full", "queen", "king", "cal_king"],
         "price": 1380,
         "firmness": 6,
         "support": 7,
@@ -184,6 +197,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S14",
         "name": "Urban Rest Core",
+        "available_sizes": ["twin", "twin_xl", "full", "queen", "king"],
         "price": 950,
         "firmness": 6,
         "support": 6,
@@ -198,6 +212,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S15",
         "name": "Zenith Cool Motion",
+        "available_sizes": ["queen", "king", "cal_king"],
         "price": 1495,
         "firmness": 6,
         "support": 8,
@@ -212,6 +227,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S16",
         "name": "CalmWave Hybrid",
+        "available_sizes": ["twin", "full", "queen", "king"],
         "price": 1325,
         "firmness": 5,
         "support": 7,
@@ -226,6 +242,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S17",
         "name": "ThermaQuiet 6",
+        "available_sizes": ["twin_xl", "full", "queen", "king", "cal_king"],
         "price": 1435,
         "firmness": 6,
         "support": 7,
@@ -240,6 +257,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S18",
         "name": "Harbor Sleep Hybrid",
+        "available_sizes": ["twin", "full", "queen", "king", "cal_king"],
         "price": 1275,
         "firmness": 6,
         "support": 7,
@@ -254,6 +272,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S19",
         "name": "BreezeForm Plus",
+        "available_sizes": ["twin", "twin_xl", "full", "queen"],
         "price": 1125,
         "firmness": 6,
         "support": 6,
@@ -268,6 +287,7 @@ SKU_CATALOG = [
     {
         "sku_id": "S20",
         "name": "CoreFlex Entry",
+        "available_sizes": ["twin", "full", "queen"],
         "price": 875,
         "firmness": 5,
         "support": 6,

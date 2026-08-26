@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "conversational-reference-continuity",
+  "suite_name": "Conversational Reference Continuity",
+  "suite_version": "v1",
+  "journeys": [
+    {
+      "case_id": "cards_compare_first_two",
+      "label": "Cards → compare first two",
+      "turns": [
+        "I need a queen mattress around $1,500. Cooling matters most and motion isolation is important.",
+        "Compare the first two."
+      ],
+      "focus_turn": 2,
+      "expectation": "compare_recent_cards"
+    },
+    {
+      "case_id": "comparison_pick_one",
+      "label": "Comparison → pick one",
+      "turns": [
+        "I need a queen mattress around $1,500. Cooling matters most and motion isolation is important.",
+        "Compare the first two.",
+        "Which one would you pick for me?"
+      ],
+      "focus_turn": 3,
+      "expectation": "pick_recent_comparison"
+    },
+    {
+      "case_id": "comparison_attribute_and_ordinal",
+      "label": "Comparison → attribute",
+      "turns": [
+        "I need a queen mattress around $1,500. Cooling matters most and motion isolation is important.",
+        "Compare the first two.",
+        "Which one is cooler?",
+        "What about the second one?"
+      ],
+      "focus_turn": 3,
+      "expectation": "attribute_recent_comparison",
+      "ordinal_turn": 4
+    },
+    {
+      "case_id": "product_review_pronoun",
+      "label": "Product pronoun",
+      "turns": [
+        "What do owners say about Metro Cool Comfort?",
+        "Does it sleep hot?"
+      ],
+      "focus_turn": 2,
+      "expectation": "review_pronoun"
+    },
+    {
+      "case_id": "service_topic_switch",
+      "label": "Service topic switch",
+      "turns": [
+        "Does Polar Motion Elite include haul-away in California?",
+        "What about Metro Cool Comfort?"
+      ],
+      "focus_turn": 2,
+      "expectation": "service_switch"
+    },
+    {
+      "case_id": "genuine_ambiguity",
+      "label": "Genuine ambiguity",
+      "turns": [
+        "Show me a few queen mattresses around $1,500.",
+        "What about that other one?"
+      ],
+      "focus_turn": 2,
+      "expectation": "natural_clarification"
+    }
+  ]
+}

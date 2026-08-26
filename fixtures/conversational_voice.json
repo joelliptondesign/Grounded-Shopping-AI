@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Fuzzy preference",
+    "turns": [
+      {"role": "shopper", "content": "I just don't want something that feels like my current mattress."},
+      {"role": "assistant", "content": "Got it—avoiding the feel of your current mattress matters more than chasing a particular label. What bothers you most about it: sinking in too far, feeling stuck when you move, sleeping hot, or something else?"}
+    ],
+    "review_for": ["acknowledges what is understood", "clarifies the specific ambiguity", "offers useful everyday examples"]
+  },
+  {
+    "name": "Ambiguous budget",
+    "turns": [
+      {"role": "shopper", "content": "I'd like to stay around $2,000 but could spend more for the right one."},
+      {"role": "assistant", "content": "I'll treat $2,000 as the target, not a hard cutoff. I can start with the strongest fits around that price and only look higher when there's a meaningful advantage. If you already know the most you'd be comfortable spending, that will help me keep the stretch options realistic."}
+    ],
+    "review_for": ["distinguishes a target from a ceiling", "does not invent a hard maximum", "asks only a useful follow-up"]
+  },
+  {
+    "name": "Priority change",
+    "turns": [
+      {"role": "shopper", "content": "Cooling is the most important thing for us."},
+      {"role": "assistant", "content": "I'll put the strongest cooling options first."},
+      {"role": "shopper", "content": "Actually motion isolation matters more than cooling. My wife moves around constantly."},
+      {"role": "assistant", "content": "That shifts the decision a bit. Keeping movement from traveling across the bed now matters most, so I'll favor the options that isolate motion best and treat cooling as the secondary priority."}
+    ],
+    "review_for": ["acknowledges the change", "explains the practical consequence", "does not expose numeric weights"]
+  },
+  {
+    "name": "No exact match",
+    "turns": [
+      {"role": "shopper", "content": "I need a king with California haul-away and $900 is my absolute max."},
+      {"role": "assistant", "content": "I'm not finding a king mattress that includes California haul-away within the $900 ceiling. Price is what narrows this down the most: the closest fit that keeps the other requirements is $1,349. Should I show you that option, or keep the $900 limit?"}
+    ],
+    "review_for": ["identifies the meaningful blocker", "offers a grounded next move", "does not silently relax the ceiling"]
+  },
+  {
+    "name": "Constraint conflict",
+    "turns": [
+      {"role": "shopper", "content": "$1,000 is my absolute max."},
+      {"role": "assistant", "content": "I'll keep the search at $1,000 or less."},
+      {"role": "shopper", "content": "Show me the Metro Cool Comfort."},
+      {"role": "assistant", "content": "Yep, I can show you Metro Cool Comfort. Just a heads-up: it's $1,099, which is above the $1,000 maximum you set. Are you open to raising the limit for this comparison, or should I keep your current ceiling?"}
+    ],
+    "review_for": ["responds to the requested product", "surfaces the saved ceiling", "asks before changing it"]
+  },
+  {
+    "name": "Comparison",
+    "turns": [
+      {"role": "shopper", "content": "Cooling matters most, but I'd rather not overspend."},
+      {"role": "assistant", "content": "I'll balance the strongest cooling fit against price."},
+      {"role": "shopper", "content": "Compare Metro Cool Comfort and Urban Rest Core for me."},
+      {"role": "assistant", "content": "Metro Cool Comfort is the better fit if cooling is still the priority: its cooling rating is 7 versus 6 for Urban Rest Core. Urban Rest Core saves you $149, while firmness, support, and motion isolation are otherwise quite close. The choice is really stronger cooling versus the lower price."}
+    ],
+    "review_for": ["frames differences around known preferences", "uses represented facts", "helps the shopper choose"]
+  },
+  {
+    "name": "Unknown product information",
+    "turns": [
+      {"role": "shopper", "content": "How is the edge support on Metro Cool Comfort?"},
+      {"role": "assistant", "content": "I don't have reliable edge-support information for Metro Cool Comfort, so I don't want to guess. If edge support is important, I can focus the search on the mattress details we can compare confidently, or help you weigh a different represented feature such as overall support."}
+    ],
+    "review_for": ["keeps unknown distinct from false", "does not invent the missing fact", "continues with a useful next step"]
+  }
+]

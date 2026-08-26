@@ -1,0 +1,2556 @@
+{
+  "status": "live_run_complete_manual_review_complete",
+  "fixture_version": "luna-vs-terra-v1",
+  "quality_bars": {
+    "structured_understanding": "Every response must be schema-valid, with no hard-constraint or state-preservation failure.",
+    "conversational_reasoning": "No grounding or major behavior failure and a manual average of at least 2.0/3.",
+    "fast_grounded_generation": "No grounding or unsupported-claim failure and a manual average of at least 2.0/3."
+  },
+  "pricing_source": "https://developers.openai.com/api/docs/pricing",
+  "results": [
+    {
+      "case_id": "structured_king_latex",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":\"king\",\"max_price\":null,\"exclude_latex\":true,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": "king",
+          "max_price": null,
+          "exclude_latex": true,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 3803.78,
+        "total": 3803.78
+      },
+      "usage": {
+        "input_tokens": 1860,
+        "cached_input_tokens": 1857,
+        "output_tokens": 155,
+        "total_tokens": 2015
+      },
+      "estimated_cost_usd": 0.00022374
+    },
+    {
+      "case_id": "structured_soft_budget",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":1500,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": 1500,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2521.581,
+        "total": 2521.581
+      },
+      "usage": {
+        "input_tokens": 1869,
+        "cached_input_tokens": 1695,
+        "output_tokens": 156,
+        "total_tokens": 2025
+      },
+      "estimated_cost_usd": 0.0002559
+    },
+    {
+      "case_id": "structured_hard_budget",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":1500,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": 1500,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 4688.122,
+        "total": 4688.122
+      },
+      "usage": {
+        "input_tokens": 1860,
+        "cached_input_tokens": 1695,
+        "output_tokens": 156,
+        "total_tokens": 2016
+      },
+      "estimated_cost_usd": 0.0002541
+    },
+    {
+      "case_id": "structured_priority",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":\"low\",\"firmness\":null,\"support\":null,\"cooling\":\"high\",\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": "low",
+          "firmness": null,
+          "support": null,
+          "cooling": "high",
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2906.857,
+        "total": 2906.857
+      },
+      "usage": {
+        "input_tokens": 1857,
+        "cached_input_tokens": 1695,
+        "output_tokens": 155,
+        "total_tokens": 2012
+      },
+      "estimated_cost_usd": 0.0002523
+    },
+    {
+      "case_id": "structured_correction",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":\"queen\",\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": "queen",
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2929.906,
+        "total": 2929.906
+      },
+      "usage": {
+        "input_tokens": 1860,
+        "cached_input_tokens": 1695,
+        "output_tokens": 155,
+        "total_tokens": 2015
+      },
+      "estimated_cost_usd": 0.0002529
+    },
+    {
+      "case_id": "structured_product_reference",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"compare\",\"turn_context\":{\"product_names\":[\"Metro Cool Comfort\",\"Urban Rest Core\"],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "compare",
+        "turn_context": {
+          "product_names": [
+            "Metro Cool Comfort",
+            "Urban Rest Core"
+          ],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 3377.314,
+        "total": 3377.314
+      },
+      "usage": {
+        "input_tokens": 1869,
+        "cached_input_tokens": 1695,
+        "output_tokens": 163,
+        "total_tokens": 2032
+      },
+      "estimated_cost_usd": 0.0002643
+    },
+    {
+      "case_id": "structured_review_and_ambiguity",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"product_question\",\"turn_context\":{\"product_names\":[\"Metro Cool Comfort\"],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":\"reviews\",\"review_topic\":\"cooling\"},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "product_question",
+        "turn_context": {
+          "product_names": [
+            "Metro Cool Comfort"
+          ],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": "reviews",
+          "review_topic": "cooling"
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2661.175,
+        "total": 2661.175
+      },
+      "usage": {
+        "input_tokens": 1864,
+        "cached_input_tokens": 1695,
+        "output_tokens": 162,
+        "total_tokens": 2026
+      },
+      "estimated_cost_usd": 0.0002621
+    },
+    {
+      "case_id": "structured_blocking_ambiguity",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":true,\"clarification_question\":\"Which maximum should I use for filtering: $1,500 or $1,800?\"}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": true,
+        "clarification_question": "Which maximum should I use for filtering: $1,500 or $1,800?"
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2663.51,
+        "total": 2663.51
+      },
+      "usage": {
+        "input_tokens": 1871,
+        "cached_input_tokens": 1695,
+        "output_tokens": 172,
+        "total_tokens": 2043
+      },
+      "estimated_cost_usd": 0.0002755
+    },
+    {
+      "case_id": "conversation_fuzzy_preference",
+      "task": "conversational_reasoning",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "raw_output": "What feels wrong about your current mattress\u2014too much sinking, difficult to move on, too warm, too firm, or something else?",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_all_listed_criteria_passed",
+      "manual_rubric_rationale": "A focused, natural clarification identifies the missing feel information and supplies concrete descriptions that reduce shopper effort.",
+      "review_for": [
+        "acknowledges the concern",
+        "identifies the missing information",
+        "offers concrete ways to describe the disliked feel",
+        "avoids generic clarification language"
+      ],
+      "latency_ms": {
+        "generation_ttft": 920.136,
+        "generation_total": 1235.447,
+        "validated_visible": 1235.447
+      },
+      "usage": {
+        "input_tokens": 1089,
+        "cached_input_tokens": 0,
+        "output_tokens": 31,
+        "total_tokens": 1120
+      },
+      "estimated_cost_usd": 0.000255
+    },
+    {
+      "case_id": "conversation_priority_change",
+      "task": "conversational_reasoning",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "raw_output": "Understood\u2014motion isolation is now your top priority, with cooling as a secondary consideration. I\u2019ll focus on mattresses that help keep your wife\u2019s movement from disturbing you.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_all_listed_criteria_passed",
+      "manual_rubric_rationale": "It uses the spouse context, explains the practical consequence of the change, preserves continuity, and avoids internal ranking language.",
+      "review_for": [
+        "acknowledges why the priority changed",
+        "explains the practical consequence",
+        "does not expose ranking terminology"
+      ],
+      "latency_ms": {
+        "generation_ttft": 1026.138,
+        "generation_total": 1539.053,
+        "validated_visible": 1539.053
+      },
+      "usage": {
+        "input_tokens": 1078,
+        "cached_input_tokens": 0,
+        "output_tokens": 38,
+        "total_tokens": 1116
+      },
+      "estimated_cost_usd": 0.0002612
+    },
+    {
+      "case_id": "conversation_no_match",
+      "task": "conversational_reasoning",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "raw_output": "I\u2019m not finding a king mattress that includes California haul-away within your absolute $900 limit. The closest option that keeps the other requirements is $1,349. Would you like me to show it, or keep the $900 limit?",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_all_listed_criteria_passed",
+      "manual_rubric_rationale": "It names the blocking ceiling, preserves the hard limit, offers only the represented alternative, and ends with a useful approval choice.",
+      "review_for": [
+        "identifies the price blocker",
+        "offers only grounded next steps",
+        "does not silently relax the ceiling",
+        "sounds like shopping assistance"
+      ],
+      "latency_ms": {
+        "generation_ttft": 1011.821,
+        "generation_total": 1754.69,
+        "validated_visible": 1754.69
+      },
+      "usage": {
+        "input_tokens": 1150,
+        "cached_input_tokens": 0,
+        "output_tokens": 52,
+        "total_tokens": 1202
+      },
+      "estimated_cost_usd": 0.0002924
+    },
+    {
+      "case_id": "conversation_catalog_review_disagreement",
+      "task": "conversational_reasoning",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "raw_output": "Owners generally describe the Metro Cool Comfort as **medium-firm**, though some find it **firmer than expected**. Its listed firmness is **6/10**.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_all_listed_criteria_passed",
+      "manual_rubric_rationale": "It clearly separates the listed 6/10 firmness from mixed owner experience, invents no quotation, and makes the disagreement easy to interpret.",
+      "review_for": [
+        "keeps the catalog firmness and owner experience distinct",
+        "does not invent quotations",
+        "helps interpret the disagreement"
+      ],
+      "latency_ms": {
+        "generation_ttft": 766.827,
+        "generation_total": 1286.596,
+        "validated_visible": 1286.596
+      },
+      "usage": {
+        "input_tokens": 1140,
+        "cached_input_tokens": 0,
+        "output_tokens": 38,
+        "total_tokens": 1178
+      },
+      "estimated_cost_usd": 0.0002736
+    },
+    {
+      "case_id": "fast_comparison_framing",
+      "task": "fast_grounded_generation",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "Here\u2019s the practical difference between them:\n\n| | Metro Cool Comfort | Urban Rest Core |\n|---|---:|---:|\n| Price | $1,099 | $950 |\n| Cooling | 7/10 | 6/10 |\n| Motion isolation | 7/10 | 6/10 |\n| Firmness | 6/10 | 6/10 |\n| Support | 6/10 | 6/10 |\n\nBoth are medium-firm hybrids with the same support and a 90-night trial plus 8-year warranty. Since cooling is a high priority for you, **Metro Cool Comfort** offers the stronger fit, while **Urban Rest Core** saves $149 if value is more important.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_all_listed_criteria_passed",
+      "manual_rubric_rationale": "It frames the decision around the stated cooling and price priorities, uses represented facts and the exact price difference, and gives a clear tradeoff.",
+      "review_for": [
+        "frames the choice around cooling and price",
+        "is concise",
+        "uses only represented values"
+      ],
+      "latency_ms": {
+        "generation_ttft": 1040.689,
+        "generation_total": 3074.019,
+        "validated_visible": 3074.019
+      },
+      "usage": {
+        "input_tokens": 1297,
+        "cached_input_tokens": 0,
+        "output_tokens": 152,
+        "total_tokens": 1449
+      },
+      "estimated_cost_usd": 0.0004418
+    },
+    {
+      "case_id": "fast_review_summary",
+      "task": "fast_grounded_generation",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "Yes. Owners frequently describe the Metro Cool Comfort as sleeping cooler than traditional memory foam. Its listed cooling rating is 7/10.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 2,
+      "manual_review_status": "completed_all_listed_criteria_passed",
+      "manual_rubric_rationale": "It directly attributes the represented cooling theme to owners, adds the separate catalog rating, stays concise, and makes no live-data claim.",
+      "review_for": [
+        "attributes experience to owners",
+        "summarizes only represented themes",
+        "does not imply live review data"
+      ],
+      "latency_ms": {
+        "generation_ttft": 832.351,
+        "generation_total": 1265.816,
+        "validated_visible": 1265.816
+      },
+      "usage": {
+        "input_tokens": 1138,
+        "cached_input_tokens": 0,
+        "output_tokens": 31,
+        "total_tokens": 1169
+      },
+      "estimated_cost_usd": 0.0002648
+    },
+    {
+      "case_id": "fast_product_explanation",
+      "task": "fast_grounded_generation",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "AeroFlex Medium may work well for you because it matches your key requirements: it\u2019s available in queen, costs $999, and doesn\u2019t contain latex. Its cooling rating of 8 is also a strong fit for your very high cooling priority, thanks to its breathable foam core and transition coils.\n\nIt also offers medium firmness, moderate support, and good motion isolation, so it\u2019s a balanced choice rather than an especially firm or highly specialized mattress. You\u2019ll also have a 90-night trial and an 8-year warranty to give it a fair test.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 2,
+      "manual_review_status": "completed_all_listed_criteria_passed",
+      "manual_rubric_rationale": "It connects the selected product to the shopper's constraints and cooling priority using grounded details; it is useful, though longer than necessary for this case.",
+      "review_for": [
+        "explains why the selected product may fit",
+        "uses only grounded evidence",
+        "is concise"
+      ],
+      "latency_ms": {
+        "generation_ttft": 795.412,
+        "generation_total": 2487.401,
+        "validated_visible": 2487.401
+      },
+      "usage": {
+        "input_tokens": 4826,
+        "cached_input_tokens": 0,
+        "output_tokens": 116,
+        "total_tokens": 4942
+      },
+      "estimated_cost_usd": 0.0011044
+    },
+    {
+      "case_id": "fast_factual_response",
+      "task": "fast_grounded_generation",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "raw_output": "Yes. Polar Motion Elite includes haul-away in California.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_all_listed_criteria_passed",
+      "manual_rubric_rationale": "It answers the represented California haul-away fact immediately and adds no unsupported service language.",
+      "review_for": [
+        "answers the represented haul-away fact directly",
+        "does not add unsupported service claims",
+        "is concise"
+      ],
+      "latency_ms": {
+        "generation_ttft": 831.896,
+        "generation_total": 1148.206,
+        "validated_visible": 1148.206
+      },
+      "usage": {
+        "input_tokens": 1160,
+        "cached_input_tokens": 0,
+        "output_tokens": 15,
+        "total_tokens": 1175
+      },
+      "estimated_cost_usd": 0.00025
+    },
+    {
+      "case_id": "structured_king_latex",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":\"king\",\"max_price\":null,\"exclude_latex\":true,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": "king",
+          "max_price": null,
+          "exclude_latex": true,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 4024.52,
+        "total": 4024.52
+      },
+      "usage": {
+        "input_tokens": 1860,
+        "cached_input_tokens": 0,
+        "output_tokens": 155,
+        "total_tokens": 2015
+      },
+      "estimated_cost_usd": 0.00558
+    },
+    {
+      "case_id": "structured_soft_budget",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":1500,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": 1500,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2431.359,
+        "total": 2431.359
+      },
+      "usage": {
+        "input_tokens": 1869,
+        "cached_input_tokens": 1695,
+        "output_tokens": 156,
+        "total_tokens": 2025
+      },
+      "estimated_cost_usd": 0.002559
+    },
+    {
+      "case_id": "structured_hard_budget",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":1500,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": 1500,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2576.815,
+        "total": 2576.815
+      },
+      "usage": {
+        "input_tokens": 1860,
+        "cached_input_tokens": 1695,
+        "output_tokens": 156,
+        "total_tokens": 2016
+      },
+      "estimated_cost_usd": 0.002541
+    },
+    {
+      "case_id": "structured_priority",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":\"low\",\"firmness\":null,\"support\":null,\"cooling\":\"high\",\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": "low",
+          "firmness": null,
+          "support": null,
+          "cooling": "high",
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2372.931,
+        "total": 2372.931
+      },
+      "usage": {
+        "input_tokens": 1857,
+        "cached_input_tokens": 1695,
+        "output_tokens": 155,
+        "total_tokens": 2012
+      },
+      "estimated_cost_usd": 0.002523
+    },
+    {
+      "case_id": "structured_correction",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":\"queen\",\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": "queen",
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2360.19,
+        "total": 2360.19
+      },
+      "usage": {
+        "input_tokens": 1860,
+        "cached_input_tokens": 1695,
+        "output_tokens": 155,
+        "total_tokens": 2015
+      },
+      "estimated_cost_usd": 0.002529
+    },
+    {
+      "case_id": "structured_product_reference",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"compare\",\"turn_context\":{\"product_names\":[\"Metro Cool Comfort\",\"Urban Rest Core\"],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "compare",
+        "turn_context": {
+          "product_names": [
+            "Metro Cool Comfort",
+            "Urban Rest Core"
+          ],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 3002.678,
+        "total": 3002.678
+      },
+      "usage": {
+        "input_tokens": 1869,
+        "cached_input_tokens": 1695,
+        "output_tokens": 163,
+        "total_tokens": 2032
+      },
+      "estimated_cost_usd": 0.002643
+    },
+    {
+      "case_id": "structured_review_and_ambiguity",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"product_question\",\"turn_context\":{\"product_names\":[\"Metro Cool Comfort\"],\"product_attribute\":\"cooling\",\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":\"reviews\",\"review_topic\":\"cooling\"},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":false,\"clarification_question\":null}",
+      "parsed_output": {
+        "intent": "product_question",
+        "turn_context": {
+          "product_names": [
+            "Metro Cool Comfort"
+          ],
+          "product_attribute": "cooling",
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": "reviews",
+          "review_topic": "cooling"
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": false,
+        "clarification_question": null
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2161.383,
+        "total": 2161.383
+      },
+      "usage": {
+        "input_tokens": 1864,
+        "cached_input_tokens": 1695,
+        "output_tokens": 163,
+        "total_tokens": 2027
+      },
+      "estimated_cost_usd": 0.002633
+    },
+    {
+      "case_id": "structured_blocking_ambiguity",
+      "task": "structured_understanding",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "{\"intent\":\"recommend\",\"turn_context\":{\"product_names\":[],\"product_attribute\":null,\"service_attribute\":null,\"exact_product_request\":false,\"information_source\":null,\"review_topic\":null},\"recovery_response\":\"none\",\"hard_constraints\":{\"size\":null,\"max_price\":null,\"exclude_latex\":null,\"require_CA_haul_away\":null},\"soft_preferences\":{\"budget_target\":null,\"firmness_target\":null,\"support_target\":null,\"cooling_target\":null,\"motion_isolation_target\":null},\"priorities\":{\"price\":null,\"firmness\":null,\"support\":null,\"cooling\":null,\"motion_isolation\":null},\"needs_clarification\":true,\"clarification_question\":\"Which hard maximum should I use: $1,500 or $1,800?\"}",
+      "parsed_output": {
+        "intent": "recommend",
+        "turn_context": {
+          "product_names": [],
+          "product_attribute": null,
+          "service_attribute": null,
+          "exact_product_request": false,
+          "information_source": null,
+          "review_topic": null
+        },
+        "recovery_response": "none",
+        "hard_constraints": {
+          "size": null,
+          "max_price": null,
+          "exclude_latex": null,
+          "require_CA_haul_away": null
+        },
+        "soft_preferences": {
+          "budget_target": null,
+          "firmness_target": null,
+          "support_target": null,
+          "cooling_target": null,
+          "motion_isolation_target": null
+        },
+        "priorities": {
+          "price": null,
+          "firmness": null,
+          "support": null,
+          "cooling": null,
+          "motion_isolation": null
+        },
+        "needs_clarification": true,
+        "clarification_question": "Which hard maximum should I use: $1,500 or $1,800?"
+      },
+      "schema_valid": true,
+      "automatic_pass": true,
+      "failure_reasons": [],
+      "latency_ms": {
+        "extraction": 2907.885,
+        "total": 2907.885
+      },
+      "usage": {
+        "input_tokens": 1871,
+        "cached_input_tokens": 1695,
+        "output_tokens": 171,
+        "total_tokens": 2042
+      },
+      "estimated_cost_usd": 0.002743
+    },
+    {
+      "case_id": "conversation_fuzzy_preference",
+      "task": "conversational_reasoning",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "low",
+      "raw_output": "What feels wrong about your current mattress\u2014does it sink too much, feel hard to move on, sleep too warm, feel too firm, or something else?",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_against_same_evaluation_rubric",
+      "review_for": [
+        "acknowledges the concern",
+        "identifies the missing information",
+        "offers concrete ways to describe the disliked feel",
+        "avoids generic clarification language"
+      ],
+      "latency_ms": {
+        "generation_ttft": 1060.492,
+        "generation_total": 1722.017,
+        "validated_visible": 1722.017
+      },
+      "usage": {
+        "input_tokens": 1089,
+        "cached_input_tokens": 0,
+        "output_tokens": 36,
+        "total_tokens": 1125
+      },
+      "estimated_cost_usd": 0.00261
+    },
+    {
+      "case_id": "conversation_priority_change",
+      "task": "conversational_reasoning",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "low",
+      "raw_output": "Got it\u2014I'll make motion isolation the top priority to help minimize disruptions from your wife\u2019s movement, with cooling as a secondary preference.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_against_same_evaluation_rubric",
+      "review_for": [
+        "acknowledges why the priority changed",
+        "explains the practical consequence",
+        "does not expose ranking terminology"
+      ],
+      "latency_ms": {
+        "generation_ttft": 728.366,
+        "generation_total": 1618.185,
+        "validated_visible": 1618.185
+      },
+      "usage": {
+        "input_tokens": 1078,
+        "cached_input_tokens": 0,
+        "output_tokens": 31,
+        "total_tokens": 1109
+      },
+      "estimated_cost_usd": 0.002528
+    },
+    {
+      "case_id": "conversation_no_match",
+      "task": "conversational_reasoning",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "low",
+      "raw_output": "I\u2019m not finding a king mattress with California haul-away at your firm $900 maximum. The closest option that keeps those other requirements is $1,349. Would you like to see it, or keep the $900 limit?",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_against_same_evaluation_rubric",
+      "review_for": [
+        "identifies the price blocker",
+        "offers only grounded next steps",
+        "does not silently relax the ceiling",
+        "sounds like shopping assistance"
+      ],
+      "latency_ms": {
+        "generation_ttft": 748.532,
+        "generation_total": 1378.999,
+        "validated_visible": 1378.999
+      },
+      "usage": {
+        "input_tokens": 1150,
+        "cached_input_tokens": 0,
+        "output_tokens": 50,
+        "total_tokens": 1200
+      },
+      "estimated_cost_usd": 0.0029
+    },
+    {
+      "case_id": "conversation_catalog_review_disagreement",
+      "task": "conversational_reasoning",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "low",
+      "raw_output": "Owners most often describe Metro Cool Comfort as medium-firm, though feedback is mixed: some say it feels firmer than they expected. Its listed firmness is 6 out of 10.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_against_same_evaluation_rubric",
+      "review_for": [
+        "keeps the catalog firmness and owner experience distinct",
+        "does not invent quotations",
+        "helps interpret the disagreement"
+      ],
+      "latency_ms": {
+        "generation_ttft": 1309.785,
+        "generation_total": 2056.106,
+        "validated_visible": 2056.106
+      },
+      "usage": {
+        "input_tokens": 1140,
+        "cached_input_tokens": 0,
+        "output_tokens": 42,
+        "total_tokens": 1182
+      },
+      "estimated_cost_usd": 0.002784
+    },
+    {
+      "case_id": "fast_comparison_framing",
+      "task": "fast_grounded_generation",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "Both are medium-feel hybrids with the same support level, 90-night trial, and 8-year warranty. The main differences are:\n\n- **Metro Cool Comfort** \u2014 $1,099; stronger cooling and motion isolation, with foam and micro-coils.\n- **Urban Rest Core** \u2014 $950; a more budget-friendly foam-forward hybrid, with slightly less cooling and motion isolation.\n\nSince cooling is a high priority for you, **Metro Cool Comfort** is the better fit if the extra $149 is within your budget. If keeping the price lower matters more, Urban Rest Core still offers a similar firmness and support profile.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_against_same_evaluation_rubric",
+      "review_for": [
+        "frames the choice around cooling and price",
+        "is concise",
+        "uses only represented values"
+      ],
+      "latency_ms": {
+        "generation_ttft": 894.265,
+        "generation_total": 2587.704,
+        "validated_visible": 2587.704
+      },
+      "usage": {
+        "input_tokens": 1297,
+        "cached_input_tokens": 0,
+        "output_tokens": 131,
+        "total_tokens": 1428
+      },
+      "estimated_cost_usd": 0.004166
+    },
+    {
+      "case_id": "fast_review_summary",
+      "task": "fast_grounded_generation",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "Owners generally don\u2019t describe Metro Cool Comfort as sleeping hot. Reviews frequently say it sleeps cooler than traditional memory foam, with a strong positive theme around cooling.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_against_same_evaluation_rubric",
+      "review_for": [
+        "attributes experience to owners",
+        "summarizes only represented themes",
+        "does not imply live review data"
+      ],
+      "latency_ms": {
+        "generation_ttft": 866.669,
+        "generation_total": 1478.587,
+        "validated_visible": 1478.587
+      },
+      "usage": {
+        "input_tokens": 1138,
+        "cached_input_tokens": 0,
+        "output_tokens": 35,
+        "total_tokens": 1173
+      },
+      "estimated_cost_usd": 0.002696
+    },
+    {
+      "case_id": "fast_product_explanation",
+      "task": "fast_grounded_generation",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "AeroFlex Medium could work well for you because it meets your key requirements: it\u2019s available in queen, costs $999\u2014well within your $1,500 limit\u2014and contains no latex.\n\nSince cooling is especially important to you, its breathable foam core and transition-coil design offer strong cooling performance. Its medium feel should provide a balanced, adaptable surface, with solid support and good motion isolation. You\u2019d also have a 90-night trial and an 8-year warranty.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 2,
+      "manual_review_status": "completed_against_same_evaluation_rubric",
+      "review_for": [
+        "explains why the selected product may fit",
+        "uses only grounded evidence",
+        "is concise"
+      ],
+      "latency_ms": {
+        "generation_ttft": 1099.809,
+        "generation_total": 2767.025,
+        "validated_visible": 2767.025
+      },
+      "usage": {
+        "input_tokens": 4826,
+        "cached_input_tokens": 0,
+        "output_tokens": 100,
+        "total_tokens": 4926
+      },
+      "estimated_cost_usd": 0.010852
+    },
+    {
+      "case_id": "fast_factual_response",
+      "task": "fast_grounded_generation",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "none",
+      "raw_output": "Yes\u2014haul-away is available in California for the Polar Motion Elite.",
+      "grounding_validation": {
+        "valid": true,
+        "reasons": []
+      },
+      "automatic_pass": true,
+      "manual_rubric_score_0_to_3": 3,
+      "manual_review_status": "completed_against_same_evaluation_rubric",
+      "review_for": [
+        "answers the represented haul-away fact directly",
+        "does not add unsupported service claims",
+        "is concise"
+      ],
+      "latency_ms": {
+        "generation_ttft": 1123.695,
+        "generation_total": 1596.306,
+        "validated_visible": 1596.306
+      },
+      "usage": {
+        "input_tokens": 1160,
+        "cached_input_tokens": 0,
+        "output_tokens": 18,
+        "total_tokens": 1178
+      },
+      "estimated_cost_usd": 0.002536
+    }
+  ],
+  "manual_review_method": {
+    "type": "non_blind_side_by_side",
+    "reason": "The existing harness has no blind-review facility; no new infrastructure was added solely for blinding.",
+    "criteria": "docs/EVALUATION.md"
+  },
+  "qualitative_comparisons": [
+    {
+      "case_id": "conversation_fuzzy_preference",
+      "shopper_message": "I just don't want something that feels like my current mattress.",
+      "fixture_reference": "fixtures/conversational_voice.json#Fuzzy preference",
+      "input_context": {
+        "latest_user_message": "I just don't want something that feels like my current mattress.",
+        "conversation_history": [],
+        "intent": "recommend",
+        "response_strategy": "clarification",
+        "presentation": null,
+        "shopper_state": {},
+        "state_changes": {},
+        "grounding_data": {
+          "recovery_type": "clarification",
+          "message": "What feels wrong about your current mattress\u2014too much sinking, hard to move on, too warm, too firm, or something else?"
+        },
+        "grounding_evidence": null,
+        "recovery": {
+          "recovery_type": "clarification",
+          "message": "What feels wrong about your current mattress\u2014too much sinking, hard to move on, too warm, too firm, or something else?"
+        },
+        "deterministic_fallback": "What feels wrong about your current mattress\u2014too much sinking, hard to move on, too warm, too firm, or something else?"
+      },
+      "luna_raw_output": "What feels wrong about your current mattress\u2014too much sinking, difficult to move on, too warm, too firm, or something else?",
+      "terra_raw_output": "What feels wrong about your current mattress\u2014does it sink too much, feel hard to move on, sleep too warm, feel too firm, or something else?",
+      "luna_rubric_score_0_to_3": 3,
+      "terra_rubric_score_0_to_3": 3,
+      "luna_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "terra_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "meaningful_difference": false,
+      "preference": "tie",
+      "rationale": "Both ask the same focused question and offer equally useful ways to describe the disliked feel."
+    },
+    {
+      "case_id": "conversation_priority_change",
+      "shopper_message": "Actually motion isolation matters more. My wife moves around constantly.",
+      "fixture_reference": "fixtures/conversational_voice.json#Priority change",
+      "input_context": {
+        "latest_user_message": "Actually motion isolation matters more. My wife moves around constantly.",
+        "conversation_history": [],
+        "intent": "recommend",
+        "response_strategy": "clarification",
+        "presentation": null,
+        "shopper_state": {
+          "priorities": {
+            "motion_isolation": "critical",
+            "cooling": "medium"
+          }
+        },
+        "state_changes": {
+          "priorities": {
+            "motion_isolation": {
+              "before": "medium",
+              "after": "critical"
+            }
+          }
+        },
+        "grounding_data": {
+          "recovery_type": "clarification",
+          "message": "I'll prioritize limiting movement transfer now and treat cooling as secondary."
+        },
+        "grounding_evidence": null,
+        "recovery": {
+          "recovery_type": "clarification",
+          "message": "I'll prioritize limiting movement transfer now and treat cooling as secondary."
+        },
+        "deterministic_fallback": "I'll prioritize limiting movement transfer now and treat cooling as secondary."
+      },
+      "luna_raw_output": "Understood\u2014motion isolation is now your top priority, with cooling as a secondary consideration. I\u2019ll focus on mattresses that help keep your wife\u2019s movement from disturbing you.",
+      "terra_raw_output": "Got it\u2014I'll make motion isolation the top priority to help minimize disruptions from your wife\u2019s movement, with cooling as a secondary preference.",
+      "luna_rubric_score_0_to_3": 3,
+      "terra_rubric_score_0_to_3": 3,
+      "luna_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "terra_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "meaningful_difference": false,
+      "preference": "tie",
+      "rationale": "Both acknowledge the spouse context, update the priority, and explain the practical consequence with comparable brevity."
+    },
+    {
+      "case_id": "conversation_no_match",
+      "shopper_message": "I need a king with California haul-away and $900 is my absolute max.",
+      "fixture_reference": "fixtures/conversational_voice.json#No exact match",
+      "input_context": {
+        "latest_user_message": "I need a king with California haul-away and $900 is my absolute max.",
+        "conversation_history": [],
+        "intent": "recommend",
+        "response_strategy": "no_match_recovery",
+        "presentation": null,
+        "shopper_state": {
+          "hard_constraints": {
+            "max_price": 900
+          }
+        },
+        "state_changes": {},
+        "grounding_data": {
+          "decision_result": {
+            "decision": "BLOCK"
+          },
+          "recovery": {
+            "message": "I'm not finding a fit at $900. The closest option that keeps the other requirements is $1,349. Should I show it, or keep the limit?",
+            "requires_user_approval": true,
+            "options": [
+              {
+                "price": 1349
+              }
+            ]
+          }
+        },
+        "grounding_evidence": null,
+        "recovery": {
+          "message": "I'm not finding a fit at $900. The closest option that keeps the other requirements is $1,349. Should I show it, or keep the limit?",
+          "requires_user_approval": true,
+          "options": [
+            {
+              "price": 1349
+            }
+          ]
+        },
+        "deterministic_fallback": "I'm not finding a fit at $900. The closest option that keeps the other requirements is $1,349. Should I show it, or keep the limit?"
+      },
+      "luna_raw_output": "I\u2019m not finding a king mattress that includes California haul-away within your absolute $900 limit. The closest option that keeps the other requirements is $1,349. Would you like me to show it, or keep the $900 limit?",
+      "terra_raw_output": "I\u2019m not finding a king mattress with California haul-away at your firm $900 maximum. The closest option that keeps those other requirements is $1,349. Would you like to see it, or keep the $900 limit?",
+      "luna_rubric_score_0_to_3": 3,
+      "terra_rubric_score_0_to_3": 3,
+      "luna_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "terra_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "meaningful_difference": false,
+      "preference": "tie",
+      "rationale": "Both preserve the hard ceiling, identify the grounded $1,349 alternative, and ask for permission before relaxing anything."
+    },
+    {
+      "case_id": "conversation_catalog_review_disagreement",
+      "shopper_message": "How firm do owners find Metro Cool Comfort?",
+      "fixture_reference": "fixtures/review_conversations.json#Catalog and review disagreement",
+      "input_context": {
+        "latest_user_message": "How firm do owners find Metro Cool Comfort?",
+        "conversation_history": [],
+        "intent": "product_question",
+        "response_strategy": "review_evidence_lookup",
+        "presentation": null,
+        "shopper_state": {},
+        "state_changes": {},
+        "grounding_data": {
+          "authoritative_source": "precomputed_customer_review_evidence_fixture_v1",
+          "requested_topic": "firmness",
+          "records": [
+            {
+              "sku_id": "S06",
+              "themes": {
+                "firmness": {
+                  "sentiment": "mixed",
+                  "strength": "moderate",
+                  "summary": "Most describe it as medium-firm, though some find it firmer than expected."
+                }
+              }
+            }
+          ],
+          "unknown_topics": [],
+          "intent": "product_question",
+          "requested_products": [
+            "Metro Cool Comfort"
+          ],
+          "product_names": {
+            "S06": "Metro Cool Comfort"
+          },
+          "catalog_context": [
+            {
+              "name": "Metro Cool Comfort",
+              "firmness": 6
+            }
+          ]
+        },
+        "grounding_evidence": null,
+        "recovery": null,
+        "deterministic_fallback": "Metro Cool Comfort is listed at 6/10 for firmness, while most describe it as medium-firm, though some find it firmer than expected."
+      },
+      "luna_raw_output": "Owners generally describe the Metro Cool Comfort as **medium-firm**, though some find it **firmer than expected**. Its listed firmness is **6/10**.",
+      "terra_raw_output": "Owners most often describe Metro Cool Comfort as medium-firm, though feedback is mixed: some say it feels firmer than they expected. Its listed firmness is 6 out of 10.",
+      "luna_rubric_score_0_to_3": 3,
+      "terra_rubric_score_0_to_3": 3,
+      "luna_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "terra_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "meaningful_difference": false,
+      "preference": "tie",
+      "rationale": "Both clearly separate the listed 6/10 firmness from mixed owner experience; Terra's extra wording does not improve the decision."
+    },
+    {
+      "case_id": "fast_comparison_framing",
+      "shopper_message": "Compare Metro Cool Comfort and Urban Rest Core for me.",
+      "fixture_reference": "fixtures/conversational_voice.json#Comparison",
+      "input_context": {
+        "latest_user_message": "Compare Metro Cool Comfort and Urban Rest Core for me.",
+        "conversation_history": [],
+        "intent": "compare",
+        "response_strategy": "catalog_comparison",
+        "presentation": null,
+        "shopper_state": {
+          "priorities": {
+            "cooling": "high",
+            "price": "medium"
+          }
+        },
+        "state_changes": {},
+        "grounding_data": {
+          "intent": "compare",
+          "authoritative_source": "structured_catalog_fixture",
+          "requested_products": [
+            "Metro Cool Comfort",
+            "Urban Rest Core"
+          ],
+          "products": [
+            {
+              "sku_id": "S06",
+              "name": "Metro Cool Comfort",
+              "price": 1099,
+              "available_sizes": [
+                "twin",
+                "full",
+                "queen",
+                "king"
+              ],
+              "firmness": 6,
+              "support": 6,
+              "cooling": 7,
+              "motion_isolation": 7,
+              "materials": "Foam and micro-coil hybrid construction",
+              "contains_latex": false,
+              "trial_days": 90,
+              "warranty_years": 8,
+              "haul_away_CA_available": false
+            },
+            {
+              "sku_id": "S14",
+              "name": "Urban Rest Core",
+              "price": 950,
+              "available_sizes": [
+                "twin",
+                "twin_xl",
+                "full",
+                "queen",
+                "king"
+              ],
+              "firmness": 6,
+              "support": 6,
+              "cooling": 6,
+              "motion_isolation": 6,
+              "materials": "Foam-forward hybrid with standard coil base",
+              "contains_latex": false,
+              "trial_days": 90,
+              "warranty_years": 8,
+              "haul_away_CA_available": false
+            }
+          ],
+          "missing_products": []
+        },
+        "grounding_evidence": null,
+        "recovery": null,
+        "deterministic_fallback": "Metro Cool Comfort vs Urban Rest Core: price: 1099 vs 950; cooling: 7 vs 6; motion isolation: 7 vs 6."
+      },
+      "luna_raw_output": "Here\u2019s the practical difference between them:\n\n| | Metro Cool Comfort | Urban Rest Core |\n|---|---:|---:|\n| Price | $1,099 | $950 |\n| Cooling | 7/10 | 6/10 |\n| Motion isolation | 7/10 | 6/10 |\n| Firmness | 6/10 | 6/10 |\n| Support | 6/10 | 6/10 |\n\nBoth are medium-firm hybrids with the same support and a 90-night trial plus 8-year warranty. Since cooling is a high priority for you, **Metro Cool Comfort** offers the stronger fit, while **Urban Rest Core** saves $149 if value is more important.",
+      "terra_raw_output": "Both are medium-feel hybrids with the same support level, 90-night trial, and 8-year warranty. The main differences are:\n\n- **Metro Cool Comfort** \u2014 $1,099; stronger cooling and motion isolation, with foam and micro-coils.\n- **Urban Rest Core** \u2014 $950; a more budget-friendly foam-forward hybrid, with slightly less cooling and motion isolation.\n\nSince cooling is a high priority for you, **Metro Cool Comfort** is the better fit if the extra $149 is within your budget. If keeping the price lower matters more, Urban Rest Core still offers a similar firmness and support profile.",
+      "luna_rubric_score_0_to_3": 3,
+      "terra_rubric_score_0_to_3": 3,
+      "luna_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "terra_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "meaningful_difference": true,
+      "preference": "prefer_luna",
+      "rationale": "Luna's compact table makes the represented ratings and $149 tradeoff faster to scan; Terra is grounded but less directly comparable."
+    },
+    {
+      "case_id": "fast_review_summary",
+      "shopper_message": "Do owners think Metro Cool Comfort sleeps hot?",
+      "fixture_reference": "fixtures/review_conversations.json#Specific review topic",
+      "input_context": {
+        "latest_user_message": "Do owners think Metro Cool Comfort sleeps hot?",
+        "conversation_history": [],
+        "intent": "product_question",
+        "response_strategy": "review_evidence_lookup",
+        "presentation": null,
+        "shopper_state": {},
+        "state_changes": {},
+        "grounding_data": {
+          "authoritative_source": "precomputed_customer_review_evidence_fixture_v1",
+          "requested_topic": "cooling",
+          "records": [
+            {
+              "sku_id": "S06",
+              "themes": {
+                "cooling": {
+                  "sentiment": "positive",
+                  "strength": "strong",
+                  "summary": "Reviewers frequently describe it as sleeping cooler than traditional memory foam."
+                }
+              }
+            }
+          ],
+          "unknown_topics": [],
+          "intent": "product_question",
+          "requested_products": [
+            "Metro Cool Comfort"
+          ],
+          "product_names": {
+            "S06": "Metro Cool Comfort"
+          },
+          "catalog_context": [
+            {
+              "sku_id": "S06",
+              "name": "Metro Cool Comfort",
+              "cooling": 7
+            }
+          ]
+        },
+        "grounding_evidence": null,
+        "recovery": null,
+        "deterministic_fallback": "Metro Cool Comfort is listed at 7/10 for cooling, while reviewers frequently describe it as sleeping cooler than traditional memory foam."
+      },
+      "luna_raw_output": "Yes. Owners frequently describe the Metro Cool Comfort as sleeping cooler than traditional memory foam. Its listed cooling rating is 7/10.",
+      "terra_raw_output": "Owners generally don\u2019t describe Metro Cool Comfort as sleeping hot. Reviews frequently say it sleeps cooler than traditional memory foam, with a strong positive theme around cooling.",
+      "luna_rubric_score_0_to_3": 2,
+      "terra_rubric_score_0_to_3": 3,
+      "luna_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "terra_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "meaningful_difference": true,
+      "preference": "prefer_terra",
+      "rationale": "Terra directly says owners generally do not report sleeping hot; Luna's opening 'Yes' is ambiguous against the shopper's question."
+    },
+    {
+      "case_id": "fast_product_explanation",
+      "shopper_message": "Why might this work for me?",
+      "fixture_reference": null,
+      "input_context": {
+        "latest_user_message": "Why might this work for me?",
+        "conversation_history": [],
+        "intent": "recommend",
+        "response_strategy": "recommendation_pipeline",
+        "presentation": null,
+        "shopper_state": {
+          "requested_size": "queen",
+          "max_price": 1500,
+          "exclude_latex": true,
+          "cooling_preference": 9,
+          "priorities": {
+            "cooling": "critical"
+          }
+        },
+        "state_changes": {},
+        "grounding_data": {
+          "decision": "ALLOW",
+          "reason": "valid_recommendation",
+          "violations": [],
+          "selected_sku": {
+            "sku_id": "S10",
+            "name": "AeroFlex Medium",
+            "available_sizes": [
+              "twin",
+              "twin_xl",
+              "full",
+              "queen"
+            ],
+            "price": 999,
+            "firmness": 5,
+            "support": 6,
+            "cooling": 8,
+            "motion_isolation": 7,
+            "materials": "Breathable foam core with transition coils",
+            "contains_latex": false,
+            "haul_away_CA_available": true,
+            "trial_days": 90,
+            "warranty_years": 8
+          },
+          "action": {
+            "type": "recommendation",
+            "status": "ready",
+            "sku_id": "S10"
+          },
+          "ranked_candidates": [
+            {
+              "sku_id": "S10",
+              "name": "AeroFlex Medium",
+              "available_sizes": [
+                "twin",
+                "twin_xl",
+                "full",
+                "queen"
+              ],
+              "price": 999,
+              "firmness": 5,
+              "support": 6,
+              "cooling": 8,
+              "motion_isolation": 7,
+              "materials": "Breathable foam core with transition coils",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 90,
+              "warranty_years": 8
+            },
+            {
+              "sku_id": "S19",
+              "name": "BreezeForm Plus",
+              "available_sizes": [
+                "twin",
+                "twin_xl",
+                "full",
+                "queen"
+              ],
+              "price": 1125,
+              "firmness": 6,
+              "support": 6,
+              "cooling": 8,
+              "motion_isolation": 7,
+              "materials": "Ventilated foam channels and responsive spring core",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 95,
+              "warranty_years": 9
+            },
+            {
+              "sku_id": "S04",
+              "name": "Night Drift Hybrid",
+              "available_sizes": [
+                "twin",
+                "twin_xl",
+                "full",
+                "queen",
+                "king"
+              ],
+              "price": 1299,
+              "firmness": 5,
+              "support": 7,
+              "cooling": 8,
+              "motion_isolation": 8,
+              "materials": "Breathable knit cover with foam and coils",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S16",
+              "name": "CalmWave Hybrid",
+              "available_sizes": [
+                "twin",
+                "full",
+                "queen",
+                "king"
+              ],
+              "price": 1325,
+              "firmness": 5,
+              "support": 7,
+              "cooling": 8,
+              "motion_isolation": 8,
+              "materials": "Contour foam layers over independently wrapped coils",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S03",
+              "name": "Cloud Harbor Medium",
+              "available_sizes": [
+                "twin",
+                "full",
+                "queen",
+                "king"
+              ],
+              "price": 1399,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 8,
+              "motion_isolation": 7,
+              "materials": "Memory foam comfort over responsive coil base",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 120,
+              "warranty_years": 12
+            },
+            {
+              "sku_id": "S20",
+              "name": "CoreFlex Entry",
+              "available_sizes": [
+                "twin",
+                "full",
+                "queen"
+              ],
+              "price": 875,
+              "firmness": 5,
+              "support": 6,
+              "cooling": 6,
+              "motion_isolation": 6,
+              "materials": "Entry foam hybrid with basic cooling cover",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 90,
+              "warranty_years": 8
+            },
+            {
+              "sku_id": "S06",
+              "name": "Metro Cool Comfort",
+              "available_sizes": [
+                "twin",
+                "full",
+                "queen",
+                "king"
+              ],
+              "price": 1099,
+              "firmness": 6,
+              "support": 6,
+              "cooling": 7,
+              "motion_isolation": 7,
+              "materials": "Foam and micro-coil hybrid construction",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 90,
+              "warranty_years": 8
+            },
+            {
+              "sku_id": "S15",
+              "name": "Zenith Cool Motion",
+              "available_sizes": [
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1495,
+              "firmness": 6,
+              "support": 8,
+              "cooling": 9,
+              "motion_isolation": 8,
+              "materials": "High-airflow cover with motion-control coils",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S01",
+              "name": "Arctic Balance Hybrid",
+              "available_sizes": [
+                "twin",
+                "twin_xl",
+                "full",
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1499,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 8,
+              "motion_isolation": 8,
+              "materials": "Hybrid with gel memory foam and pocketed coils",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S08",
+              "name": "Everrest Breeze 8",
+              "available_sizes": [
+                "twin",
+                "twin_xl",
+                "full",
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1349,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 8,
+              "motion_isolation": 8,
+              "materials": "Airflow channel foam and reinforced edge coils",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S13",
+              "name": "Luma Chill Medium",
+              "available_sizes": [
+                "full",
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1380,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 8,
+              "motion_isolation": 8,
+              "materials": "Cooling-gel foam quilt with adaptive coils",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S14",
+              "name": "Urban Rest Core",
+              "available_sizes": [
+                "twin",
+                "twin_xl",
+                "full",
+                "queen",
+                "king"
+              ],
+              "price": 950,
+              "firmness": 6,
+              "support": 6,
+              "cooling": 6,
+              "motion_isolation": 6,
+              "materials": "Foam-forward hybrid with standard coil base",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 90,
+              "warranty_years": 8
+            },
+            {
+              "sku_id": "S02",
+              "name": "Polar Motion Elite",
+              "available_sizes": [
+                "twin_xl",
+                "full",
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1479,
+              "firmness": 6,
+              "support": 8,
+              "cooling": 9,
+              "motion_isolation": 9,
+              "materials": "Cooling foam layers with zoned coils",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S17",
+              "name": "ThermaQuiet 6",
+              "available_sizes": [
+                "twin_xl",
+                "full",
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1435,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 8,
+              "motion_isolation": 9,
+              "materials": "Thermal-regulating fabric and dense transition foam",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S05",
+              "name": "Summit Chill Pro",
+              "available_sizes": [
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1449,
+              "firmness": 7,
+              "support": 8,
+              "cooling": 9,
+              "motion_isolation": 8,
+              "materials": "Phase-change cooling top over high-density foams",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S11",
+              "name": "Crescent Comfort Plus",
+              "available_sizes": [
+                "twin",
+                "full",
+                "queen",
+                "king"
+              ],
+              "price": 1199,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 7,
+              "motion_isolation": 7,
+              "materials": "Balanced foam and coil layering",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S09",
+              "name": "Contour Quiet Hybrid",
+              "available_sizes": [
+                "twin",
+                "full",
+                "queen",
+                "king"
+              ],
+              "price": 1249,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 7,
+              "motion_isolation": 8,
+              "materials": "Pressure-relief foam stack with zoned springs",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 110,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S18",
+              "name": "Harbor Sleep Hybrid",
+              "available_sizes": [
+                "twin",
+                "full",
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1275,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 7,
+              "motion_isolation": 8,
+              "materials": "Hybrid comfort stack with reinforced perimeter coils",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S07",
+              "name": "Serene Motion Max",
+              "available_sizes": [
+                "full",
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1490,
+              "firmness": 6,
+              "support": 7,
+              "cooling": 7,
+              "motion_isolation": 9,
+              "materials": "Enhanced motion-control foam over pocketed coils",
+              "contains_latex": false,
+              "haul_away_CA_available": false,
+              "trial_days": 100,
+              "warranty_years": 10
+            },
+            {
+              "sku_id": "S12",
+              "name": "Pulse Support Hybrid",
+              "available_sizes": [
+                "twin_xl",
+                "queen",
+                "king",
+                "cal_king"
+              ],
+              "price": 1450,
+              "firmness": 7,
+              "support": 9,
+              "cooling": 8,
+              "motion_isolation": 8,
+              "materials": "Targeted lumbar support coils with cooling foams",
+              "contains_latex": false,
+              "haul_away_CA_available": true,
+              "trial_days": 100,
+              "warranty_years": 12
+            }
+          ],
+          "metadata": {
+            "haul_away_requested": false,
+            "zip_code": null,
+            "candidate_count": 20,
+            "active_hard_constraints": {
+              "requested_size": "queen",
+              "max_price": 1500,
+              "exclude_latex": true,
+              "require_CA_haul_away": false
+            },
+            "excluded_candidates": [],
+            "active_normalized_weights": {
+              "price": 0.0,
+              "firmness": 0.20833333333333334,
+              "support": 0.2916666666666667,
+              "cooling": 0.3333333333333333,
+              "motion_isolation": 0.16666666666666666
+            },
+            "candidate_scores": [
+              {
+                "sku_id": "S10",
+                "score": 0.904167,
+                "previous_rank": null,
+                "current_rank": 1
+              },
+              {
+                "sku_id": "S19",
+                "score": 0.883333,
+                "previous_rank": null,
+                "current_rank": 2
+              },
+              {
+                "sku_id": "S04",
+                "score": 0.858333,
+                "previous_rank": null,
+                "current_rank": 3
+              },
+              {
+                "sku_id": "S16",
+                "score": 0.858333,
+                "previous_rank": null,
+                "current_rank": 4
+              },
+              {
+                "sku_id": "S03",
+                "score": 0.854167,
+                "previous_rank": null,
+                "current_rank": 5
+              },
+              {
+                "sku_id": "S20",
+                "score": 0.854167,
+                "previous_rank": null,
+                "current_rank": 6
+              },
+              {
+                "sku_id": "S06",
+                "score": 0.85,
+                "previous_rank": null,
+                "current_rank": 7
+              },
+              {
+                "sku_id": "S15",
+                "score": 0.841667,
+                "previous_rank": null,
+                "current_rank": 8
+              },
+              {
+                "sku_id": "S01",
+                "score": 0.8375,
+                "previous_rank": null,
+                "current_rank": 9
+              },
+              {
+                "sku_id": "S08",
+                "score": 0.8375,
+                "previous_rank": null,
+                "current_rank": 10
+              },
+              {
+                "sku_id": "S13",
+                "score": 0.8375,
+                "previous_rank": null,
+                "current_rank": 11
+              },
+              {
+                "sku_id": "S14",
+                "score": 0.833333,
+                "previous_rank": null,
+                "current_rank": 12
+              },
+              {
+                "sku_id": "S02",
+                "score": 0.825,
+                "previous_rank": null,
+                "current_rank": 13
+              },
+              {
+                "sku_id": "S17",
+                "score": 0.820833,
+                "previous_rank": null,
+                "current_rank": 14
+              },
+              {
+                "sku_id": "S05",
+                "score": 0.820833,
+                "previous_rank": null,
+                "current_rank": 15
+              },
+              {
+                "sku_id": "S11",
+                "score": 0.820833,
+                "previous_rank": null,
+                "current_rank": 16
+              },
+              {
+                "sku_id": "S09",
+                "score": 0.804167,
+                "previous_rank": null,
+                "current_rank": 17
+              },
+              {
+                "sku_id": "S18",
+                "score": 0.804167,
+                "previous_rank": null,
+                "current_rank": 18
+              },
+              {
+                "sku_id": "S07",
+                "score": 0.7875,
+                "previous_rank": null,
+                "current_rank": 19
+              },
+              {
+                "sku_id": "S12",
+                "score": 0.758333,
+                "previous_rank": null,
+                "current_rank": 20
+              }
+            ],
+            "previous_selected_sku_id": null,
+            "previous_active_normalized_weights": null,
+            "selected_sku_id": "S10"
+          }
+        },
+        "grounding_evidence": {
+          "intent": "recommend",
+          "authoritative_sources": {
+            "product_facts": "structured_catalog_fixture",
+            "service_eligibility": "structured_service_fixture_and_eligibility_logic",
+            "recommendation": "deterministic_eligibility_and_ranking_result",
+            "conversational_preferences": "validated_structured_conversational_state",
+            "review_evidence": "precomputed_customer_review_evidence_fixture_v1"
+          },
+          "decision": "ALLOW",
+          "decision_reason": "valid_recommendation",
+          "selected_sku": {
+            "sku_id": "S10",
+            "name": "AeroFlex Medium",
+            "available_sizes": [
+              "twin",
+              "twin_xl",
+              "full",
+              "queen"
+            ],
+            "price": 999,
+            "firmness": 5,
+            "support": 6,
+            "cooling": 8,
+            "motion_isolation": 7,
+            "materials": "Breathable foam core with transition coils",
+            "contains_latex": false,
+            "trial_days": 90,
+            "warranty_years": 8
+          },
+          "fact_status": {
+            "verified_product_facts": [
+              "price",
+              "available_sizes",
+              "firmness",
+              "support",
+              "cooling",
+              "motion_isolation",
+              "materials",
+              "contains_latex",
+              "trial_days",
+              "warranty_years"
+            ],
+            "unknown_product_facts": [],
+            "verified_service_facts": [
+              "CA_haul_away"
+            ],
+            "unknown_service_facts": []
+          },
+          "ranking_context": {
+            "selected_sku_id": "S10",
+            "active_normalized_weights": {
+              "price": 0.0,
+              "firmness": 0.20833333333333334,
+              "support": 0.2916666666666667,
+              "cooling": 0.3333333333333333,
+              "motion_isolation": 0.16666666666666666
+            },
+            "candidate_count": 20,
+            "previous_selected_sku_id": null
+          },
+          "verified_services": {
+            "CA_haul_away": {
+              "verified": true,
+              "available": true
+            }
+          },
+          "structured_preferences": {
+            "requested_size": "queen",
+            "max_price": 1500,
+            "exclude_latex": true,
+            "cooling_preference": 9,
+            "priorities": {
+              "cooling": "critical"
+            }
+          },
+          "hard_constraints": {
+            "requested_size": "queen",
+            "max_price": 1500,
+            "exclude_latex": true,
+            "require_CA_haul_away": false
+          },
+          "constraint_relaxation": {
+            "approved": false,
+            "applied_change": null,
+            "active_constraints_are_authoritative": true
+          },
+          "blocked_violations": []
+        },
+        "recovery": null,
+        "deterministic_fallback": "AeroFlex Medium is the strongest represented fit for your current requirements and cooling preference."
+      },
+      "luna_raw_output": "AeroFlex Medium may work well for you because it matches your key requirements: it\u2019s available in queen, costs $999, and doesn\u2019t contain latex. Its cooling rating of 8 is also a strong fit for your very high cooling priority, thanks to its breathable foam core and transition coils.\n\nIt also offers medium firmness, moderate support, and good motion isolation, so it\u2019s a balanced choice rather than an especially firm or highly specialized mattress. You\u2019ll also have a 90-night trial and an 8-year warranty to give it a fair test.",
+      "terra_raw_output": "AeroFlex Medium could work well for you because it meets your key requirements: it\u2019s available in queen, costs $999\u2014well within your $1,500 limit\u2014and contains no latex.\n\nSince cooling is especially important to you, its breathable foam core and transition-coil design offer strong cooling performance. Its medium feel should provide a balanced, adaptable surface, with solid support and good motion isolation. You\u2019d also have a 90-night trial and an 8-year warranty.",
+      "luna_rubric_score_0_to_3": 2,
+      "terra_rubric_score_0_to_3": 2,
+      "luna_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "terra_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "meaningful_difference": false,
+      "preference": "tie",
+      "rationale": "Terra is modestly shorter, but both add secondary details beyond the core fit explanation and remain longer than necessary."
+    },
+    {
+      "case_id": "fast_factual_response",
+      "shopper_message": "Does Polar Motion Elite include haul-away in California?",
+      "fixture_reference": null,
+      "input_context": {
+        "latest_user_message": "Does Polar Motion Elite include haul-away in California?",
+        "conversation_history": [],
+        "intent": "service_question",
+        "response_strategy": "service_fact_lookup",
+        "presentation": null,
+        "shopper_state": {},
+        "state_changes": {},
+        "grounding_data": {
+          "intent": "service_question",
+          "authoritative_source": "structured_service_fixture_and_eligibility_logic",
+          "service": "haul_away",
+          "region": "CA",
+          "scope": "product",
+          "product": {
+            "sku_id": "S02",
+            "name": "Polar Motion Elite",
+            "price": 1479,
+            "available_sizes": [
+              "twin_xl",
+              "full",
+              "queen",
+              "king",
+              "cal_king"
+            ],
+            "firmness": 6,
+            "support": 8,
+            "cooling": 9,
+            "motion_isolation": 9,
+            "materials": "Cooling foam layers with zoned coils",
+            "contains_latex": false,
+            "trial_days": 100,
+            "warranty_years": 10,
+            "haul_away_CA_available": true
+          },
+          "verified": true,
+          "available": true
+        },
+        "grounding_evidence": null,
+        "recovery": null,
+        "deterministic_fallback": "California haul-away is available for Polar Motion Elite."
+      },
+      "luna_raw_output": "Yes. Polar Motion Elite includes haul-away in California.",
+      "terra_raw_output": "Yes\u2014haul-away is available in California for the Polar Motion Elite.",
+      "luna_rubric_score_0_to_3": 3,
+      "terra_rubric_score_0_to_3": 3,
+      "luna_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "terra_grounding": {
+        "valid": true,
+        "reasons": []
+      },
+      "meaningful_difference": false,
+      "preference": "tie",
+      "rationale": "Both answer the represented California haul-away fact directly and add no unsupported service claim."
+    }
+  ],
+  "preference_counts": {
+    "prefer_luna": 1,
+    "prefer_terra": 1,
+    "tie": 6
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "version": "luna-vs-terra-v1",
+  "quality_bars": {
+    "structured_understanding": "Every response must be schema-valid, with no hard-constraint or state-preservation failure.",
+    "conversational_reasoning": "No grounding or major behavior failure and a manual average of at least 2.0/3.",
+    "fast_grounded_generation": "No grounding or unsupported-claim failure and a manual average of at least 2.0/3."
+  },
+  "cases": [
+    {
+      "id": "structured_king_latex",
+      "task": "structured_understanding",
+      "message": "I need a king and I'm allergic to latex.",
+      "expected": {"intent": "recommend", "hard_constraints.size": "king", "hard_constraints.exclude_latex": true}
+    },
+    {
+      "id": "structured_soft_budget",
+      "task": "structured_understanding",
+      "message": "I'd like to stay around $1,500, but I'd spend more for the right one.",
+      "expected": {"soft_preferences.budget_target": 1500, "hard_constraints.max_price": null}
+    },
+    {
+      "id": "structured_hard_budget",
+      "task": "structured_understanding",
+      "message": "I absolutely can't go over $1,500.",
+      "expected": {"hard_constraints.max_price": 1500}
+    },
+    {
+      "id": "structured_priority",
+      "task": "structured_understanding",
+      "message": "Cooling matters way more than price.",
+      "expected_relation": ["priorities.cooling", ">", "priorities.price"]
+    },
+    {
+      "id": "structured_correction",
+      "task": "structured_understanding",
+      "message": "Actually I meant queen, not king.",
+      "current_state": {"hard_constraints": {"size": "king", "exclude_latex": true}, "soft_preferences": {"cooling_target": 8}},
+      "expected": {"hard_constraints.size": "queen"},
+      "preserve": {"hard_constraints.exclude_latex": true, "soft_preferences.cooling_target": 8}
+    },
+    {
+      "id": "structured_product_reference",
+      "task": "structured_understanding",
+      "message": "Compare the first two.",
+      "current_state": {"recent_product_names": ["Metro Cool Comfort", "Urban Rest Core", "Polar Motion Elite"]},
+      "expected": {"intent": "compare", "turn_context.product_names": ["Metro Cool Comfort", "Urban Rest Core"]}
+    },
+    {
+      "id": "structured_review_and_ambiguity",
+      "task": "structured_understanding",
+      "message": "What do owners say about cooling on this one?",
+      "current_state": {"recent_product_names": ["Metro Cool Comfort"]},
+      "expected": {"intent": "product_question", "turn_context.information_source": "reviews", "turn_context.review_topic": "cooling", "turn_context.product_names": ["Metro Cool Comfort"]}
+    },
+    {
+      "id": "structured_blocking_ambiguity",
+      "task": "structured_understanding",
+      "message": "Keep it under $1,500—or maybe $1,800 is the real maximum.",
+      "expected": {"hard_constraints.max_price": null, "needs_clarification": true}
+    },
+    {
+      "id": "conversation_fuzzy_preference",
+      "task": "conversational_reasoning",
+      "scenario": "fuzzy_preference",
+      "fixture_reference": "fixtures/conversational_voice.json#Fuzzy preference",
+      "review_for": ["acknowledges the concern", "identifies the missing information", "offers concrete ways to describe the disliked feel", "avoids generic clarification language"]
+    },
+    {
+      "id": "conversation_priority_change",
+      "task": "conversational_reasoning",
+      "scenario": "priority_change",
+      "fixture_reference": "fixtures/conversational_voice.json#Priority change",
+      "review_for": ["acknowledges why the priority changed", "explains the practical consequence", "does not expose ranking terminology"]
+    },
+    {
+      "id": "conversation_no_match",
+      "task": "conversational_reasoning",
+      "scenario": "no_match",
+      "fixture_reference": "fixtures/conversational_voice.json#No exact match",
+      "review_for": ["identifies the price blocker", "offers only grounded next steps", "does not silently relax the ceiling", "sounds like shopping assistance"]
+    },
+    {
+      "id": "conversation_catalog_review_disagreement",
+      "task": "conversational_reasoning",
+      "scenario": "catalog_review_disagreement",
+      "fixture_reference": "fixtures/review_conversations.json#Catalog and review disagreement",
+      "review_for": ["keeps the catalog firmness and owner experience distinct", "does not invent quotations", "helps interpret the disagreement"]
+    },
+    {
+      "id": "fast_comparison_framing",
+      "task": "fast_grounded_generation",
+      "scenario": "comparison",
+      "fixture_reference": "fixtures/conversational_voice.json#Comparison",
+      "review_for": ["frames the choice around cooling and price", "is concise", "uses only represented values"]
+    },
+    {
+      "id": "fast_review_summary",
+      "task": "fast_grounded_generation",
+      "scenario": "review_summary",
+      "fixture_reference": "fixtures/review_conversations.json#Specific review topic",
+      "review_for": ["attributes experience to owners", "summarizes only represented themes", "does not imply live review data"]
+    },
+    {
+      "id": "fast_product_explanation",
+      "task": "fast_grounded_generation",
+      "scenario": "product_explanation",
+      "review_for": ["explains why the selected product may fit", "uses only grounded evidence", "is concise"]
+    },
+    {
+      "id": "fast_factual_response",
+      "task": "fast_grounded_generation",
+      "scenario": "service_fact",
+      "review_for": ["answers the represented haul-away fact directly", "does not add unsupported service claims", "is concise"]
+    }
+  ]
+}
