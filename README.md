@@ -16,7 +16,7 @@ This is a technical prototype, not production commerce infrastructure. Its catal
 - Agent-resolved conversational references grounded by a four-item window of shopper-visible presentation identity and order
 - Restrained clarification, extraction-failure recovery, immediate near matches for ordinary preferences, and explicit approval before a true hard requirement changes
 - Grounded catalog, service, ranking, and fixture-backed review evidence with validation and safe fallbacks
-- Adaptive presentation through conversation, recommendation cards, comparison tables, product details, recovery choices, and useful suggested replies
+- Adaptive presentation through conversation, recommendation cards, comparison tables, product details, recovery choices, structured elicitation contracts, and conversational suggested replies
 - Customer-facing conversational generation plus optional developer/debug inspection
 - Validation-buffered response streaming and turn-level latency instrumentation
 - Explicit task-based model routing and a small, inspectable model-selection experiment
@@ -57,7 +57,7 @@ shopper message
 
 ### Understanding and shopper state
 
-`engine/preference_extraction.py` calls the OpenAI Responses API with a strict JSON Schema. It extracts one of five broad intents plus a concrete shopping action (`recommend_products`, `compare_products`, `choose_from_products`, `answer_product_question`, `answer_service_question`, `off_topic`, or `clarify_reference`), grounded product IDs, requested information source, hard constraints, soft targets, semantic priorities, and clarification or recovery signals. It does not answer factual questions or invent numeric ranking weights.
+`engine/preference_extraction.py` calls the OpenAI Responses API with a strict JSON Schema. It extracts one of five broad intents plus a concrete shopping action (`recommend_products`, `compare_products`, `choose_from_products`, `answer_product_question`, `answer_service_question`, `off_topic`, or `clarify_reference`), grounded product IDs, requested information source, hard constraints, soft targets, semantic priorities, recommendation readiness (`low`, `exploratory`, or `strong`), and clarification or recovery signals. Readiness is a semantic interaction cue, not a numeric confidence score. It does not answer factual questions or invent numeric ranking weights.
 
 The merged shopper state persists across turns in the current Streamlit session. Null update values leave prior values unchanged; explicit values replace them, including `false` when a shopper reverses a Boolean requirement. State is in memory only—there is no user account, database, or cross-session persistence.
 
@@ -97,6 +97,12 @@ When extraction supplies a specific product-scoped attribute, that specific topi
 
 Blocking ambiguity returns one focused clarification only when useful recommendation work cannot continue. Extraction or schema-validation failure preserves the last valid shopper state and skips the decision layer. When hard-safe products exist but none satisfy all ordinary targets, the decision layer returns the closest products immediately with calculated tradeoffs. When no product satisfies true hard requirements, recovery may propose a verified change, but never weakening latex safety; a hard-requirement proposal is applied only after explicit approval.
 
+Cold-start preference elicitation optimizes for time to useful products. For a nearly empty mattress request, size and approximate budget are the default high-value basics and may be asked together in one concise turn. Once enough signal exists for an exploratory shortlist, products appear; the agent does not run a questionnaire before searching. An explicit request to browse bypasses additional ordinary cold-start clarification. Preference learning then continues progressively through reactions to the cards—for example, liking an option but asking for something cooler immediately updates state and refines the results.
+
+Three interaction types remain separate. A structured elicitation is an optional `single_select` contract whose labeled options carry exact state patches; selecting one resumes deterministically without another interpretation call. Suggested replies are only conversational shortcuts and continue through ordinary language understanding. Free text always remains available, including as the fallback when a renderer cannot display structured controls. “Show me options” skips an optional pending elicitation and resumes exploratory shopping. The same renderer-independent recommendation contract already carries stable product IDs, names, fixture prices, match reasons, and tradeoffs, which is sufficient for a later text-only recommendation renderer without weakening catalog grounding.
+
+This milestone implements the interaction contract and resume path only. The current Streamlit view does not yet render the new structured choices; it displays the complete question and accepts a typed response through the text fallback. A later UI pass can render the contract without changing its state semantics.
+
 For generated prose, `engine/grounding.py` defines represented evidence and validates high-risk claims such as validated-selection identity, price and score values, latex status, haul-away availability, review ratings/counts/themes, unsupported quotations, and implied live capabilities. Product identity may be supplied by validated recommendation cards delivered with the prose, so conversational framing need not duplicate card names; any product explicitly named or recommended in prose must still belong to the validated selection. Generation receives one stricter retry after a validation failure and then falls back to deterministic customer copy. Off-topic and extraction-failure responses are fixed guardrails.
 
 ### Adaptive presentation
@@ -107,7 +113,7 @@ For generated prose, `engine/grounding.py` defines represented evidence and vali
 - Comparisons use a table whose first rows reflect active priorities and hard requirements, followed by represented fields that differ meaningfully.
 - Broad questions about one resolved product use a product-detail view; narrow facts stay conversational.
 - Grounded relaxation proposals use recovery choices that preserve the approval boundary.
-- Clarifications and recovery turns include suggested replies when a finite choice is useful.
+- Optional cold-start basics use a distinct structured-elicitation payload; open-ended clarifications may still provide conversational suggested replies.
 
 The Streamlit chat offers optional developer details for shopper state, intent and strategy, presentation selection and sources, ranking metadata, recovery state, extraction errors, and grounding audits. The separate **Advanced / Experiments** view retains the original A/B comparison between a baseline LLM response and the deterministic decision layer.
 

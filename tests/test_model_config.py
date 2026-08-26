@@ -47,8 +47,9 @@ class ModelConfigurationTests(unittest.TestCase):
             generation_task_for_turn({"response_strategy": "catalog_comparison"}),
             ModelTask.FAST_GROUNDED_GENERATION,
         )
-        self.assertIsNone(
-            generation_task_for_turn({"response_strategy": "scoped_guardrail"})
+        self.assertEqual(
+            generation_task_for_turn({"response_strategy": "scoped_guardrail"}),
+            ModelTask.CONVERSATIONAL_REASONING,
         )
 
     def test_reasoning_controls_are_attached_to_gpt5_responses(self):

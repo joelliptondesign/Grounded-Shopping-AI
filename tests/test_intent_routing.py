@@ -6,6 +6,7 @@ from unittest.mock import patch
 
 from engine.conversation import process_conversation_turn
 from engine.data import SKU_CATALOG
+from engine.customer_copy import OFF_TOPIC_CONTEXT_FALLBACKS, OFF_TOPIC_FALLBACKS
 from engine.preference_extraction import EMPTY_STATE, INTENTS
 
 
@@ -212,7 +213,7 @@ class IntentRoutingTests(unittest.TestCase):
             )
         decision.assert_not_called()
         self.assertEqual(turn["response_strategy"], "scoped_guardrail")
-        self.assertIn("mattress", turn["response_text"])
+        self.assertIn(turn["response_text"], OFF_TOPIC_FALLBACKS)
         self.assertFalse(turn["scope_guardrail"]["in_scope"])
 
     def test_off_topic_copy_preserves_existing_shopping_context(self):
@@ -231,7 +232,21 @@ class IntentRoutingTests(unittest.TestCase):
             state=state,
         )
 
-        self.assertIn("keep narrowing down those options", turn["response_text"])
+        self.assertIn(turn["response_text"], OFF_TOPIC_CONTEXT_FALLBACKS)
+
+    def test_off_topic_fallback_selection_is_stable_and_varied(self):
+        messages = ("What's the weather?", "Tell me a joke", "Write Python code")
+        outputs = [
+            self.route(message, extracted_turn("off_topic"))["response_text"]
+            for message in messages
+        ]
+
+        self.assertGreater(len(set(outputs)), 1)
+        self.assertEqual(
+            outputs[0],
+            self.route(messages[0], extracted_turn("off_topic"))["response_text"],
+        )
+        self.assertTrue(all(output in OFF_TOPIC_FALLBACKS for output in outputs))
 
     def test_normal_shopping_language_does_not_trigger_scope_guardrail(self):
         for message in (

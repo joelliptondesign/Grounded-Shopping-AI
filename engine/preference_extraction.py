@@ -32,6 +32,13 @@ SHOPPING_ACTIONS = (
 )
 RECOVERY_RESPONSES = ("none", "approve", "reject")
 DIRECTIONS = ("higher", "lower")
+RECOMMENDATION_READINESS_LEVELS = ("low", "exploratory", "strong")
+CLARIFICATION_REASONS = (
+    "cold_start_basics",
+    "blocking_ambiguity",
+    "reference_ambiguity",
+    "other",
+)
 PRODUCT_ATTRIBUTES = (
     "price",
     "available_sizes",
@@ -115,6 +122,7 @@ PREFERENCE_UPDATE_SCHEMA: Dict[str, Any] = {
                     "type": ["string", "null"],
                     "enum": [*REVIEW_TOPICS, None],
                 },
+                "explicit_browse_intent": {"type": "boolean"},
             },
             "required": [
                 "product_names",
@@ -123,6 +131,7 @@ PREFERENCE_UPDATE_SCHEMA: Dict[str, Any] = {
                 "exact_product_request",
                 "information_source",
                 "review_topic",
+                "explicit_browse_intent",
             ],
             "additionalProperties": False,
         },
@@ -199,6 +208,14 @@ PREFERENCE_UPDATE_SCHEMA: Dict[str, Any] = {
         },
         "needs_clarification": {"type": "boolean"},
         "clarification_question": {"type": ["string", "null"]},
+        "clarification_reason": {
+            "type": ["string", "null"],
+            "enum": [*CLARIFICATION_REASONS, None],
+        },
+        "recommendation_readiness": {
+            "type": "string",
+            "enum": list(RECOMMENDATION_READINESS_LEVELS),
+        },
     },
     "required": [
         "intent",
@@ -211,6 +228,8 @@ PREFERENCE_UPDATE_SCHEMA: Dict[str, Any] = {
         "priorities",
         "needs_clarification",
         "clarification_question",
+        "clarification_reason",
+        "recommendation_readiness",
     ],
     "additionalProperties": False,
 }
@@ -249,6 +268,9 @@ EMPTY_STATE: Dict[str, Any] = {
     },
     "needs_clarification": False,
     "clarification_question": None,
+    "clarification_reason": None,
+    "recommendation_readiness": "low",
+    "pending_elicitation": None,
     "pending_recovery": None,
     "recent_product_names": [],
     "recent_presentations": [],
@@ -256,6 +278,40 @@ EMPTY_STATE: Dict[str, Any] = {
 
 
 SYSTEM_PROMPT = load_prompt("preference_extraction.md")
+
+
+def _inferred_recommendation_readiness(
+    current_state: Optional[Dict[str, Any]], update: Dict[str, Any]
+) -> str:
+    """Compatibility fallback for fixtures that predate semantic readiness."""
+    state = deepcopy(current_state or EMPTY_STATE)
+    for section in ("hard_constraints", "soft_preferences", "directions", "priorities"):
+        for key, value in update.get(section, {}).items():
+            if value is not None:
+                state.setdefault(section, {})[key] = value
+    hard = state.get("hard_constraints", {})
+    soft = state.get("soft_preferences", {})
+    has_size = hard.get("size") is not None
+    has_budget = any(
+        value is not None
+        for value in (
+            hard.get("max_price"),
+            soft.get("budget_target"),
+            soft.get("budget_flex_max"),
+        )
+    )
+    meaningful = sum(
+        1
+        for field in ("firmness", "support", "cooling", "motion_isolation")
+        if state.get("directions", {}).get(field) is not None
+        or state.get("priorities", {}).get(field) is not None
+        or soft.get(f"{field}_target") is not None
+    )
+    if has_size and has_budget and meaningful:
+        return "strong"
+    if has_size or has_budget or meaningful:
+        return "exploratory"
+    return "low"
 
 
 def new_preference_state() -> Dict[str, Any]:
@@ -322,6 +378,7 @@ def extract_preference_update(
         update["turn_context"].setdefault("exact_product_request", False)
         update["turn_context"].setdefault("information_source", None)
         update["turn_context"].setdefault("review_topic", None)
+        update["turn_context"].setdefault("explicit_browse_intent", False)
         update.setdefault("recovery_response", "none")
         update.setdefault("directions", deepcopy(EMPTY_STATE["directions"]))
         update.setdefault("soft_preferences", {})
@@ -331,6 +388,14 @@ def extract_preference_update(
         # always supplies an intent.
         if update.get("intent") is None:
             update["intent"] = "recommend"
+        update.setdefault(
+            "recommendation_readiness",
+            _inferred_recommendation_readiness(current_state, update),
+        )
+        update.setdefault(
+            "clarification_reason",
+            "blocking_ambiguity" if update.get("needs_clarification") else None,
+        )
         if not isinstance(update.get("shopping_action"), dict):
             context = update["turn_context"]
             action_by_intent = {
@@ -439,6 +504,11 @@ def merge_preference_state(
 
     merged["needs_clarification"] = bool(update.get("needs_clarification", False))
     merged["clarification_question"] = update.get("clarification_question")
+    merged["clarification_reason"] = update.get("clarification_reason")
+    merged["recommendation_readiness"] = update.get(
+        "recommendation_readiness",
+        _inferred_recommendation_readiness(current_state, update),
+    )
     return merged
 
 

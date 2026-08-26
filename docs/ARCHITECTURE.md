@@ -337,6 +337,14 @@ Hard constraints are never silently relaxed. If required catalog evidence is mis
 
 Malformed structured output, a timeout, or another extraction failure preserves the last valid shopper state, skips the decision layer, and returns controlled recovery copy. Internal error details appear only in developer data.
 
+Recommendation readiness is a small semantic field on the existing extraction/state contract: `low`, `exploratory`, or `strong`. Low readiness can trigger one concise, high-value cold-start question; for mattresses, size and approximate budget are the usual first basics because they quickly narrow compatibility and price. Exploratory readiness proceeds directly to differentiated cards without claiming a winner, while strong readiness permits the existing shopping-selection step to make a stronger judgment when a product genuinely stands out. Explicit browse intent bypasses ordinary cold-start clarification, and a shopper who answers only part of a combined question is not automatically nagged for the rest.
+
+This is a progressive interaction pattern for high-consideration shopping, not a questionnaire or onboarding flow: gather minimal useful context, show products, learn from reactions, and refine. Product-card reactions remain normal preference updates, so elicitation continues after results appear without new memory or ranking infrastructure.
+
+Optional finite answers use a renderer-independent elicitation contract with an ID, question, `single_select` response type, exact option-to-state patches, and explicit free-text/skip capabilities. Supported size options come from the catalog vocabulary. Approximate budget options update only `budget_target` and `budget_flex_max`; they never create an absolute ceiling. A matching structured response applies its patch, clears `pending_elicitation`, and reassesses immediately without sending the label through language interpretation. Skip does the same without a patch and requests an exploratory shortlist. Ordinary typed answers still use schema-constrained extraction, while suggested replies remain semantically separate conversational examples. If no structured renderer exists, the question alone is a complete text interaction.
+
+The current Streamlit renderer intentionally uses that text fallback and does not yet render the elicitation options. Its developer diagnostics expose the pending contract and resume metadata; the final shopper-facing control layout is a separate presentation task.
+
 ## 9. Grounding
 
 Conversational generation happens after authoritative results exist. Each kind of claim has a defined source:
@@ -470,10 +478,11 @@ The supported domain is therefore broad in phrasing but narrow in authority.
 
 ## 15. Developer visibility
 
-The normal shopper view hides implementation detail. An optional **Show chat developer details** view exposes the latest system state and decision trace, including:
+The normal shopper view hides implementation detail. An optional sidebar **Developer mode** exposes the latest system state and decision trace, including:
 
 - structured shopper state and the fields changed on the latest turn;
 - classified intent and selected response strategy;
+- semantic recommendation readiness, pending elicitation/type, selected structured option, explicit browse or skip-to-options intent, and whether cold-start clarification was bypassed;
 - whether eligibility and ranking were recomputed;
 - active normalized weights, candidate scores, the deterministic scorer leader, and the validated shopping-agent selection;
 - recovery proposals, approval state, and supporting match counts;

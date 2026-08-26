@@ -147,6 +147,9 @@ def _format_latency(value):
 
 def render_turn_presentation(presentation, *, key_prefix, render_message=True):
     """Render the framework-independent turn contract with basic Streamlit UI."""
+    if render_message:
+        st.markdown(presentation.get("message", ""))
+
     modality = presentation.get("modality")
 
     if modality == "recommendation_cards":
@@ -204,8 +207,70 @@ def render_turn_presentation(presentation, *, key_prefix, render_message=True):
                 args=(control["label"],),
             )
 
-    if render_message:
-        st.markdown(presentation.get("message", ""))
+
+
+def render_developer_details():
+    """Keep optional diagnostics available outside the shopper conversation."""
+    with st.sidebar:
+        st.divider()
+        st.subheader("Developer")
+        developer_mode = st.toggle("Developer mode", value=False)
+
+        if developer_mode:
+            with st.expander("Current structured shopping state", expanded=True):
+                st.json(st.session_state["preference_state"])
+            latest_turn = st.session_state.get("chat_turn_debug")
+            if latest_turn is not None:
+                with st.expander("Latest intent routing", expanded=True):
+                    st.json(latest_turn)
+                latency = latest_turn.get("latency") or {}
+                metrics = latency.get("metrics_ms") or {}
+                with st.expander("Latency", expanded=True):
+                    st.markdown(
+                        "  \n".join(
+                            [
+                                f"**Extraction:** {_format_latency(metrics.get('extraction_latency'))}",
+                                f"**Decision ready:** {_format_latency(metrics.get('decision_ready_latency'))}",
+                                f"**Presentation ready:** {_format_latency(metrics.get('presentation_ready_latency'))}",
+                                f"**First generated token:** {_format_latency(metrics.get('generation_ttft'))}",
+                                f"**Generation complete:** {_format_latency(metrics.get('generation_latency'))}",
+                                f"**First visible response:** {_format_latency(metrics.get('user_perceived_first_response_latency'))}",
+                                f"**Total turn:** {_format_latency(metrics.get('total_turn_latency'))}",
+                                f"**Response path:** {latency.get('response_path') or 'Not recorded'}",
+                            ]
+                        )
+                    )
+            latest_decision = st.session_state.get("chat_decision_result")
+            if latest_decision is not None:
+                with st.expander(
+                    "Latest deterministic ranking details", expanded=False
+                ):
+                    metadata = latest_decision.get("metadata", {})
+                    st.json(
+                        {
+                            "before_weights": metadata.get(
+                                "previous_active_normalized_weights"
+                            ),
+                            "active_normalized_weights": metadata.get(
+                                "active_normalized_weights"
+                            ),
+                            "candidate_scores": metadata.get(
+                                "candidate_scores", []
+                            ),
+                            "deterministic_top_sku_id": metadata.get(
+                                "selected_sku_id"
+                            ),
+                            "eligible_candidate_ids": [
+                                item.get("sku_id")
+                                for item in latest_decision.get(
+                                    "ranked_candidates", []
+                                )
+                            ],
+                            "agent_selection": (
+                                st.session_state.get("chat_turn_debug") or {}
+                            ).get("shopping_selection"),
+                        }
+                    )
 
 
 def render_legacy_experiment():
@@ -317,6 +382,27 @@ def render_legacy_experiment():
 
 
 def render_shopping_agent():
+    st.markdown(
+        """
+        <style>
+        :root {
+            --shopping-chat-width: 1024px;
+        }
+        div[data-testid="stMainBlockContainer"],
+        div[data-testid="stBottomBlockContainer"] {
+            width: 100%;
+            max-width: var(--shopping-chat-width);
+            margin-left: auto;
+            margin-right: auto;
+        }
+        div[data-testid="stBottomBlockContainer"] {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     st.title("Mattress Shopping Agent")
     st.caption(
         "Tell me what you're looking for, what matters most, or what you "
@@ -336,53 +422,7 @@ def render_shopping_agent():
             else:
                 st.markdown(message["content"])
 
-    if st.checkbox("Developer details", value=False):
-        with st.expander("Current structured shopping state", expanded=True):
-            st.json(st.session_state["preference_state"])
-        latest_turn = st.session_state.get("chat_turn_debug")
-        if latest_turn is not None:
-            with st.expander("Latest intent routing", expanded=True):
-                st.json(latest_turn)
-            latency = latest_turn.get("latency") or {}
-            metrics = latency.get("metrics_ms") or {}
-            with st.expander("Latency", expanded=True):
-                st.markdown(
-                    "  \n".join(
-                        [
-                            f"**Extraction:** {_format_latency(metrics.get('extraction_latency'))}",
-                            f"**Decision ready:** {_format_latency(metrics.get('decision_ready_latency'))}",
-                            f"**Presentation ready:** {_format_latency(metrics.get('presentation_ready_latency'))}",
-                            f"**First generated token:** {_format_latency(metrics.get('generation_ttft'))}",
-                            f"**Generation complete:** {_format_latency(metrics.get('generation_latency'))}",
-                            f"**First visible response:** {_format_latency(metrics.get('user_perceived_first_response_latency'))}",
-                            f"**Total turn:** {_format_latency(metrics.get('total_turn_latency'))}",
-                            f"**Response path:** {latency.get('response_path') or 'Not recorded'}",
-                        ]
-                    )
-                )
-        latest_decision = st.session_state.get("chat_decision_result")
-        if latest_decision is not None:
-            with st.expander("Latest deterministic ranking details", expanded=False):
-                metadata = latest_decision.get("metadata", {})
-                st.json(
-                    {
-                        "before_weights": metadata.get(
-                            "previous_active_normalized_weights"
-                        ),
-                        "active_normalized_weights": metadata.get(
-                            "active_normalized_weights"
-                        ),
-                        "candidate_scores": metadata.get("candidate_scores", []),
-                        "deterministic_top_sku_id": metadata.get("selected_sku_id"),
-                        "eligible_candidate_ids": [
-                            item.get("sku_id")
-                            for item in latest_decision.get("ranked_candidates", [])
-                        ],
-                        "agent_selection": (
-                            st.session_state.get("chat_turn_debug") or {}
-                        ).get("shopping_selection"),
-                    }
-                )
+    render_developer_details()
 
     queued_reply = st.session_state.pop("pending_quick_reply", None)
     user_input = queued_reply or st.chat_input(
@@ -415,6 +455,22 @@ def render_shopping_agent():
                         "shopping_action_validation"
                     ),
                     "response_strategy": turn["response_strategy"],
+                    "recommendation_readiness": turn.get(
+                        "recommendation_readiness"
+                    ),
+                    "clarification_reason": turn.get("clarification_reason"),
+                    "explicit_browse_intent": turn.get(
+                        "explicit_browse_intent"
+                    ),
+                    "clarification_bypassed": turn.get(
+                        "clarification_bypassed"
+                    ),
+                    "pending_elicitation": turn.get("pending_elicitation"),
+                    "elicitation_type": turn.get("elicitation_type"),
+                    "structured_option_selected": turn.get(
+                        "structured_option_selected"
+                    ),
+                    "skipped_to_options": turn.get("skipped_to_options"),
                     "selected_modality": turn.get("modality"),
                     "modality_selection_reason": turn.get("modality_reason"),
                     "presentation_contract": turn.get("presentation"),
@@ -456,15 +512,6 @@ def render_shopping_agent():
                 if turn["response_text"] is not None:
                     response_audit = {}
                     with st.chat_message("assistant"):
-                        if turn["presentation"]["modality"] != "conversation":
-                            render_turn_presentation(
-                                turn["presentation"],
-                                key_prefix=f"current_{len(st.session_state['messages'])}",
-                                render_message=False,
-                            )
-                            mark_timing(
-                                turn["timing"], "presentation_visible_at"
-                            )
                         assistant_response = st.write_stream(
                             generate_turn_response_stream(
                                 turn,
@@ -474,6 +521,15 @@ def render_shopping_agent():
                                 audit=response_audit,
                             )
                         )
+                        if turn["presentation"]["modality"] != "conversation":
+                            render_turn_presentation(
+                                turn["presentation"],
+                                key_prefix=f"current_{len(st.session_state['messages'])}",
+                                render_message=False,
+                            )
+                            mark_timing(
+                                turn["timing"], "presentation_visible_at"
+                            )
                     turn_debug["response_audit"] = response_audit
                 else:
                     assistant_response = ROUTING_FAILURE

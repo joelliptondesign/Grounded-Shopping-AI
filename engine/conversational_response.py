@@ -29,6 +29,36 @@ from engine.timing import complete_turn, mark_timing, new_turn_timing, set_respo
 
 BASE_INSTRUCTION = load_customer_prompt("conversational_turn.md")
 RETRY_INSTRUCTION = f"{BASE_INSTRUCTION}\n\n{load_prompt('grounded_retry.md')}"
+OFF_TOPIC_INSTRUCTION = load_customer_prompt("off_topic_redirect.md")
+OFF_TOPIC_RETRY_INSTRUCTION = (
+    f"{OFF_TOPIC_INSTRUCTION}\n\n"
+    "Rewrite from scratch. Do not answer the unrelated request; acknowledge it briefly "
+    "and return to mattress shopping without internal terminology."
+)
+
+OFF_TOPIC_INTERNAL_TERMS = (
+    "policy",
+    "policies",
+    "classifier",
+    "domain",
+    "scope",
+    "intent",
+    "guardrail",
+    "internal",
+    "system",
+    "limitation",
+    "limitations",
+    "system limitation",
+    "configuration",
+    "api",
+    "prompt",
+    "model routing",
+)
+MATTRESS_REDIRECT = re.compile(
+    r"\b(?:mattress(?:es)?|bed(?:ding)?|sleep(?:ing)?|firmness|cooling|"
+    r"motion isolation|shortlist)\b",
+    re.IGNORECASE,
+)
 
 
 def _model_output(
@@ -158,6 +188,14 @@ def _validate_general_response(
     if grounded_product.get("name"):
         allowed_names.add(grounded_product["name"].casefold())
     fallback = str(turn.get("response_text") or "").casefold()
+    if turn.get("intent") == "off_topic":
+        allowed_names.update(
+            str(name).casefold()
+            for name in (turn.get("preference_state") or {}).get(
+                "recent_product_names", []
+            )
+            if name
+        )
     for product in catalog:
         name = str(product.get("name", ""))
         if name and name.casefold() in fallback:
@@ -200,7 +238,10 @@ def _response_payload(
 
 
 def _validate_response(
-    text: str, turn: Dict[str, Any], catalog: Iterable[Dict[str, Any]]
+    text: str,
+    turn: Dict[str, Any],
+    catalog: Iterable[Dict[str, Any]],
+    latest_user_message: str = "",
 ) -> Dict[str, Any]:
     decision_result = turn.get("decision_result") or {}
     if turn.get("grounding_evidence") and decision_result.get("decision") == "ALLOW":
@@ -222,7 +263,49 @@ def _validate_response(
             validation["valid"] = False
             validation["reasons"].append("internal_customer_language")
         return validation
-    return _validate_general_response(text, turn, catalog)
+    validation = _validate_general_response(text, turn, catalog)
+    if turn.get("intent") != "off_topic":
+        return validation
+
+    reasons = list(validation["reasons"])
+    stripped = text.strip()
+    lowered = stripped.casefold()
+    if len(stripped.split()) > 60:
+        reasons.append("off_topic_redirect_too_long")
+    if not MATTRESS_REDIRECT.search(stripped):
+        reasons.append("missing_mattress_redirect")
+    if any(
+        re.search(rf"\b{re.escape(term)}\b", lowered)
+        for term in OFF_TOPIC_INTERNAL_TERMS
+    ):
+        reasons.append("off_topic_internal_language")
+
+    message = latest_user_message.casefold()
+    if re.search(r"\b(?:weather|forecast|temperature)\b", message) and re.search(
+        r"(?:\b\d+\s*(?:°|degrees?)\b|\b(?:sunny|cloudy|rainy|snowy)\b)",
+        stripped,
+        re.IGNORECASE,
+    ):
+        reasons.append("answered_weather_request")
+    if re.search(r"\b(?:python|script|code|program)\b", message) and re.search(
+        r"(?:```|\b(?:import|def|class)\s+[A-Za-z_]|\bprint\s*\()",
+        stripped,
+        re.IGNORECASE,
+    ):
+        reasons.append("answered_code_request")
+    if re.search(r"\b(?:won|winner|score|super bowl|champion)\b", message) and re.search(
+        r"\b(?:won|beat|defeated|champion|score(?:d)?)\b",
+        stripped,
+        re.IGNORECASE,
+    ) and not re.search(r"\b(?:can't|cannot|won't|not)\b[^.!?]{0,35}\b(?:answer|help|tell)\b", lowered):
+        reasons.append("answered_sports_request")
+    return {"valid": not reasons, "reasons": list(dict.fromkeys(reasons))}
+
+
+def _instructions_for_turn(turn: Dict[str, Any]) -> tuple[str, str]:
+    if turn.get("intent") == "off_topic":
+        return OFF_TOPIC_INSTRUCTION, OFF_TOPIC_RETRY_INSTRUCTION
+    return BASE_INSTRUCTION, RETRY_INSTRUCTION
 
 
 def _record_review_language(turn: Dict[str, Any], text: str) -> None:
@@ -290,7 +373,8 @@ def generate_turn_response(
     attempts = []
     mark_timing(timing, "generation_started_at")
     timing["generation_status"] = "running"
-    for attempt, instruction in enumerate((BASE_INSTRUCTION, RETRY_INSTRUCTION), start=1):
+    instructions = _instructions_for_turn(turn)
+    for attempt, instruction in enumerate(instructions, start=1):
         try:
             text = _model_output(client, config, payload, instruction)
             mark_timing(timing, "first_token_at")
@@ -298,7 +382,9 @@ def generate_turn_response(
             attempts.append({"attempt": attempt, "valid": False, "reasons": ["generation_error"], "error": type(error).__name__})
             break
 
-        validation = _validate_response(text, turn, catalog_list)
+        validation = _validate_response(
+            text, turn, catalog_list, latest_user_message
+        )
         attempts.append({"attempt": attempt, **validation})
         if validation["valid"]:
             _record_review_language(turn, text)
@@ -361,7 +447,7 @@ def generate_turn_response_stream(
         mark_timing(timing, "generation_started_at")
         timing["generation_status"] = "running"
         for attempt, instruction in enumerate(
-            (BASE_INSTRUCTION, RETRY_INSTRUCTION), start=1
+            _instructions_for_turn(turn), start=1
         ):
             try:
                 deltas = []
@@ -380,7 +466,9 @@ def generate_turn_response_stream(
                     }
                 )
                 break
-            validation = _validate_response(text, turn, catalog_list)
+            validation = _validate_response(
+                text, turn, catalog_list, latest_user_message
+            )
             attempts.append({"attempt": attempt, **validation})
             if validation["valid"]:
                 approved_text = text

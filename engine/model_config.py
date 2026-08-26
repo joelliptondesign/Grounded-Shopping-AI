@@ -77,10 +77,11 @@ CONVERSATIONAL_STRATEGIES = frozenset(
         "no_match_recovery",
         "recovery_rejected",
         "recommendation_pipeline",
+        "scoped_guardrail",
     }
 )
 
-DETERMINISTIC_STRATEGIES = frozenset({"scoped_guardrail", "extraction_recovery"})
+DETERMINISTIC_STRATEGIES = frozenset({"extraction_recovery"})
 
 
 def generation_task_for_turn(turn: Dict[str, Any]) -> Optional[ModelTask]:

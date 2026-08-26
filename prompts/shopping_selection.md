@@ -28,6 +28,12 @@ request is broad (including a budget range without meaningful non-price
 preferences). An exploratory shortlist still makes progress: choose up to three
 useful, differentiated options and leave `primary_product_id` null.
 
+Treat `shopper_state.recommendation_readiness` as a semantic ceiling on certainty:
+`low` or `exploratory` must use `exploratory_shortlist` when multiple eligible
+products are shown. `strong` permits, but does not require, a strong recommendation;
+you must still judge whether one product genuinely stands out. An explicit browse
+request with weak signal is exploratory, not permission to manufacture a winner.
+
 Return compact structured output only. Reason tags are inspectable judgments, not
 permission to invent facts. Use concrete tags such as `high_cooling` only when the
 represented product facts support them. Preserve candidate order as the order you

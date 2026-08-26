@@ -7,7 +7,7 @@ from types import SimpleNamespace
 from engine.conversation import process_conversation_turn
 from engine.data import SKU_CATALOG
 from engine.preference_extraction import new_preference_state
-from engine.presentation import MODALITIES
+from engine.presentation import MODALITIES, _card_tradeoff
 
 
 def extracted(
@@ -105,6 +105,7 @@ class AdaptivePresentationTests(unittest.TestCase):
                 "comparison",
                 "actions",
                 "suggested_replies",
+                "elicitation",
                 "selection_reason",
                 "grounding_sources",
             },
@@ -152,6 +153,24 @@ class AdaptivePresentationTests(unittest.TestCase):
         self.assertEqual(
             presentation["grounding_sources"]["ordering"],
             "validated_shopping_agent_selection",
+        )
+
+    def test_card_tradeoffs_use_concise_shopper_language(self):
+        state = new_preference_state()
+        state["soft_preferences"]["cooling_target"] = 9
+        state["priorities"]["cooling"] = "critical"
+        displayed = [
+            {"price": 1500, "cooling": 9},
+            {"price": 1000, "cooling": 8},
+        ]
+
+        self.assertEqual(
+            _card_tradeoff(displayed[0], displayed, state),
+            "Higher-priced option",
+        )
+        self.assertEqual(
+            _card_tradeoff(displayed[1], displayed, state),
+            "Slightly lower cooling",
         )
 
     def test_comparison_rows_use_catalog_and_prioritize_context(self):

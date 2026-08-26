@@ -32,6 +32,10 @@ from engine.response_strategy import (
     strategy_for_intent,
 )
 from engine.customer_copy import EXTRACTION_RECOVERY, off_topic_fallback
+from engine.elicitation import (
+    build_cold_start_elicitation,
+    resolve_elicitation_response,
+)
 from engine.presentation import build_turn_presentation
 from engine.shopping_selection import select_shopping_products
 from engine.timing import mark_timing, new_turn_timing
@@ -54,6 +58,9 @@ def _state_changes(before: Dict[str, Any], after: Dict[str, Any]) -> Dict[str, A
                 }
         if section_changes:
             changes[section] = section_changes
+    for key in ("recommendation_readiness", "needs_clarification", "clarification_reason"):
+        if before.get(key) != after.get(key):
+            changes[key] = {"before": before.get(key), "after": after.get(key)}
     return changes
 
 
@@ -78,6 +85,13 @@ def _base_result(
         "grounding_data": None,
         "grounding_evidence": None,
         "recovery": None,
+        "pending_elicitation": deepcopy(preference_state.get("pending_elicitation")),
+        "elicitation_type": (
+            (preference_state.get("pending_elicitation") or {}).get("response_type")
+        ),
+        "elicitation_response": None,
+        "structured_option_selected": None,
+        "skipped_to_options": False,
         "extraction_error": None,
         "review_debug": {
             "evidence_requested": False,
@@ -171,6 +185,110 @@ def _extraction_failure(
 
 def _has_explicit_hard_update(update: Dict[str, Any]) -> bool:
     return any(value is not None for value in update.get("hard_constraints", {}).values())
+
+
+def _apply_state_patch(state: Dict[str, Any], patch: Dict[str, Any]) -> None:
+    for section in ("hard_constraints", "soft_preferences", "directions", "priorities"):
+        for key, value in patch.get(section, {}).items():
+            state.setdefault(section, {})[key] = value
+
+
+def _structured_resume_update(
+    previous_state: Dict[str, Any], response: Dict[str, Any]
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    resolved = resolve_elicitation_response(
+        previous_state.get("pending_elicitation"), response
+    )
+    resumed = deepcopy(previous_state)
+    _apply_state_patch(resumed, resolved["state_patch"])
+    resumed["pending_elicitation"] = None
+    resumed["needs_clarification"] = False
+    resumed["clarification_question"] = None
+    resumed["clarification_reason"] = None
+    hard = resumed.get("hard_constraints", {})
+    soft = resumed.get("soft_preferences", {})
+    has_basic = hard.get("size") is not None or soft.get("budget_target") is not None
+    resumed["recommendation_readiness"] = "exploratory" if has_basic else "low"
+    update = {
+        "intent": "recommend",
+        "shopping_action": {
+            "action": "recommend_products",
+            "product_ids": [],
+            "product_attribute": None,
+            "service_attribute": None,
+        },
+        "turn_context": {
+            "product_names": [],
+            "product_attribute": None,
+            "service_attribute": None,
+            "exact_product_request": False,
+            "information_source": None,
+            "review_topic": None,
+            "explicit_browse_intent": resolved["skipped_to_options"],
+        },
+        "recovery_response": "none",
+        "hard_constraints": deepcopy(resumed["hard_constraints"]),
+        "soft_preferences": deepcopy(resumed["soft_preferences"]),
+        "directions": deepcopy(resumed["directions"]),
+        "priorities": deepcopy(resumed["priorities"]),
+        "needs_clarification": False,
+        "clarification_question": None,
+        "clarification_reason": None,
+        "recommendation_readiness": resumed["recommendation_readiness"],
+    }
+    return update, resolved
+
+
+def _apply_cold_start_policy(
+    previous_state: Dict[str, Any],
+    state: Dict[str, Any],
+    update: Dict[str, Any],
+    context: Dict[str, Any],
+    *,
+    intent: str,
+) -> Dict[str, Any]:
+    """Enforce one-turn cold starts without turning elicitation into a form."""
+    details = {
+        "recommendation_readiness": state.get("recommendation_readiness", "low"),
+        "clarification_reason": state.get("clarification_reason"),
+        "explicit_browse_intent": bool(context.get("explicit_browse_intent")),
+        "clarification_bypassed": False,
+    }
+    if intent != "recommend":
+        return details
+
+    prior_cold_start_question = (
+        previous_state.get("needs_clarification") is True
+        and previous_state.get("clarification_reason") == "cold_start_basics"
+    )
+    cold_start_clarification = (
+        state.get("needs_clarification") is True
+        and state.get("clarification_reason") == "cold_start_basics"
+    )
+    if cold_start_clarification and (
+        details["explicit_browse_intent"] or prior_cold_start_question
+    ):
+        state["needs_clarification"] = False
+        state["clarification_question"] = None
+        state["clarification_reason"] = None
+        details["clarification_reason"] = "cold_start_basics"
+        details["clarification_bypassed"] = True
+        return details
+
+    return details
+
+
+def _respect_readiness_certainty(
+    selection: Optional[Dict[str, Any]], readiness: str, action_type: Optional[str]
+) -> Optional[Dict[str, Any]]:
+    """Keep weak-signal multi-product results exploratory without reranking them."""
+    if not selection or readiness == "strong" or action_type == "choose_from_products":
+        return selection
+    if len(selection.get("selected_product_ids", [])) <= 1:
+        return selection
+    selection["selection_mode"] = "exploratory_shortlist"
+    selection["primary_product_id"] = None
+    return selection
 
 
 def _specific_intent(intent: str, context: Dict[str, Any]) -> str:
@@ -318,6 +436,7 @@ def process_conversation_turn(
     previous_decision_result: Optional[Dict[str, Any]] = None,
     timing: Optional[Dict[str, Any]] = None,
     conversation_history: Optional[Iterable[Dict[str, str]]] = None,
+    elicitation_response: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Extract one turn, preserve valid state, and route or recover explicitly."""
     timing = timing or new_turn_timing()
@@ -333,16 +452,22 @@ def process_conversation_turn(
         ],
         "previous_decision_result": previous_decision_result,
     }
+    structured_response = None
     mark_timing(timing, "extraction_started_at")
     try:
-        update = extract_preference_update(
-            user_message,
-            previous_state,
-            model=model,
-            client=client,
-            conversation_history=conversation_history,
-            recent_results=recent_results,
-        )
+        if elicitation_response is not None:
+            update, structured_response = _structured_resume_update(
+                previous_state, elicitation_response
+            )
+        else:
+            update = extract_preference_update(
+                user_message,
+                previous_state,
+                model=model,
+                client=client,
+                conversation_history=conversation_history,
+                recent_results=recent_results,
+            )
     except Exception as error:
         mark_timing(timing, "extraction_completed_at")
         return _extraction_failure(previous_state, error, timing)
@@ -380,6 +505,8 @@ def process_conversation_turn(
             action, action_errors = grounded, []
 
     preference_state = merge_preference_state(previous_state, update)
+    if previous_state.get("pending_elicitation") is not None:
+        preference_state["pending_elicitation"] = None
     context = update.get("turn_context") or {}
     intent = _intent_for_action(action, update.get("intent") or "recommend")
     if action.get("action") not in {"compare_products", "choose_from_products"}:
@@ -394,6 +521,33 @@ def process_conversation_turn(
         "reasons": action_errors,
     }
     result["turn_context"] = deepcopy(context)
+    result["elicitation_response"] = deepcopy(structured_response)
+    result["structured_option_selected"] = (
+        deepcopy(structured_response.get("selected_option"))
+        if structured_response
+        else None
+    )
+    result["skipped_to_options"] = bool(
+        structured_response and structured_response.get("skipped_to_options")
+    )
+    result["cold_start"] = _apply_cold_start_policy(
+        previous_state,
+        preference_state,
+        update,
+        context,
+        intent=intent,
+    )
+    result["recommendation_readiness"] = result["cold_start"][
+        "recommendation_readiness"
+    ]
+    result["clarification_reason"] = result["cold_start"]["clarification_reason"]
+    result["explicit_browse_intent"] = result["cold_start"][
+        "explicit_browse_intent"
+    ]
+    result["clarification_bypassed"] = result["cold_start"][
+        "clarification_bypassed"
+    ]
+    _refresh_state_debug(result)
 
     pending = previous_state.get("pending_recovery")
     recovery_response = update.get("recovery_response", "none")
@@ -443,11 +597,28 @@ def process_conversation_turn(
             "authoritative_source": "validated_turn_intent",
         }
         result["response_text"] = off_topic_fallback(
+            user_message,
             has_shopping_context=bool(recent_presentations)
         )
         return _finish(result)
 
     if preference_state["needs_clarification"]:
+        pending_elicitation = None
+        if preference_state.get("clarification_reason") == "cold_start_basics":
+            pending_elicitation = build_cold_start_elicitation(
+                preference_state,
+                catalog_list,
+                preference_state.get("clarification_question"),
+            )
+            preference_state["pending_elicitation"] = deepcopy(pending_elicitation)
+            result["preference_state"] = preference_state
+            result["pending_elicitation"] = deepcopy(pending_elicitation)
+            result["elicitation_type"] = (
+                pending_elicitation.get("response_type")
+                if pending_elicitation
+                else None
+            )
+            _refresh_state_debug(result)
         recovery = {
             "recovery_type": "clarification",
             "message": preference_state["clarification_question"],
@@ -579,6 +750,11 @@ def process_conversation_turn(
             review_evidence=selection_review,
             model=model,
             client=client,
+        )
+        result["shopping_selection"] = _respect_readiness_certainty(
+            result["shopping_selection"],
+            result["recommendation_readiness"],
+            action.get("action"),
         )
         result["pipeline_actions"]["shopping_selection_generated"] = not result[
             "shopping_selection"

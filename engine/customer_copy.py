@@ -1,5 +1,6 @@
 """Deterministic customer copy used only for guardrails and safe fallbacks."""
 
+import hashlib
 from typing import Any, Dict
 
 
@@ -21,13 +22,21 @@ EXTRACTION_RECOVERY = (
     "Which part should we focus on—budget, feel, cooling, motion isolation, "
     "or something else?"
 )
-OFF_TOPIC = (
-    "I'm mostly useful on the mattress side of things. Want help narrowing down "
-    "what you're looking for?"
+OFF_TOPIC_FALLBACKS = (
+    "I'm better on the mattress side of things. What are you looking for?",
+    "That one's outside my lane, but I can help you narrow down a mattress.",
+    "I'm here for mattress shopping. Want to keep looking at options?",
+    "I can't do much with that one, but I can help you find the right mattress.",
 )
-OFF_TOPIC_WITH_CONTEXT = (
-    "I'm better on the mattress side of things. Want to keep narrowing down those options?"
+OFF_TOPIC_CONTEXT_FALLBACKS = (
+    "I'm better on the mattress side of things. Want to keep narrowing down those options?",
+    "That one's outside my lane, but we can pick the mattress search back up.",
+    "I'm here for mattress shopping. Want to keep refining the options we found?",
+    "I can't help much with that one, but I can help with your mattress shortlist.",
 )
+# Backward-compatible representatives for callers that display or inspect constants.
+OFF_TOPIC = OFF_TOPIC_FALLBACKS[0]
+OFF_TOPIC_WITH_CONTEXT = OFF_TOPIC_CONTEXT_FALLBACKS[0]
 UNKNOWN_FACT = "I don't have reliable information about that for this mattress."
 ROUTING_FAILURE = (
     "I'm not sure which part of the mattress search you want to tackle next. "
@@ -39,8 +48,13 @@ CONFIGURATION_FAILURE = (
 )
 
 
-def off_topic_fallback(*, has_shopping_context: bool = False) -> str:
-    return OFF_TOPIC_WITH_CONTEXT if has_shopping_context else OFF_TOPIC
+def off_topic_fallback(
+    message: str = "", *, has_shopping_context: bool = False
+) -> str:
+    """Choose stable safe copy without collapsing every off-topic turn to one line."""
+    pool = OFF_TOPIC_CONTEXT_FALLBACKS if has_shopping_context else OFF_TOPIC_FALLBACKS
+    digest = hashlib.sha256(message.strip().casefold().encode("utf-8")).digest()
+    return pool[int.from_bytes(digest[:2], "big") % len(pool)]
 
 
 def contains_internal_language(text: str) -> bool:

@@ -46,6 +46,7 @@ def _contract(modality: str, message: str, reason: str) -> Dict[str, Any]:
         "comparison": None,
         "actions": [],
         "suggested_replies": [],
+        "elicitation": None,
         "selection_reason": reason,
         "grounding_sources": {},
     }
@@ -199,10 +200,12 @@ def _card_tradeoff(
     for field in relevant:
         values = [item.get(field) for item in displayed if isinstance(item.get(field), (int, float))]
         if values and product.get(field) is not None and product[field] < max(values):
-            return f"Lower {DIMENSION_LABELS[field].lower()} than the strongest option shown"
+            difference = max(values) - product[field]
+            qualifier = "Slightly lower" if difference <= 1 else "Lower"
+            return f"{qualifier} {DIMENSION_LABELS[field].lower()}"
     prices = [item.get("price") for item in displayed if isinstance(item.get("price"), (int, float))]
     if prices and product.get("price") is not None and product["price"] > min(prices):
-        return f"Costs ${product['price'] - min(prices):,.0f} more than the lowest-priced option shown"
+        return "Higher-priced option"
     return None
 
 
@@ -529,8 +532,6 @@ def _clarification_replies(message: str) -> List[str]:
             "It's too firm",
             "My partner's movement wakes me up",
         ]
-    if "maximum" in lowered or "budget" in lowered or "$" in message:
-        return ["Use the lower amount", "Use the higher amount"]
     return []
 
 
@@ -538,7 +539,9 @@ def _conversation(turn: Dict[str, Any], reason: str) -> Dict[str, Any]:
     message = turn.get("response_text") or "How can I help with your mattress search?"
     contract = _contract("conversation", message, reason)
     if (turn.get("recovery") or {}).get("recovery_type") == "clarification":
-        contract["suggested_replies"] = _clarification_replies(message)
+        contract["elicitation"] = deepcopy(turn.get("pending_elicitation"))
+        if contract["elicitation"] is None:
+            contract["suggested_replies"] = _clarification_replies(message)
         contract["grounding_sources"] = {
             "message": AUTHORITATIVE_SOURCES["conversational_preferences"]
         }

@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "shopping-agent-core",
+  "suite_version": "v2",
+  "suite": "multi_turn",
+  "cases": [
+    {
+      "case_id": "v2_cold_start_no_signal_001",
+      "category": "cold_start",
+      "dimensions": ["understanding", "conversation_quality", "presentation"],
+      "severity_if_failed": "major",
+      "tags": ["cold_start", "clarification_restraint", "shopper_effort"],
+      "turns": [
+        {"user": "I need a mattress.", "fixture_update": {"needs_clarification": true, "clarification_question": "What size are you shopping for, and roughly what would you like to spend?", "clarification_reason": "cold_start_basics", "recommendation_readiness": "low"}, "expected": {"intent": "recommend", "modality": "conversation", "state": {"recommendation_readiness": "low", "needs_clarification": true, "clarification_reason": "cold_start_basics"}}, "qualitative": {"criteria": ["time_to_useful_products", "naturalness", "shopper_effort"]}}
+      ]
+    },
+    {
+      "case_id": "v2_cold_start_size_only_001",
+      "category": "cold_start",
+      "dimensions": ["understanding", "conversation_quality"],
+      "severity_if_failed": "minor",
+      "tags": ["cold_start", "high_value_question"],
+      "turns": [
+        {"user": "I need a queen mattress.", "fixture_update": {"hard_constraints": {"size": "queen"}, "needs_clarification": true, "clarification_question": "Roughly what would you like to spend?", "clarification_reason": "cold_start_basics", "recommendation_readiness": "low"}, "expected": {"intent": "recommend", "modality": "conversation", "state": {"hard_constraints": {"size": "queen"}, "recommendation_readiness": "low", "needs_clarification": true}}}
+      ]
+    },
+    {
+      "case_id": "v2_cold_start_size_budget_001",
+      "category": "cold_start",
+      "dimensions": ["understanding", "decision_correctness", "presentation", "conversation_quality"],
+      "severity_if_failed": "major",
+      "tags": ["cold_start", "forward_momentum", "exploratory"],
+      "turns": [
+        {"user": "Queen around $1,500.", "fixture_update": {"hard_constraints": {"size": "queen"}, "soft_preferences": {"budget_target": 1500}, "recommendation_readiness": "exploratory"}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"recommendation_readiness": "exploratory", "needs_clarification": false}}, "qualitative": {"criteria": ["time_to_useful_products", "appropriate_certainty"]}}
+      ]
+    },
+    {
+      "case_id": "v2_cold_start_strong_signal_001",
+      "category": "cold_start",
+      "dimensions": ["understanding", "decision_correctness", "presentation"],
+      "severity_if_failed": "major",
+      "tags": ["cold_start", "strong_signal", "forward_momentum"],
+      "turns": [
+        {"user": "Queen around $1,500. I sleep hot and motion isolation matters.", "fixture_update": {"hard_constraints": {"size": "queen"}, "soft_preferences": {"budget_target": 1500}, "directions": {"cooling": "higher", "motion_isolation": "higher"}, "priorities": {"cooling": "high", "motion_isolation": "high"}, "recommendation_readiness": "strong"}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"recommendation_readiness": "strong", "needs_clarification": false}}}
+      ]
+    },
+    {
+      "case_id": "v2_cold_start_explicit_browse_001",
+      "category": "cold_start",
+      "dimensions": ["understanding", "presentation", "conversation_quality"],
+      "severity_if_failed": "major",
+      "tags": ["cold_start", "explicit_browse", "clarification_bypass"],
+      "turns": [
+        {"user": "Just show me some queen mattresses.", "fixture_update": {"hard_constraints": {"size": "queen"}, "turn_context": {"explicit_browse_intent": true}, "recommendation_readiness": "low"}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"size": "queen"}, "needs_clarification": false}}, "qualitative": {"criteria": ["clarification_restraint", "forward_momentum"]}}
+      ]
+    },
+    {
+      "case_id": "v2_cold_start_ignored_budget_001",
+      "category": "cold_start",
+      "dimensions": ["understanding", "conversation_quality", "presentation"],
+      "severity_if_failed": "major",
+      "tags": ["cold_start", "no_nagging", "progressive_elicitation"],
+      "turns": [
+        {"user": "I need a mattress.", "fixture_update": {"needs_clarification": true, "clarification_question": "What size are you shopping for, and roughly what would you like to spend?", "clarification_reason": "cold_start_basics", "recommendation_readiness": "low"}, "expected": {"intent": "recommend", "modality": "conversation", "state": {"needs_clarification": true, "clarification_reason": "cold_start_basics"}}},
+        {"user": "King.", "fixture_update": {"hard_constraints": {"size": "king"}, "needs_clarification": true, "clarification_question": "And what is your budget?", "clarification_reason": "cold_start_basics", "recommendation_readiness": "low"}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"size": "king"}, "needs_clarification": false}}}
+      ]
+    },
+    {
+      "case_id": "v2_cold_start_product_reaction_001",
+      "category": "progressive_elicitation",
+      "dimensions": ["understanding", "decision_correctness", "conversation_quality"],
+      "severity_if_failed": "major",
+      "tags": ["product_reaction", "preference_update", "forward_momentum"],
+      "turns": [
+        {"user": "Queen around $1,500.", "fixture_update": {"hard_constraints": {"size": "queen"}, "soft_preferences": {"budget_target": 1500}, "recommendation_readiness": "exploratory"}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"recommendation_readiness": "exploratory"}}},
+        {"user": "I like the second one, but I want something cooler.", "fixture_update": {"directions": {"cooling": "higher"}, "priorities": {"cooling": "high"}, "recommendation_readiness": "strong"}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"size": "queen"}, "soft_preferences": {"budget_target": 1500}, "directions": {"cooling": "higher"}, "recommendation_readiness": "strong"}}, "qualitative": {"criteria": ["learns_from_product_reaction", "forward_momentum"]}}
+      ]
+    }
+  ]
+}

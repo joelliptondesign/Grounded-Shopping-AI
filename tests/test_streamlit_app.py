@@ -24,7 +24,18 @@ class StreamlitProductBoundaryTests(unittest.TestCase):
         self.assertEqual(app.radio[0].value, "Shopping Agent")
         self.assertEqual(len(app.selectbox), 0)
         self.assertEqual(len(app.text_area), 0)
-        self.assertEqual([item.label for item in app.checkbox], ["Developer details"])
+        self.assertEqual([item.label for item in app.toggle], ["Developer mode"])
+        self.assertEqual(
+            [item.label for item in app.sidebar.toggle], ["Developer mode"]
+        )
+        self.assertIn(
+            "--shopping-chat-width: 1024px",
+            "\n".join(item.value for item in app.markdown),
+        )
+        layout_css = "\n".join(item.value for item in app.markdown)
+        self.assertIn('div[data-testid="stMainBlockContainer"]', layout_css)
+        self.assertIn('div[data-testid="stBottomBlockContainer"]', layout_css)
+        self.assertNotIn("stSidebar", layout_css)
         self.assertEqual(
             app.chat_input[0].placeholder,
             "What are you looking for in a mattress?",
@@ -47,7 +58,7 @@ class StreamlitProductBoundaryTests(unittest.TestCase):
         app = self.run_app()
         self.assertEqual(len(app.expander), 0)
 
-        app.checkbox[0].check().run()
+        app.toggle[0].set_value(True).run()
 
         self.assertIn(
             "Current structured shopping state",
@@ -81,6 +92,12 @@ class StreamlitProductBoundaryTests(unittest.TestCase):
 
         self.assertEqual(len(app.exception), 0)
         self.assertIn("#### Test Mattress", [item.value for item in app.markdown])
+        markdown_values = [item.value for item in app.markdown]
+        self.assertEqual(markdown_values.count("I'd start here."), 1)
+        self.assertLess(
+            markdown_values.index("I'd start here."),
+            markdown_values.index("#### Test Mattress"),
+        )
 
         app.session_state["messages"] = [
             {
@@ -103,6 +120,60 @@ class StreamlitProductBoundaryTests(unittest.TestCase):
 
         self.assertEqual(len(app.exception), 0)
         self.assertEqual(len(app.dataframe), 1)
+        markdown_values = [item.value for item in app.markdown]
+        self.assertEqual(markdown_values.count("Here's the comparison."), 1)
+
+        app.session_state["messages"] = [
+            {
+                "role": "assistant",
+                "content": "Here are the details.",
+                "presentation": {
+                    "modality": "product_detail",
+                    "message": "Here are the details.",
+                    "products": [
+                        {
+                            "name": "Test Mattress",
+                            "details": [{"label": "Cooling", "value": "9/10"}],
+                        }
+                    ],
+                    "actions": [],
+                    "suggested_replies": [],
+                },
+            }
+        ]
+        app.run()
+
+        markdown_values = [item.value for item in app.markdown]
+        self.assertEqual(markdown_values.count("Here are the details."), 1)
+        self.assertLess(
+            markdown_values.index("Here are the details."),
+            markdown_values.index("#### Test Mattress"),
+        )
+
+        app.session_state["messages"] = [
+            {
+                "role": "assistant",
+                "content": "Which requirement should we adjust?",
+                "presentation": {
+                    "modality": "recovery_choices",
+                    "message": "Which requirement should we adjust?",
+                    "products": [],
+                    "actions": [
+                        {"label": "Raise budget", "action": "suggested_reply"}
+                    ],
+                    "suggested_replies": [],
+                },
+            }
+        ]
+        app.run()
+
+        self.assertEqual(
+            [item.value for item in app.markdown].count(
+                "Which requirement should we adjust?"
+            ),
+            1,
+        )
+        self.assertIn("Raise budget", [item.label for item in app.button])
 
     def test_primary_chat_uses_current_conversation_entry_point_only(self):
         source = inspect.getsource(streamlit_app.render_shopping_agent)

@@ -7,6 +7,7 @@ from engine.customer_copy import (
     EXTRACTION_RECOVERY,
     INTERNAL_CUSTOMER_TERMS,
     OFF_TOPIC,
+    OFF_TOPIC_FALLBACKS,
     OFF_TOPIC_WITH_CONTEXT,
     ROUTING_FAILURE,
     UNKNOWN_FACT,
@@ -57,6 +58,23 @@ def comparison_turn():
         "recovery": None,
         "decision_result": None,
         "response_text": "Metro Cool Comfort vs Urban Rest Core: cooling: 9 vs 6.",
+    }
+
+
+def off_topic_turn(fallback=None):
+    return {
+        "intent": "off_topic",
+        "response_strategy": "scoped_guardrail",
+        "preference_state": {
+            "priorities": {"cooling": "critical"},
+            "recent_product_names": [],
+        },
+        "state_changes": {},
+        "grounding_data": {"scope": "mattress_shopping"},
+        "grounding_evidence": None,
+        "recovery": None,
+        "decision_result": None,
+        "response_text": fallback or OFF_TOPIC_FALLBACKS[0],
     }
 
 
@@ -201,6 +219,90 @@ class ConversationalResponseTests(unittest.TestCase):
                 lowered = fallback.casefold()
                 for term in INTERNAL_CUSTOMER_TERMS:
                     self.assertNotIn(term, lowered)
+
+    def test_off_topic_uses_dedicated_luna_redirect_with_recent_context(self):
+        output = (
+            "I can't help with tomorrow's forecast, but I can help with the "
+            "sleeping-hot problem. Want to keep looking at cooler mattresses?"
+        )
+        client = ScriptedClient([output])
+        audit = {}
+        result = generate_turn_response(
+            off_topic_turn(),
+            "What's the weather tomorrow?",
+            [{"role": "user", "content": "Cooling matters most."}],
+            client=client,
+            audit=audit,
+        )
+
+        self.assertEqual(result, output)
+        self.assertTrue(audit["generated"])
+        self.assertEqual(audit["model_route"]["model"], "gpt-5.6-luna")
+        self.assertEqual(
+            audit["model_route"]["task"], "conversational_reasoning"
+        )
+        request = client.responses.requests[0]
+        self.assertIn("do not answer the unrelated request", request["input"][0]["content"])
+        self.assertIn("Cooling matters most", request["input"][1]["content"])
+
+    def test_off_topic_answer_and_internal_language_fail_validation(self):
+        fallback = OFF_TOPIC_FALLBACKS[2]
+        client = ScriptedClient(
+            [
+                "It will be 72 degrees and sunny. Want to shop for a mattress?",
+                "My system policy limits this domain, so let's discuss mattresses.",
+            ]
+        )
+        audit = {}
+        result = generate_turn_response(
+            off_topic_turn(fallback),
+            "What's the weather tomorrow?",
+            client=client,
+            audit=audit,
+        )
+
+        self.assertEqual(result, fallback)
+        self.assertTrue(audit["fallback_used"])
+        self.assertIn("answered_weather_request", audit["attempts"][0]["reasons"])
+        self.assertIn("off_topic_internal_language", audit["attempts"][1]["reasons"])
+
+    def test_off_topic_code_is_not_substantively_answered(self):
+        fallback = OFF_TOPIC_FALLBACKS[1]
+        client = ScriptedClient(
+            [
+                "```python\nprint('hello')\n``` Let's get back to mattresses.",
+                "I can't write that here, but I can help narrow down a mattress.",
+            ]
+        )
+        result = generate_turn_response(
+            off_topic_turn(fallback),
+            "Write me a Python script.",
+            client=client,
+        )
+
+        self.assertEqual(
+            result, "I can't write that here, but I can help narrow down a mattress."
+        )
+        self.assertEqual(len(client.responses.requests), 2)
+
+    def test_off_topic_may_name_an_established_shortlist_product(self):
+        turn = off_topic_turn()
+        turn["preference_state"]["recent_product_names"] = ["Metro Cool Comfort"]
+        output = (
+            "I can't help with the forecast, but we can get back to Metro Cool "
+            "Comfort or keep looking at cooling-focused mattresses."
+        )
+        audit = {}
+        result = generate_turn_response(
+            turn,
+            "What's the weather?",
+            client=ScriptedClient([output]),
+            catalog=SKU_CATALOG,
+            audit=audit,
+        )
+
+        self.assertEqual(result, output)
+        self.assertTrue(audit["generated"])
 
 
 if __name__ == "__main__":

@@ -99,6 +99,7 @@ def complete_update(partial: Dict[str, Any]) -> Dict[str, Any]:
             "exact_product_request": False,
             "information_source": None,
             "review_topic": None,
+            "explicit_browse_intent": False,
         },
         "recovery_response": "none",
         "hard_constraints": {
@@ -132,6 +133,10 @@ def complete_update(partial: Dict[str, Any]) -> Dict[str, Any]:
         },
         "needs_clarification": False,
         "clarification_question": None,
+        "clarification_reason": None,
+        # Existing v2 fixtures predate cold-start readiness. Keep their prior
+        # behavior unless a focused cold-start case opts into another level.
+        "recommendation_readiness": "exploratory",
     }
     for key, value in partial.items():
         if isinstance(value, dict) and isinstance(update.get(key), dict):
@@ -304,6 +309,8 @@ def core_state(state: Dict[str, Any]) -> Dict[str, Any]:
         "priorities": deepcopy(state.get("priorities", {})),
         "needs_clarification": bool(state.get("needs_clarification", False)),
         "clarification_question": state.get("clarification_question"),
+        "clarification_reason": state.get("clarification_reason"),
+        "recommendation_readiness": state.get("recommendation_readiness"),
     }
 
 
