@@ -138,7 +138,9 @@ def review_fallback(result: Dict[str, Any]) -> str:
             theme = record.get("themes", {}).get(topic)
             if theme:
                 catalog = next((item for item in result.get("catalog_context", []) if item.get("sku_id") == record.get("sku_id")), {})
-                if topic in {"firmness", "cooling", "motion_isolation"} and topic in catalog:
+                if topic in {"firmness", "cooling", "motion_isolation"} and isinstance(
+                    catalog.get(topic), (int, float)
+                ):
                     return f"{name} is listed at {catalog[topic]}/10 for {topic.replace('_', ' ')}, while {decapitalize(theme['summary'])}"
                 return f"For {name}, {theme['summary']}"
             return f"I don't have enough review information about {topic.replace('_', ' ')} for {name}."

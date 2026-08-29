@@ -11,7 +11,7 @@ AUTHORITATIVE_SOURCES = {
     "recommendation": "validated_shopping_agent_selection",
     "candidate_ranking": "deterministic_eligibility_and_scoring_result",
     "conversational_preferences": "validated_structured_conversational_state",
-    "review_evidence": "precomputed_customer_review_evidence_fixture_v1",
+    "review_evidence": "precomputed_customer_review_evidence_fixture_v2",
 }
 
 EXPECTED_PRODUCT_FACTS = (
@@ -94,13 +94,17 @@ def build_recommendation_evidence(
     selected = by_id.get(primary_id) if primary_id else (presented[0] if presented else None)
     metadata = decision_result.get("metadata", {})
     service_verified = bool(
-        selected is not None and "haul_away_CA_available" in selected
+        selected is not None and selected.get("haul_away_CA_available") is not None
     )
     verified_product_facts = [
-        field for field in EXPECTED_PRODUCT_FACTS if selected and field in selected
+        field
+        for field in EXPECTED_PRODUCT_FACTS
+        if selected and selected.get(field) is not None
     ]
     unknown_product_facts = [
-        field for field in EXPECTED_PRODUCT_FACTS if not selected or field not in selected
+        field
+        for field in EXPECTED_PRODUCT_FACTS
+        if not selected or selected.get(field) is None
     ]
     active_constraints = deepcopy(metadata.get("active_hard_constraints", {}))
     return {
@@ -204,7 +208,9 @@ def _validate_represented_facts(
         ):
             stated = float(match.group(1))
             represented_values = {
-                float(item[field]) for item in presented if field in item
+                float(item[field])
+                for item in presented
+                if isinstance(item.get(field), (int, float))
             }
             if stated not in represented_values:
                 reasons.append(f"unverified_product_fact:{field}")
@@ -212,7 +218,9 @@ def _validate_represented_facts(
     lowered = text.casefold()
     if "latex" in lowered:
         latex_values = {
-            item.get("contains_latex") for item in presented if "contains_latex" in item
+            item.get("contains_latex")
+            for item in presented
+            if item.get("contains_latex") in (True, False)
         }
         if not latex_values:
             reasons.append("unverified_product_fact:contains_latex")
@@ -221,9 +229,9 @@ def _validate_represented_facts(
                 re.search(r"\b(?:latex[- ]free|no latex|does not contain latex|without latex)\b", lowered)
             )
             positive = bool(re.search(r"\bcontains latex\b", lowered))
-            if negative and latex_values == {True}:
+            if negative and False not in latex_values:
                 reasons.append("product_fact_mismatch:contains_latex")
-            if positive and latex_values == {False}:
+            if positive and True not in latex_values:
                 reasons.append("product_fact_mismatch:contains_latex")
 
     service = evidence.get("verified_services", {}).get("CA_haul_away", {})

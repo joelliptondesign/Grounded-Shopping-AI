@@ -1,5 +1,5 @@
 {
-  "name": "Cards to comparison to fact to recovery",
+  "name": "Cards to comparison to fact to refined cards",
   "turns": [
     {
       "shopper": "I need a king around $2,000. Cooling matters most.",
@@ -15,7 +15,7 @@
     },
     {
       "shopper": "Actually I need California haul-away and have to stay under $1,000.",
-      "expected_modality": "recovery_choices"
+      "expected_modality": "recommendation_cards"
     }
   ]
 }

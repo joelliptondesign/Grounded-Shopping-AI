@@ -4,12 +4,12 @@
 
 Customer-facing claims follow an explicit source map:
 
-- Product facts: the structured catalog fixture. Missing attributes remain unknown.
+- Product facts: the 48-product structured synthetic catalog fixture. Missing optional attributes remain unknown; they are not converted to false or zero.
 - Service eligibility: the structured service fixture and eligibility logic. Model knowledge is never used for service answers.
 - Recommendation eligibility: the deterministic decision result. Products outside the hard-safe eligible set cannot be recommended.
 - Shopper-facing recommendation identity and order: the validated shopping-agent selection. Deterministic scores and ranks are decision-support signals and fallback inputs, not final recommendation authority.
 - Conversational preferences: validated structured conversational state. Downstream code does not reconstruct hard constraints from raw conversation text.
-- Customer experience: the precomputed review-evidence fixture. It remains separate from catalog facts and is never an eligibility or ranking input.
+- Customer experience: the 48-record precomputed synthetic review-evidence fixture. Topic coverage intentionally varies. It remains separate from catalog facts and is never an eligibility or ranking input.
 
 Before recommendation prose is generated, `engine.grounding.build_recommendation_evidence` creates a narrow contract containing represented fields for the validated selection, verified or unknown fact status, verified service state, active weights, active hard constraints, and any structured approved relaxation. The full catalog is not sent to the response model.
 

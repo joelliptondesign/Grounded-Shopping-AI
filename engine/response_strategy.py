@@ -151,6 +151,7 @@ def build_product_fact(
         product is not None
         and attribute
         and attribute in product
+        and product[attribute] is not None
         and attribute != "unknown"
     )
     return {
@@ -182,7 +183,7 @@ def build_service_fact(
     products = find_products(requested, catalog)
     product = products[0] if products else fallback_product
     if product is not None:
-        verified = "haul_away_CA_available" in product
+        verified = product.get("haul_away_CA_available") is not None
         return {
             "intent": "service_question",
             "authoritative_source": AUTHORITATIVE_SOURCES["service_eligibility"],

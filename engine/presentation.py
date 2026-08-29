@@ -23,7 +23,7 @@ SERVICE_SOURCE = AUTHORITATIVE_SOURCES["service_eligibility"]
 RANKING_SOURCE = AUTHORITATIVE_SOURCES["recommendation"]
 SCORING_SOURCE = AUTHORITATIVE_SOURCES["candidate_ranking"]
 REVIEW_SOURCE = AUTHORITATIVE_SOURCES.get(
-    "review_evidence", "precomputed_customer_review_evidence_fixture_v1"
+    "review_evidence", "precomputed_customer_review_evidence_fixture_v2"
 )
 
 DIMENSION_LABELS = {
@@ -170,14 +170,14 @@ def _card_reasons(product: Dict[str, Any], state: Dict[str, Any]) -> List[str]:
     if hard.get("max_price") is not None and product.get("price") is not None:
         reasons.append(f"Within your ${hard['max_price']:,.0f} maximum")
     for field in _relevant_dimensions(state):
-        if field == "price" or field not in product:
+        if field == "price" or product.get(field) is None:
             continue
         reasons.append(f"{DIMENSION_LABELS[field]}: {_format_value(field, product[field])}")
         if len(reasons) == 3:
             break
     if not reasons:
         for field in ("support", "cooling", "motion_isolation"):
-            if field in product:
+            if product.get(field) is not None:
                 reasons.append(f"{DIMENSION_LABELS[field]}: {_format_value(field, product[field])}")
             if len(reasons) == 2:
                 break
@@ -266,7 +266,7 @@ def _recommendation_cards(turn: Dict[str, Any]) -> Dict[str, Any]:
                     "label": "California haul-away",
                     "available": product.get("haul_away_CA_available"),
                 }
-                if service_relevant and "haul_away_CA_available" in product
+                if service_relevant and product.get("haul_away_CA_available") is not None
                 else None
             ),
         }
@@ -445,7 +445,7 @@ def _product_detail(turn: Dict[str, Any]) -> Dict[str, Any]:
         "warranty_years",
         "haul_away_CA_available",
     ):
-        if field in product:
+        if product.get(field) is not None:
             fields.append(
                 {
                     "key": field,

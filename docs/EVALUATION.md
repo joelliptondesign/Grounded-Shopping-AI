@@ -35,7 +35,7 @@ Trust-boundary failures are blocking. Among systems that remain inside the bound
 
 ## Datasets and reporting
 
-[Shopping Agent Core](../evals/shopping-agent-core/README.md) contains versioned single- and multi-turn cases. Deterministic fixtures test state, decisions, grounding, presentation, recovery, and eight critical invariants. Live runs use the production model routes and preserve transcripts, structured shopper state, authoritative results, evidence, presentation contracts, validation audits, timing, and model-call metadata.
+[Shopping Agent Core](../evals/shopping-agent-core/README.md) contains versioned single-turn, multi-turn, and cold-start cases. The current v2 definition has 26 cases. Deterministic fixtures test state, decisions, grounding, presentation, recovery, and critical invariants. Live runs use the production model routes and preserve transcripts, structured shopper state, authoritative results, evidence, presentation contracts, validation audits, timing, and model-call metadata.
 
 [Conversational Reference Continuity](../evals/conversational-reference-continuity/v1/journeys.json) is a separate six-journey focused live regression for cards→ordinal comparison, compare→pick, comparison attributes and ordinals, review pronouns, service-topic switches, and genuine ambiguity. It uses production Luna routing plus the independent Sol Shopping Experience judge and deterministic System Integrity assessment; it is intentionally not a rerun of the full Core v2 suite.
 
@@ -67,8 +67,10 @@ python3 evals/runner.py --live --cx-judge
 
 The calibration command runs exactly five representative v2 journeys. The final command runs the complete v2 suite with production Luna routing and the independent Sol judge for customer-facing journeys.
 
-## Latest v2 evidence
+## Current v2 evidence
 
-The final immutable full run is [2026-08-26_191216](../artifacts/evals/shopping-agent-core/v2/2026-08-26_191216_report.md). System Integrity passed 19/19 with every critical invariant intact. Shopping Experience averaged 2.06/3 across 17 judged journeys (four scored 3, ten scored 2, and three scored 1). The semantic regression layer passed 12/19; seven major mismatches were recorded, including a broken compare-then-pick journey and several priority/state extraction mismatches.
+The latest current-definition deterministic run is [2026-08-26_235725](../artifacts/evals/shopping-agent-core/v2/2026-08-26_235725_report.md). It uses `catalog_v2+reviews_v2`, includes all 26 cases, passes every critical invariant, and passes 25/26 cases overall. The one major failure is an expected-winner mismatch in the compare-then-pick journey after the 48-product catalog expansion; no integrity boundary failed.
 
-The run also exposed one invalid deterministic expectation: the fuzzy-preference journey required an exact clarification string despite receiving semantically correct behavior and a 3/3 Sol score. The v2 definition now marks that wording as non-exact; the immutable run remains unchanged and transparently includes the original false failure. No post-run rerun was performed.
+The latest immutable full live run is [2026-08-26_191216](../artifacts/evals/shopping-agent-core/v2/2026-08-26_191216_report.md). It predates the seven cold-start journeys and therefore covers the earlier 19-case v2 definition. System Integrity passed 19/19 with every critical invariant intact. Shopping Experience averaged 2.06/3 across 17 judged journeys (four scored 3, ten scored 2, and three scored 1). The semantic regression layer passed 12/19; seven major mismatches were recorded, including a broken compare-then-pick journey and several priority/state extraction mismatches.
+
+That live run also exposed one invalid deterministic expectation: the fuzzy-preference journey required an exact clarification string despite receiving semantically correct behavior and a 3/3 Sol score. The v2 definition now marks that wording as non-exact; the immutable run remains unchanged and transparently includes the original false failure. The current 26-case definition has not yet received a full live rerun.

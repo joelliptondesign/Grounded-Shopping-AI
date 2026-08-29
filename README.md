@@ -6,6 +6,13 @@ The prototype is a **shopping agent with trusted commerce tools**. Language mode
 
 This is a technical prototype, not production commerce infrastructure. Its catalog, service eligibility, and customer-review evidence are local fixtures, and its supported decisions are limited to fields represented by the schemas and data in this repository.
 
+Current repository snapshot:
+
+- 48 synthetic catalog products and 48 corresponding synthetic review records, with intentionally incomplete optional fields
+- 178 passing unit tests
+- 26 Shopping Agent Core v2 cases: 12 single-turn cases, 7 multi-turn journeys, and 7 cold-start journeys
+- latest deterministic Core v2 artifact: 25/26 passed, with one documented non-integrity comparison-winner expectation mismatch after the catalog expansion
+
 ## What the System Demonstrates
 
 - Natural-language preference extraction into schema-constrained shopper state
@@ -167,7 +174,7 @@ the extraction layer can produce the following state update (abbreviated):
 }
 ```
 
-Application code filters and scores the fixture catalog, then a validated structured shopping selection drives a presentation contract shaped like:
+Application code filters and scores the fixture catalog, then a validated structured shopping selection drives a presentation contract shaped like the illustrative example below. Exact product choice and order can change as the fixture and agent judgment evolve.
 
 ```json
 {
@@ -207,10 +214,10 @@ print(result["selected_sku"])
 Fixtures demonstrate and test representative behavior; they are not a whitelist of accepted chat messages. With an API key, the chat accepts open natural-language input within the supported mattress-shopping model.
 
 - `fixtures/conversational_voice.json` contains seven qualitative conversations covering fuzzy preferences, a soft budget, priority changes, no-match recovery, a saved-constraint conflict, comparison, and unknown information.
-- `fixtures/adaptive_modality.json` follows one stateful conversation from recommendation cards to comparison, factual answer, and recovery choices.
+- `fixtures/adaptive_modality.json` follows one stateful conversation from recommendation cards to comparison, a factual answer, and refined recommendation cards.
 - `fixtures/review_conversations.json` covers general reviews, topic-specific evidence, catalog/review disagreement, and an unknown review topic.
 - The **Advanced / Experiments** view retains three original A/B presets: cooling under budget, required California haul-away, and an intentionally tight cooling/budget scenario.
-- Unit tests also exercise schema validation, state merging, intent routing, hard gates, weight changes, stable ranking, grounding failures, review isolation, approval/rejection, and presentation contracts.
+- The 178 unit tests also exercise schema validation, state merging, intent routing, hard gates, missing optional metadata, catalog and review coverage, weight changes, stable ranking, grounding failures, review isolation, approval/rejection, and presentation contracts.
 
 ## Running the Repository
 
@@ -304,7 +311,7 @@ python3 scripts/model_bakeoff.py --finalize-review
 - `engine/explanation_llm.py`: grounded recommendation explanation generation, validation, retry, and deterministic fallback.
 - `engine/presentation.py`: deterministic modality selection and renderer-independent presentation contracts.
 - `engine/customer_copy.py`: fixed guardrails and deterministic customer-safe fallbacks.
-- `engine/data.py`: 20-product local mattress catalog and service fields.
+- `engine/data.py`: 48-product local mattress catalog with varied price, size, construction, performance, and service coverage.
 - `engine/review_data.py`: precomputed review-evidence fixture and narrow retrieval interface.
 - `engine/prompts.py` and `prompts/`: loader and versioned extraction, voice, explanation, baseline, and retry prompts.
 - `fixtures/`: qualitative voice, adaptive-modality, review-conversation, and Luna-vs-Terra experiment fixtures.
@@ -317,5 +324,7 @@ python3 scripts/model_bakeoff.py --finalize-review
 ## Intentional Scope Boundaries
 
 This is open-ended conversation over a bounded shopping model. The shopper is not limited to exact fixture wording, but grounded knowledge is limited to the local catalog, California haul-away field, review fixture, supported product attributes, and extraction schema.
+
+The catalog and customer-review evidence are synthetic local fixtures, not live commerce data. Optional fixture metadata is intentionally incomplete: `null` means unknown or unrepresented, never false or zero. Consequential requirements still require affirmative evidence, while missing ordinary preference evidence is omitted from compact cards and does not become a fabricated low score.
 
 The repository does not provide live inventory, live pricing, live fulfillment, checkout, retailer integration, production catalog or review APIs, semantic search, learned ranking, durable shopper profiles, authentication, analytics, or production reliability controls. The baseline path is intentionally less governed for comparison; it should not be read as an endorsed production architecture.

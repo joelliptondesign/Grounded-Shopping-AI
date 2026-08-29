@@ -214,8 +214,8 @@ class AdaptivePresentationTests(unittest.TestCase):
 
     def test_no_match_uses_evidence_backed_recovery_choices(self):
         turn = self.turn(
-            "I need a king under $900 with California haul-away.",
-            extracted(size="king", max_price=900, haul_away=True),
+            "I need a king under $200 with California haul-away.",
+            extracted(size="king", max_price=200, haul_away=True),
         )
         presentation = turn["presentation"]
         self.assertEqual(presentation["modality"], "recovery_choices")
@@ -228,7 +228,7 @@ class AdaptivePresentationTests(unittest.TestCase):
             presentation["actions"][-1]["action"], "reject_relaxation"
         )
         self.assertEqual(
-            turn["preference_state"]["hard_constraints"]["max_price"], 900
+            turn["preference_state"]["hard_constraints"]["max_price"], 200
         )
         self.assertTrue(turn["recovery"]["requires_user_approval"])
         self.assertTrue(presentation["suggested_replies"])

@@ -2,7 +2,7 @@
 
 Shopping Agent Core is the versioned behavior dataset for the grounded mattress-shopping system. [The evaluation framework](../../docs/EVALUATION.md) assigns its evidence to two independent responsibilities: deterministic [System Integrity](../../docs/evaluation/SYSTEM_INTEGRITY.md) and qualitative [Shopping Experience](../../docs/evaluation/SHOPPING_EXPERIENCE.md). It does not blend their results.
 
-The suite is intentionally small and inspectable. Version `v1` contains 34 single-turn cases and 10 multi-turn journeys and remains unchanged with its historical runs. Version `v2` contains 12 single-turn cases and 7 multi-turn journeys (19 total). It revises the product contract around flexible budgets, directional preferences, near matches, restrained clarification, bounded conversational context, and customer voice.
+The suite is intentionally small and inspectable. Version `v1` contains 34 single-turn cases and 10 multi-turn journeys and remains unchanged with its historical runs. Version `v2` contains 12 single-turn cases, 7 multi-turn journeys, and 7 cold-start journeys (26 total). It revises the product contract around flexible budgets, directional preferences, near matches, restrained clarification, bounded conversational context, customer voice, and progressive cold-start elicitation.
 
 ## Files and case contract
 
@@ -11,7 +11,8 @@ The suite is intentionally small and inspectable. Version `v1` contains 34 singl
 - [`../runner.py`](../runner.py) validates cases, runs them, records configuration and raw outputs, and writes JSON plus Markdown artifacts.
 - [`../scoring.py`](../scoring.py) owns exact checks, severity-aware summaries, supported metrics, and report rendering.
 - [`v1/manual_scores.json`](v1/manual_scores.json) stores reviewed 0–3 conversation-quality scores and rationales. It starts empty by design.
-- [`v2/single_turn.json`](v2/single_turn.json) and [`v2/multi_turn.json`](v2/multi_turn.json) cover all 30 semantic gold behaviors, merging related behaviors into maintainable journeys.
+- [`v2/single_turn.json`](v2/single_turn.json) and [`v2/multi_turn.json`](v2/multi_turn.json) cover all 30 original semantic gold behaviors, merging related behaviors into maintainable journeys.
+- [`v2/cold_start.json`](v2/cold_start.json) adds seven focused journeys for one-turn basic elicitation, structured selection, typed responses, browse bypass, and refinement from product reactions.
 
 Every case declares a stable `case_id`, category, dimensions, failure severity, and slice tags. Cases may also name one or more critical invariants. Turn cases include shopper text, a deterministic fixture update, and gold intent/state/modality expectations. The runner resolves each declared state delta into the complete core gold shopper state after every turn and compares every field, so an omitted or accidentally reset field fails preservation checks without duplicating large state objects throughout the JSON. Decision cases start at structured state and pin exact eligibility, candidate, score/rank-signal, selection-authority, or block results. Grounding cases supply adversarial response fixtures to the existing validators.
 
@@ -19,7 +20,7 @@ The dataset and schema are independently versioned. Large catalog and review fix
 
 ### v2 gold coverage
 
-All 30 gold behaviors are represented. Closely related behaviors are merged as follows: 8–9 share the priority-change/explanation journey; 10–11 share reference and topic continuity; 12 and 18 share correction with partial information; 15–16 and 26–28 share natural acceptance, rejection, hardening, and firmness updates; 19–20 share catalog/review polarity; 23–24 share comparison and follow-up choice; 25 and 29 share priority loosening with off-topic state preservation. Behaviors 1–7, 13–14, 17, 21–22, and 30 retain focused cases. This yields 19 maintainable cases instead of 30 near-duplicates.
+All 30 original gold behaviors are represented. Closely related behaviors are merged as follows: 8–9 share the priority-change/explanation journey; 10–11 share reference and topic continuity; 12 and 18 share correction with partial information; 15–16 and 26–28 share natural acceptance, rejection, hardening, and firmness updates; 19–20 share catalog/review polarity; 23–24 share comparison and follow-up choice; 25 and 29 share priority loosening with off-topic state preservation. Behaviors 1–7, 13–14, 17, 21–22, and 30 retain focused cases. This yields 19 maintainable original cases instead of 30 near-duplicates, plus 7 cold-start journeys for 26 current v2 cases.
 
 ## Running evaluations
 
@@ -54,7 +55,7 @@ Deterministic mode uses fixture-backed structured updates and runs the real stat
 
 Live mode requires `OPENAI_API_KEY`. It replaces fixture extraction in understanding and journey cases with the production model route, then generates final conversational prose for journey turns. The configured production routes remain `gpt-5.6-luna` with `none` effort for structured understanding and lightweight grounded generation, and `low` effort for conversational reasoning. Add `--cx-judge` to run the independent `gpt-5.6-sol` judge over customer-facing journeys without changing production routing.
 
-A full live run can make roughly 45 extraction calls plus up to roughly 65 generation attempts, depending on deterministic response paths and grounding retries. Use a case or category filter for development, and avoid repeating a full live run casually.
+A full current v2 live run can make roughly 50 extraction calls plus up to roughly 75 generation attempts, depending on structured cold-start resumes, deterministic response paths, and grounding retries. Use a case or category filter for development, and avoid repeating a full live run casually.
 
 ## Outputs and failure inspection
 
@@ -67,6 +68,8 @@ Each run writes beneath `artifacts/evals/shopping-agent-core/<version>/`:
 Run filenames use immutable UTC identities such as `2026-08-26_154719_run.json` and `2026-08-26_154719_report.md`. Existing runs are never overwritten.
 
 Core reports preserve deterministic regression details. The five-case calibration report shows System Integrity and Shopping Experience separately, followed by exact chronological customer conversations, structured UI content, criterion rationales, and blank human-review fields. Pass rates describe these small regression sets only; they are not production benchmarks.
+
+The latest current-definition deterministic run is [2026-08-26_235725](../../artifacts/evals/shopping-agent-core/v2/2026-08-26_235725_report.md): 25/26 cases passed, all critical invariants passed, and the one major failure was an expected-winner mismatch in the compare-then-pick journey after the catalog expanded. Earlier 19-case reports remain immutable evidence for the pre-cold-start v2 definition.
 
 ## Qualitative scoring
 

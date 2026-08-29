@@ -23,7 +23,7 @@ if str(ROOT) not in sys.path:
 
 from engine.conversation import process_conversation_turn
 from engine.conversational_response import generate_turn_response
-from engine.data import SKU_CATALOG
+from engine.data import CATALOG_FIXTURE_VERSION, SKU_CATALOG
 from engine.decision import constraint_violations, evaluate_decision
 from engine.grounding import (
     build_recommendation_evidence,
@@ -38,6 +38,7 @@ from engine.preference_extraction import (
     validate_preference_update,
 )
 from engine.response_strategy import build_review_fact
+from engine.review_data import REVIEW_FIXTURE_VERSION
 from evals.scoring import CaseResult, flatten, markdown_report, nested_get, summary
 from evals.cx_judge import (
     CX_CRITERIA,
@@ -1075,7 +1076,7 @@ def main() -> int:
         "configuration": {
             "models": {task.value: {"model": DEFAULT_MODELS[task], "reasoning_effort": DEFAULT_REASONING[task]} for task in DEFAULT_MODELS},
             "prompt_hashes": prompt_hashes(),
-            "fixture_version": "catalog_v1+reviews_v1",
+            "fixture_version": f"{CATALOG_FIXTURE_VERSION}+{REVIEW_FIXTURE_VERSION}",
             "code_commit": code_commit(),
             "scoring_configuration": {
                 "schema_version": SCHEMA_VERSION,

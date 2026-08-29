@@ -65,26 +65,26 @@ def constraint_evidence(user_preferences, sku):
 
     requested_size = user_preferences.get("requested_size")
     if requested_size is not None:
-        if "available_sizes" not in sku:
+        if sku.get("available_sizes") is None:
             unknowns.append("unknown_size_constraint")
         elif requested_size not in sku["available_sizes"]:
             violations.append("size_constraint")
 
     max_price = user_preferences.get("max_price")
     if max_price is not None:
-        if "price" not in sku:
+        if sku.get("price") is None:
             unknowns.append("unknown_max_price")
         elif sku["price"] > max_price:
             violations.append("max_price")
 
     if latex_constraint_active(user_preferences):
-        if "contains_latex" not in sku:
+        if sku.get("contains_latex") is None:
             unknowns.append("unknown_latex_constraint")
         elif sku["contains_latex"] is True:
             violations.append("latex_constraint")
 
     if user_preferences.get("require_CA_haul_away") is True:
-        if "haul_away_CA_available" not in sku:
+        if sku.get("haul_away_CA_available") is None:
             unknowns.append("unknown_require_CA_haul_away")
         elif sku["haul_away_CA_available"] is not True:
             violations.append("require_CA_haul_away")
@@ -111,7 +111,9 @@ def service_gate(user_preferences, sku):
 
 def _price_score(user_preferences, sku):
     """Score affordability without turning a price preference into eligibility."""
-    price = max(0.0, float(sku.get("price", 0)))
+    if sku.get("price") is None:
+        return None
+    price = max(0.0, float(sku["price"]))
     reference_price = user_preferences.get("budget_target")
     if reference_price is None:
         reference_price = user_preferences.get("max_price")
@@ -140,7 +142,11 @@ def score_dimensions(user_preferences, sku):
         "motion_isolation": "motion_isolation_preference" in user_preferences,
     }
     for metric in ("firmness", "support", "cooling", "motion_isolation"):
-        value = float(sku.get(metric, 0))
+        raw_value = sku.get(metric)
+        if raw_value is None:
+            dimensions[metric] = None
+            continue
+        value = float(raw_value)
         direction = directions.get(metric)
         if direction and not explicit_targets[metric]:
             dimensions[metric] = value / 10.0 if direction == "higher" else (10.0 - value) / 10.0
@@ -210,7 +216,15 @@ def _near_match_penalty(user_preferences, sku):
 def score_sku(user_preferences, sku):
     weights = normalized_ranking_weights(user_preferences)
     dimensions = score_dimensions(user_preferences, sku)
-    return sum(dimensions[metric] * weight for metric, weight in weights.items())
+    represented = {
+        metric: value for metric, value in dimensions.items() if value is not None
+    }
+    represented_weight = sum(weights[metric] for metric in represented)
+    if represented_weight <= 0:
+        return 0.0
+    return sum(
+        value * weights[metric] for metric, value in represented.items()
+    ) / represented_weight
 
 
 def filter_eligible_skus(user_preferences, catalog):

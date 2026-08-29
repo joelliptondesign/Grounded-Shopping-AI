@@ -13,7 +13,15 @@ from engine.preference_extraction import EMPTY_STATE, INTENTS
 from engine.review_data import REVIEW_FIXTURE_SOURCE, review_slice
 
 
-def extracted(intent="product_question", *, products=None, source="reviews", topic="general", cooling_priority=None):
+def extracted(
+    intent="product_question",
+    *,
+    products=None,
+    source="reviews",
+    topic="general",
+    cooling=None,
+    cooling_priority=None,
+):
     return {
         "intent": intent,
         "turn_context": {
@@ -26,7 +34,7 @@ def extracted(intent="product_question", *, products=None, source="reviews", top
         },
         "recovery_response": "none",
         "hard_constraints": {"size": None, "max_price": None, "exclude_latex": None, "require_CA_haul_away": None},
-        "soft_preferences": {"budget_target": None, "firmness_target": None, "support_target": None, "cooling_target": None, "motion_isolation_target": None},
+        "soft_preferences": {"budget_target": None, "firmness_target": None, "support_target": None, "cooling_target": cooling, "motion_isolation_target": None},
         "priorities": {"price": None, "firmness": None, "support": None, "cooling": cooling_priority, "motion_isolation": None},
         "needs_clarification": False,
         "clarification_question": None,
@@ -108,7 +116,9 @@ class ReviewEvidenceTests(unittest.TestCase):
         self.assertNotIn("contains_latex", review_slice(["S06"], "general")["records"][0])
 
     def test_recommendation_may_enrich_card_after_ranking(self):
-        update = extracted("recommend", source=None, topic=None, cooling_priority="critical")
+        update = extracted(
+            "recommend", source=None, topic=None, cooling=9, cooling_priority="critical"
+        )
         turn = self.turn("Cooling matters most. Recommend one.", update)
         selected = turn["decision_result"]["selected_sku"]["sku_id"]
         self.assertEqual(turn["presentation"]["products"][0]["sku_id"], selected)
@@ -118,7 +128,9 @@ class ReviewEvidenceTests(unittest.TestCase):
     def test_recommendation_explanation_may_use_supplied_review_theme(self):
         turn = self.turn(
             "Cooling matters most. Recommend one.",
-            extracted("recommend", source=None, topic=None, cooling_priority="critical"),
+            extracted(
+                "recommend", source=None, topic=None, cooling=9, cooling_priority="critical"
+            ),
         )
         name = turn["decision_result"]["selected_sku"]["name"]
         summary = turn["grounding_evidence"]["review_evidence"]["records"][0]["themes"]["cooling"]["summary"]

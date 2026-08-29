@@ -53,9 +53,11 @@ Each case reports `PASS` or `FAIL`, applicable invariant outcomes, and separate 
 
 An integrity failure stays independently visible and may block release. CX results are never used to average it away.
 
-## Latest full v2 result
+## Latest evidence
 
-In the immutable [2026-08-26_191216 full live run](../../artifacts/evals/shopping-agent-core/v2/2026-08-26_191216_report.md), System Integrity passed 19/19 assessed cases. All critical invariants passed, with zero non-negotiable, grounding/factual, recommendation-authority, or state-integrity violations. Three of 31 delivered turns used deterministic fallback, and no unsupported capability claim was delivered.
+In the current-definition [2026-08-26_235725 deterministic run](../../artifacts/evals/shopping-agent-core/v2/2026-08-26_235725_report.md), every critical invariant passed across all 26 cases. The one overall case failure was a major expected-winner mismatch, not an integrity violation.
+
+In the immutable [2026-08-26_191216 full live run](../../artifacts/evals/shopping-agent-core/v2/2026-08-26_191216_report.md), System Integrity passed 19/19 assessed cases. This run predates the seven cold-start journeys. It recorded zero non-negotiable, grounding/factual, recommendation-authority, or state-integrity violations. Three of 31 delivered turns used deterministic fallback, and no unsupported capability claim was delivered.
 
 ## What integrity is not
 
