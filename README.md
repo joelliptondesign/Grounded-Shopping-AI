@@ -9,9 +9,10 @@ This is a technical prototype, not production commerce infrastructure. Its catal
 Current repository snapshot:
 
 - 48 synthetic catalog products and 48 corresponding synthetic review records, with intentionally incomplete optional fields
-- 178 passing unit tests
+- 193 passing unit tests
 - 26 Shopping Agent Core v2 cases: 12 single-turn cases, 7 multi-turn journeys, and 7 cold-start journeys
 - latest deterministic Core v2 artifact: 25/26 passed, with one documented non-integrity comparison-winner expectation mismatch after the catalog expansion
+- a Claude Design shopper interface with a scripted **Demo** mode and a **Live** mode backed by this engine, served with the FastAPI adapter in `api/`
 
 ## What the System Demonstrates
 
@@ -24,6 +25,7 @@ Current repository snapshot:
 - Restrained clarification, extraction-failure recovery, immediate near matches for ordinary preferences, and explicit approval before a true hard requirement changes
 - Grounded catalog, service, ranking, and fixture-backed review evidence with validation and safe fallbacks
 - Adaptive presentation through conversation, recommendation cards, comparison tables, product details, recovery choices, structured elicitation contracts, and conversational suggested replies
+- One Claude Design shopper interface with a scripted Demo mode and an engine-backed Live mode
 - Customer-facing conversational generation plus optional developer/debug inspection
 - Validation-buffered response streaming and turn-level latency instrumentation
 - Explicit task-based model routing and a small, inspectable model-selection experiment
@@ -32,7 +34,19 @@ Current repository snapshot:
 
 For a product-level explanation of how the conversational system works, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-The primary chat path is implemented by `engine/conversation.py` and rendered by the default **Shopping Agent** view in `streamlit_app.py`:
+The customer-facing product surface is the Claude Design frontend in `frontend/`. In its **Live** mode a turn travels:
+
+```text
+Claude Design frontend
+  -> FastAPI (api/server.py)
+  -> the Python shopping-agent engine (engine/conversation.py)
+  -> presentation adapter (api/blocks.py)
+  -> the same Claude Design renderer
+```
+
+Streamlit is no longer in that path. `streamlit_app.py` remains as a legacy debug and development surface over the same engine.
+
+The turn itself is implemented by `engine/conversation.py` and is identical for both surfaces:
 
 ```text
 shopper message
@@ -43,7 +57,7 @@ shopper message
        soft-preference updates
        semantic-priority updates
        clarification or recovery response
-  -> persistent shopper state for the Streamlit session
+  -> persistent shopper state for the current session
   -> explicit response strategy
        recommendation | comparison | product fact | service fact | off-topic
   -> clarification or recovery when required
@@ -62,11 +76,24 @@ shopper message
   -> only validated or deterministic-safe language streams to the shopper
 ```
 
+### Shopper interface: Demo and Live
+
+`frontend/` holds the Claude Design interface. Both of its modes use the same visual system; only the source of the response differs.
+
+- **Demo** is the original scripted, fixture-backed experience. It runs entirely in the browser with no backend or key, and is the reliable presentation path.
+- **Live** sends every turn to this engine through `api/`. Selection, ordering, eligibility, shopper state, grounded evidence, comparison rows, service availability, and recommendation rationale all come from the backend.
+
+Switching modes clears the conversation and returns to the cold-start screen; the two never share conversational state.
+
+The division of authority in Live mode is deliberate. The engine owns commerce truth: which products are selected, in what order, at what price, under which constraints, and why. The frontend owns customer-facing presentation, including a small fixture layer of decorative commerce metadata keyed by `sku_id` — product imagery, display rating, review count, Prime badge, delivery date, and an optional list price. The engine's catalog carries none of those, and they exist so a Live recommendation renders in the same card as a Demo one instead of degrading into a sparser layout. **They never travel to the backend and never influence eligibility, ranking, grounding, or any agent decision.**
+
+Live interaction follows the Demo prototype's model rather than a reduced version of it: size and approximate budget are preferred cold-start basics but never hard gates, explicit browse intent bypasses them, recommendation categories keep their heading and their `see more` link — which draws further real backend candidates — comparisons use the comparison treatment, service and haul-away questions answer from real backend evidence, and every turn ends in continuation pills chosen from the live shopper state.
+
 ### Understanding and shopper state
 
 `engine/preference_extraction.py` calls the OpenAI Responses API with a strict JSON Schema. It extracts one of five broad intents plus a concrete shopping action (`recommend_products`, `compare_products`, `choose_from_products`, `answer_product_question`, `answer_service_question`, `off_topic`, or `clarify_reference`), grounded product IDs, requested information source, hard constraints, soft targets, semantic priorities, recommendation readiness (`low`, `exploratory`, or `strong`), and clarification or recovery signals. Readiness is a semantic interaction cue, not a numeric confidence score. It does not answer factual questions or invent numeric ranking weights.
 
-The merged shopper state persists across turns in the current Streamlit session. Null update values leave prior values unchanged; explicit values replace them, including `false` when a shopper reverses a Boolean requirement. State is in memory only—there is no user account, database, or cross-session persistence.
+The merged shopper state persists across turns within one conversation session. Null update values leave prior values unchanged; explicit values replace them, including `false` when a shopper reverses a Boolean requirement. State is in memory only—there is no user account, database, or cross-session persistence. For the Live frontend, `api/sessions.py` holds that state per conversation in the API process; restarting the server ends every conversation, and the frontend simply starts a new one.
 
 Recent conversation supplies linguistic meaning; a four-record `recent_presentations` window supplies the authoritative modality, product identity/order, and active product/service/review topic that the shopper actually saw. The same agent extraction call resolves ordinary pronouns, ordinals, comparisons, and topic switches from both inputs. Application code then resolves IDs through the catalog, rejects invalid or out-of-scope actions, retries once, and can recover an obvious comparison scope from the authoritative UI record. This is bounded session metadata, not long-term memory or retrieval.
 
@@ -108,7 +135,7 @@ Cold-start preference elicitation optimizes for time to useful products. For a n
 
 Three interaction types remain separate. A structured elicitation is an optional `single_select` contract whose labeled options carry exact state patches; selecting one resumes deterministically without another interpretation call. Suggested replies are only conversational shortcuts and continue through ordinary language understanding. Free text always remains available, including as the fallback when a renderer cannot display structured controls. “Show me options” skips an optional pending elicitation and resumes exploratory shopping. The same renderer-independent recommendation contract already carries stable product IDs, names, fixture prices, match reasons, and tradeoffs, which is sufficient for a later text-only recommendation renderer without weakening catalog grounding.
 
-This milestone implements the interaction contract and resume path only. The current Streamlit view does not yet render the new structured choices; it displays the complete question and accepts a typed response through the text fallback. A later UI pass can render the contract without changing its state semantics.
+The Live frontend renders a pending elicitation as its option pills; tapping one posts the option label, which the API matches back to the contract and resumes through the deterministic resolver rather than re-interpreting it with a model. Free text remains available throughout. The legacy Streamlit view still uses the typed-text fallback rather than dedicated choice controls.
 
 For generated prose, `engine/grounding.py` defines represented evidence and validates high-risk claims such as validated-selection identity, price and score values, latex status, haul-away availability, review ratings/counts/themes, unsupported quotations, and implied live capabilities. Product identity may be supplied by validated recommendation cards delivered with the prose, so conversational framing need not duplicate card names; any product explicitly named or recommended in prose must still belong to the validated selection. Generation receives one stricter retry after a validation failure and then falls back to deterministic customer copy. Off-topic and extraction-failure responses are fixed guardrails.
 
@@ -122,13 +149,17 @@ For generated prose, `engine/grounding.py` defines represented evidence and vali
 - Grounded relaxation proposals use recovery choices that preserve the approval boundary.
 - Optional cold-start basics use a distinct structured-elicitation payload; open-ended clarifications may still provide conversational suggested replies.
 
-The Streamlit chat offers optional developer details for shopper state, intent and strategy, presentation selection and sources, ranking metadata, recovery state, extraction errors, and grounding audits. The separate **Advanced / Experiments** view retains the original A/B comparison between a baseline LLM response and the deterministic decision layer.
+The Claude Design frontend renders every one of these through one shared visual system; see [frontend/README.md](frontend/README.md) for how each contract maps onto its blocks. The legacy Streamlit view renders the same contracts with basic controls, and offers optional developer details for shopper state, intent and strategy, presentation selection and sources, ranking metadata, recovery state, extraction errors, and grounding audits. Its separate **Advanced / Experiments** view retains the original A/B comparison between a baseline LLM response and the deterministic decision layer.
 
 ### Streaming and latency
 
 Structured interpretation, state validation, routing, filtering, ranking, grounding, and presentation selection all complete before customer-facing generation begins. Extraction remains one atomic schema-constrained call; partial JSON never updates state or enters decision logic.
 
-For generated conversational framing, model deltas are collected behind the existing grounding validator. Streamlit renders cards, tables, product details, or recovery actions as soon as the presentation contract is ready, then releases the prose as a stream only after the complete text passes validation. This deliberate validation buffer prevents an unsupported claim from appearing and later being retracted. Fixed guardrails, model-unavailable responses, generation failures, and grounding failures use deterministic fallback copy rather than a generated stream.
+For generated conversational framing, model deltas are collected behind the existing grounding validator. No unvalidated model token ever reaches the shopper. This deliberate validation buffer prevents an unsupported claim from appearing and later being retracted. Fixed guardrails, model-unavailable responses, generation failures, and grounding failures use deterministic fallback copy rather than a generated stream.
+
+The Live frontend uses that boundary for progressive delivery. `POST /api/session/{id}/turn/stream` sends Server-Sent Events at the points where a turn genuinely completes: `presentation` once the validated structured contract exists, `message` once the prose has passed grounding validation, and `complete` with the continuation pills. Cards and comparison tables can therefore render while generation is still running, and the loading state stays visible so the turn does not look finished early. The events carry finished, validated artifacts — this is staged delivery, not token streaming. A buffered `POST .../turn` endpoint runs the identical engine path and serves as the fallback.
+
+Live loading treatment is a semantic decision, not a view of backend stages. Simple conversational turns — greetings, a missing size or budget, unclear input, a narrow product fact — use the lightweight dots. Genuine multi-step shopping work — a recommendation search, a refinement that rebuilds the shortlist, haul-away or delivery discovery — may use the multi-step progress treatment. That progress tree is a turn-level artifact: it appears at most once per shopper turn and is retired as soon as presentation or message content lands, so any later wait in the same turn shows dots. A new turn is eligible for a new tree.
 
 Each turn carries reusable timing metadata for extraction, decision readiness, presentation readiness, generation time to first token, generation completion, first visible response, and total turn latency. Durations use a monotonic clock; developer-facing timestamps are UTC. These measurements support later buffered-versus-streamed evaluation but are not themselves a claim that total latency improved.
 
@@ -217,7 +248,7 @@ Fixtures demonstrate and test representative behavior; they are not a whitelist 
 - `fixtures/adaptive_modality.json` follows one stateful conversation from recommendation cards to comparison, a factual answer, and refined recommendation cards.
 - `fixtures/review_conversations.json` covers general reviews, topic-specific evidence, catalog/review disagreement, and an unknown review topic.
 - The **Advanced / Experiments** view retains three original A/B presets: cooling under budget, required California haul-away, and an intentionally tight cooling/budget scenario.
-- The 178 unit tests also exercise schema validation, state merging, intent routing, hard gates, missing optional metadata, catalog and review coverage, weight changes, stable ranking, grounding failures, review isolation, approval/rejection, and presentation contracts.
+- The 193 unit tests also exercise schema validation, state merging, intent routing, hard gates, missing optional metadata, catalog and review coverage, weight changes, stable ranking, grounding failures, review isolation, approval/rejection, and presentation contracts.
 
 ## Running the Repository
 
@@ -233,13 +264,22 @@ For live structured extraction and conversational generation, create a `.env` fi
 OPENAI_API_KEY=your_key_here
 ```
 
-Run the Streamlit application:
+Run the shopper application — one process serves both the API and the frontend:
+
+```bash
+uvicorn api.server:app --reload --port 8000
+open http://localhost:8000/
+```
+
+The three-dot menu switches between **Demo** and **Live**. Demo is the scripted, fixture-backed Claude Design experience and needs no key or backend. Live runs this engine, so it needs `OPENAI_API_KEY`; without one it reports that a new shopping conversation is temporarily unavailable, because its first step is model-based structured extraction, and it does not bypass that boundary. `LIVE_DEBUG=1` adds a small development-only per-turn diagnostic field.
+
+Run the legacy Streamlit debug surface over the same engine:
 
 ```bash
 streamlit run streamlit_app.py
 ```
 
-Without `OPENAI_API_KEY`, the Streamlit application still starts and the deterministic path under **Advanced / Experiments** remains usable with local fallback prose. The **Shopping Agent** reports that a new shopping conversation is temporarily unavailable because its first step is model-based structured extraction; it does not bypass that boundary.
+Without `OPENAI_API_KEY`, Streamlit still starts and the deterministic path under **Advanced / Experiments** remains usable with local fallback prose.
 
 Run the complete test suite (model calls are mocked):
 
@@ -292,11 +332,14 @@ python3 scripts/model_bakeoff.py --model gpt-5.6-terra
 python3 scripts/model_bakeoff.py --finalize-review
 ```
 
-`python3 app.py` remains a legacy command-line smoke entry point for the original A/B path. Its current hard-coded empty query is rejected by the scope guardrail, so Streamlit is the useful interactive entry point.
+`python3 app.py` remains a legacy command-line smoke entry point for the original A/B path. Its current hard-coded empty query is rejected by the scope guardrail.
 
 ## Repository Map
 
-- `streamlit_app.py`: primary Streamlit Shopping Agent, adaptive renderers, developer/debug views, and the secondary original A/B experiment.
+- `frontend/`: the Claude Design shopper interface — Demo and Live modes over one visual system, its runtime, product imagery, and presentation-only fixtures. See [frontend/README.md](frontend/README.md).
+- `api/`: the FastAPI adapter that puts this engine behind Live mode — sessions, the presentation-to-block adapter, staged delivery, and static hosting of `frontend/`. See [api/README.md](api/README.md).
+- `bench/`: latency measurement harnesses and the recorded findings behind the current routing choices. See [bench/README.md](bench/README.md).
+- `streamlit_app.py`: legacy debug and development surface over the same engine, plus the original A/B experiment.
 - `app.py`: legacy command-line A/B smoke entry point.
 - `engine/preference_extraction.py`: strict extraction schema, model call, validation, state merge, and decision adapter.
 - `engine/conversation.py`: turn orchestration, intent routing, recovery coordination, evidence assembly, and presentation handoff.

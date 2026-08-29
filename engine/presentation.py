@@ -209,6 +209,33 @@ def _card_tradeoff(
     return None
 
 
+SERVICE_LABELS = {"haul_away": "haul-away"}
+
+
+def _service_discovery_message(turn: Dict[str, Any], products: List[Dict[str, Any]]) -> str:
+    """Explain the gap, then hand over the alternatives that close it."""
+    discovery = turn.get("service_discovery") or {}
+    label = SERVICE_LABELS.get(discovery.get("service"), "that service")
+    if discovery.get("region") == "CA":
+        label = f"California {label}"
+    if not products:
+        return (
+            f"None of these include {label}, and I couldn't find another option "
+            "that does while staying close to what you're looking for."
+        )
+    found = "a couple that do" if len(products) > 1 else "one that does"
+    return (
+        f"These options don't include {label}. I found {found}, while staying "
+        "close to what you're looking for."
+    )
+
+
+def _service_discovery_heading(turn: Dict[str, Any]) -> str:
+    discovery = turn.get("service_discovery") or {}
+    label = SERVICE_LABELS.get(discovery.get("service"), "that service")
+    return f"Options with {label}"
+
+
 def _recommendation_cards(turn: Dict[str, Any]) -> Dict[str, Any]:
     decision = turn.get("decision_result") or {}
     selection = turn.get("shopping_selection") or {}
@@ -291,6 +318,12 @@ def _recommendation_cards(turn: Dict[str, Any]) -> Dict[str, Any]:
                 field_sources["tradeoff"] = REVIEW_SOURCE
             turn["review_debug"]["appeared_in_cards"] = True
         sources[product.get("sku_id", "unknown")] = field_sources
+    if turn.get("service_discovery"):
+        # The shopper asked about a service, so the framing leads with the gap
+        # and the list is introduced by its own heading, as the prototype does.
+        contract["message"] = _service_discovery_message(turn, cards)
+        contract["heading"] = _service_discovery_heading(turn)
+        contract["selection_reason"] = "service requirement applied to the shopper's existing state"
     contract["products"] = cards
     contract["selection_mode"] = mode
     contract["primary_product_id"] = selection.get("primary_product_id")

@@ -8,6 +8,17 @@ The prototype is a mattress shopping assistant that can understand natural conve
 
 It is a prototype, not a live store. The 48 mattresses, prices, service details, and customer-review summaries are synthetic local fixtures. There is no checkout, live inventory, retailer connection, or customer account.
 
+## Where the shopper sees this
+
+The shopper interface is a mobile shopping-assistant surface with two modes that share one visual system:
+
+- **Demo** replays a scripted, fixture-backed conversation entirely in the browser. It needs no backend and is the reliable presentation path.
+- **Live** sends each turn to the engine described below, so the products, ordering, facts, comparisons and reasoning are all real.
+
+Switching modes clears the conversation. The two never share state.
+
+One detail is worth stating plainly because it affects how the cards should be read. The engine is authoritative for everything commercial: which products are selected, in what order, at what price, under which constraints, and why. The interface adds a small fixture layer of decorative shopping chrome — product photography, a display rating, a review count, a Prime badge, a delivery date — because the engine's catalog holds none of those and a card without them would look broken. Those decorative values never reach the engine and never influence what it recommends.
+
 ## The central design principle
 
 The experience combines two kinds of decision-making:
@@ -46,9 +57,9 @@ The model does not decide eligibility or freely answer from its general knowledg
 
 ### 2. Update the session's shopper profile
 
-The assistant keeps a small structured profile for the current Streamlit session. New messages update only the fields the shopper changed. For example, “Actually, queen instead of king” changes the size while keeping the saved budget and cooling preference.
+The assistant keeps a small structured profile for the current conversation session. New messages update only the fields the shopper changed. For example, “Actually, queen instead of king” changes the size while keeping the saved budget and cooling preference.
 
-This is session memory, not a customer profile. It disappears when the session ends and is not stored in a database.
+This is session memory, not a customer profile. It disappears when the session ends and is not stored in a database. In the shopper interface, each conversation's profile lives in the API server's memory for as long as that conversation does; restarting the server ends them all.
 
 The assistant also keeps two short context windows:
 
@@ -123,7 +134,7 @@ The application chooses a renderer-independent presentation contract. That contr
 | Recovery choices | Verified ways forward when no product meets all true requirements |
 | Structured elicitation | An optional single-choice question for high-value cold-start basics |
 
-The current Streamlit interface renders cards, comparison tables, product details, recovery actions, and conversational suggested replies. Structured elicitation already has a complete data contract and deterministic resume path, but the current interface uses its typed-text fallback rather than dedicated choice controls.
+The shopper interface renders every one of these through one visual system, including structured elicitation, whose options appear as selectable pills and resume through the deterministic resolver. The legacy Streamlit surface renders the same contracts with basic controls and uses the typed-text fallback for elicitation.
 
 ### 8. Validate customer-facing language
 
@@ -140,7 +151,7 @@ The checks reject, among other things:
 
 If the first response fails, the model receives one stricter retry. If the retry fails or the model is unavailable, the shopper receives deterministic fallback copy assembled from represented facts. Unsafe partial prose is never shown and then retracted.
 
-Structured UI can become renderable as soon as its contract is ready. Approved prose is then released as a stream. Turn timing records interpretation, decision, presentation, first generated token, first visible response, and completion so the latency tradeoff remains inspectable.
+Structured UI can become renderable as soon as its contract is ready, which happens before the wording exists. The shopper interface uses that: it shows validated cards or a comparison table while the response is still being written, keeps a loading state visible so the turn does not look finished, and adds the approved prose when it passes validation. What is delivered early is a finished, validated artifact — never partial or unchecked wording. Turn timing records interpretation, decision, presentation, first generated token, first visible response, and completion so the latency tradeoff remains inspectable.
 
 ## Clarification, cold starts, and recovery
 
@@ -192,7 +203,9 @@ Filtering, scoring, recovery-option construction, selection validation, presenta
 | Generate and validate conversational wording | `engine/conversational_response.py` and `engine/explanation_llm.py` |
 | Provide customer-safe local fallback copy | `engine/customer_copy.py` |
 | Hold synthetic catalog and review evidence | `engine/data.py` and `engine/review_data.py` |
-| Render the product and developer views | `streamlit_app.py` |
+| Present the shopper experience | `frontend/` (Claude Design, Demo and Live modes) |
+| Put the engine behind the Live interface | `api/` (sessions, presentation adapter, staged delivery) |
+| Render the legacy debug and developer views | `streamlit_app.py` |
 
 ## What the prototype deliberately does not include
 

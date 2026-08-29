@@ -4,6 +4,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 from engine.grounding import AUTHORITATIVE_SOURCES
 from engine.customer_copy import (
+    service_availability_fallback,
     OFF_TOPIC,
     UNKNOWN_FACT,
     comparison_fallback,
@@ -221,7 +222,43 @@ def render_product_fact(result: Dict[str, Any]) -> str:
     return product_fact_fallback(result)
 
 
+def service_availability(
+    product_names: Iterable[str], catalog: Iterable[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """California haul-away availability across every product the shopper meant.
+
+    ``build_service_fact`` answers about one product, which is right for "does
+    the CoreFlex Entry include haul-away". A question about a shortlist needs the
+    whole shortlist, so this reports each referenced product separately and says
+    whether any of them carries the service.
+    """
+    products = find_products(list(product_names), catalog)
+    entries = [
+        {
+            "sku_id": product.get("sku_id"),
+            "name": product.get("name"),
+            "verified": product.get("haul_away_CA_available") is not None,
+            "available": product.get("haul_away_CA_available"),
+        }
+        for product in products
+    ]
+    return {
+        "intent": "service_question",
+        "authoritative_source": AUTHORITATIVE_SOURCES["service_eligibility"],
+        "service": "haul_away",
+        "region": "CA",
+        "scope": "shortlist",
+        "verified": bool(entries) and any(item["verified"] for item in entries),
+        "products": entries,
+        "with_service": [item for item in entries if item["available"] is True],
+        "any_available": any(item["available"] is True for item in entries),
+        "all_verified": bool(entries) and all(item["verified"] for item in entries),
+    }
+
+
 def render_service_fact(result: Dict[str, Any]) -> str:
+    if result.get("scope") == "shortlist":
+        return service_availability_fallback(result)
     return service_fact_fallback(result)
 
 

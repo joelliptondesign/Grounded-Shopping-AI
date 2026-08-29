@@ -1,7 +1,7 @@
 """Deterministic customer copy used only for guardrails and safe fallbacks."""
 
 import hashlib
-from typing import Any, Dict
+from typing import Any, Dict, Sequence
 
 
 INTERNAL_CUSTOMER_TERMS = (
@@ -42,6 +42,12 @@ ROUTING_FAILURE = (
     "I'm not sure which part of the mattress search you want to tackle next. "
     "Tell me what you're weighing, and we'll pick it up from there."
 )
+# One lightweight follow-up when the shopper answered half of the cold-start
+# question. Never a gate: the next turn recommends regardless of the answer.
+COLD_START_FOLLOW_UPS = {
+    "size": "Got it. What size mattress are you shopping for?",
+    "budget": "Got it. Roughly what would you like to spend?",
+}
 CONFIGURATION_FAILURE = (
     "I'm unable to start a new shopping conversation right now. Your preferences "
     "haven't changed, so you can try again in a moment."
@@ -107,6 +113,37 @@ def service_fact_fallback(result: Dict[str, Any]) -> str:
     count = len(result["eligible_products"])
     noun = "mattress" if count == 1 else "mattresses"
     return f"California haul-away is available for {count} {noun} in this collection."
+
+
+def service_availability_fallback(result: Dict[str, Any]) -> str:
+    """Answer a shortlist-level service question about every product shown."""
+    entries = result.get("products", [])
+    if not entries:
+        return "I don't have reliable haul-away information for those mattresses."
+    with_service = [item["name"] for item in entries if item.get("available") is True]
+    without = [item["name"] for item in entries if item.get("available") is False]
+    unknown = [item["name"] for item in entries if item.get("available") is None]
+
+    if not with_service and not without:
+        return "I don't have reliable haul-away information for those mattresses."
+    if not with_service:
+        subject = _join(without) if without else _join(unknown)
+        return f"California haul-away isn't available for {subject}."
+    sentence = f"California haul-away is available for {_join(with_service)}."
+    if without:
+        sentence += f" It isn't available for {_join(without)}."
+    if unknown:
+        sentence += f" I don't have reliable information for {_join(unknown)}."
+    return sentence
+
+
+def _join(names: Sequence[str]) -> str:
+    names = list(names)
+    if len(names) == 1:
+        return names[0]
+    if len(names) == 2:
+        return f"{names[0]} and {names[1]}"
+    return ", ".join(names[:-1]) + f", and {names[-1]}"
 
 
 def review_fallback(result: Dict[str, Any]) -> str:

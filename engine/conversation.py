@@ -1,5 +1,6 @@
 """Intent router with explicit clarification and deterministic recovery."""
 
+import re
 from copy import deepcopy
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
@@ -20,6 +21,7 @@ from engine.recovery import (
 )
 from engine.response_strategy import (
     build_comparison,
+    service_availability,
     add_comparison_reviews,
     build_product_fact,
     build_review_fact,
@@ -31,13 +33,20 @@ from engine.response_strategy import (
     render_service_fact,
     strategy_for_intent,
 )
-from engine.customer_copy import EXTRACTION_RECOVERY, off_topic_fallback
+from engine.customer_copy import (
+    COLD_START_FOLLOW_UPS,
+    EXTRACTION_RECOVERY,
+    off_topic_fallback,
+)
 from engine.elicitation import (
     build_cold_start_elicitation,
     resolve_elicitation_response,
 )
 from engine.presentation import build_turn_presentation
-from engine.shopping_selection import select_shopping_products
+from engine.shopping_selection import (
+    deterministic_selection_fallback,
+    select_shopping_products,
+)
 from engine.timing import mark_timing, new_turn_timing
 
 
@@ -239,6 +248,82 @@ def _structured_resume_update(
     return update, resolved
 
 
+# Size and approximate budget markedly improve a first shortlist, so the agent
+# gets two lightweight attempts to collect them — never more, and never as a gate.
+MAX_COLD_START_QUESTIONS = 2
+
+_DECLINES_BASICS = re.compile(
+    r"\b(just show|show me (some|any|options|what)|browse|"
+    r"i (don'?t|do not) know|dunno|no idea|not sure|unsure|"
+    r"(doesn'?t|does not) matter|no (real )?budget|"
+    r"whatever|any(thing)? (is )?fine|no preference|not important|skip)\b",
+    re.IGNORECASE,
+)
+
+
+def _declines_basics(user_message: str) -> bool:
+    """Detect a shopper waving the cold-start basics off, so we stop asking."""
+    return bool(_DECLINES_BASICS.search(user_message or ""))
+
+
+# A haul-away question about a shortlist is a service need, not only a fact
+# request: if nothing on screen carries the service, the shopper still needs a
+# mattress that does.
+_SERVICE_DISCOVERY = re.compile(
+    r"haul[\s-]?away|haul it|get rid of|dispose|disposal|take(s)? (it |them |my |the )?away|removal|remove .{0,20}old|old mattress",
+    re.IGNORECASE,
+)
+
+
+def _names_a_product(message: str, catalog: Iterable[Dict[str, Any]]) -> bool:
+    """Whether the shopper named a specific product rather than referring to a set.
+
+    "Does CoreFlex Entry include haul-away" stays a narrow fact about that
+    product. "Does either include haul-away" is about the shortlist.
+    """
+    lowered = (message or "").casefold()
+    for product in catalog:
+        name = str(product.get("name") or "").casefold()
+        if not name:
+            continue
+        if name in lowered:
+            return True
+        head = " ".join(name.split()[:2])
+        if len(head) > 6 and head in lowered:
+            return True
+    return False
+
+
+def _service_discovery_alternatives(
+    preference_state: Dict[str, Any],
+    decision_preferences: Dict[str, Any],
+    catalog: List[Dict[str, Any]],
+    exclude: Iterable[str],
+) -> Dict[str, Any]:
+    """Rank catalog options that do carry the service, keeping everything else.
+
+    The shopper's size, budget, priorities and hard constraints are untouched;
+    the service requirement is applied for this search only, so it never becomes
+    a permanent constraint they did not ask for.
+    """
+    scoped = deepcopy(decision_preferences)
+    scoped["require_CA_haul_away"] = True
+    shown = set(exclude)
+    candidates = [sku for sku in catalog if sku.get("sku_id") not in shown]
+    return evaluate_decision(scoped, candidates)
+
+
+def _missing_basic(state: Dict[str, Any]) -> Optional[str]:
+    """Which of the two high-value basics the shopper still hasn't given."""
+    hard = state.get("hard_constraints", {})
+    soft = state.get("soft_preferences", {})
+    if hard.get("size") is None:
+        return "size"
+    if hard.get("max_price") is None and soft.get("budget_target") is None:
+        return "budget"
+    return None
+
+
 def _apply_cold_start_policy(
     previous_state: Dict[str, Any],
     state: Dict[str, Any],
@@ -246,27 +331,53 @@ def _apply_cold_start_policy(
     context: Dict[str, Any],
     *,
     intent: str,
+    user_message: str = "",
 ) -> Dict[str, Any]:
-    """Enforce one-turn cold starts without turning elicitation into a form."""
+    """Try for size and approximate budget, but never block shopping on them."""
     details = {
         "recommendation_readiness": state.get("recommendation_readiness", "low"),
         "clarification_reason": state.get("clarification_reason"),
         "explicit_browse_intent": bool(context.get("explicit_browse_intent")),
         "clarification_bypassed": False,
+        "cold_start_questions_asked": int(
+            previous_state.get("cold_start_questions_asked") or 0
+        ),
     }
     if intent != "recommend":
         return details
 
-    prior_cold_start_question = (
-        previous_state.get("needs_clarification") is True
-        and previous_state.get("clarification_reason") == "cold_start_basics"
-    )
     cold_start_clarification = (
         state.get("needs_clarification") is True
         and state.get("clarification_reason") == "cold_start_basics"
     )
-    if cold_start_clarification and (
-        details["explicit_browse_intent"] or prior_cold_start_question
+    asked = details["cold_start_questions_asked"]
+    declined = _declines_basics(user_message)
+
+    if not cold_start_clarification:
+        # The shopper answered half of the combined question. Size and budget
+        # both markedly improve a first shortlist, so ask once for the other
+        # half before recommending — unless they've waved it off or are browsing.
+        missing = _missing_basic(state)
+        if (
+            missing
+            and asked
+            and asked < MAX_COLD_START_QUESTIONS
+            and not declined
+            and not details["explicit_browse_intent"]
+            and not state.get("needs_clarification")
+        ):
+            state["needs_clarification"] = True
+            state["clarification_reason"] = "cold_start_basics"
+            state["clarification_question"] = COLD_START_FOLLOW_UPS[missing]
+            state["cold_start_questions_asked"] = asked + 1
+            details["clarification_reason"] = "cold_start_basics"
+            details["cold_start_questions_asked"] = asked + 1
+        return details
+
+    if (
+        details["explicit_browse_intent"]
+        or declined
+        or asked >= MAX_COLD_START_QUESTIONS
     ):
         state["needs_clarification"] = False
         state["clarification_question"] = None
@@ -275,6 +386,8 @@ def _apply_cold_start_policy(
         details["clarification_bypassed"] = True
         return details
 
+    state["cold_start_questions_asked"] = asked + 1
+    details["cold_start_questions_asked"] = asked + 1
     return details
 
 
@@ -536,6 +649,7 @@ def process_conversation_turn(
         update,
         context,
         intent=intent,
+        user_message=user_message,
     )
     result["recommendation_readiness"] = result["cold_start"][
         "recommendation_readiness"
@@ -669,6 +783,34 @@ def process_conversation_turn(
         return _finish(result)
 
     if intent == "service_question":
+        # A haul-away question naming one product stays a narrow fact. Asked of a
+        # shortlist, it is also a service need: answer for everything on screen,
+        # and if none of it carries the service, go and find options that do.
+        shortlist_question = bool(
+            _SERVICE_DISCOVERY.search(user_message)
+            and not _names_a_product(user_message, catalog_list)
+        )
+        scoped_names = product_names or list(
+            preference_state.get("recent_product_names", [])
+        )[:3]
+        availability = (
+            service_availability(scoped_names, catalog_list)
+            if shortlist_question and scoped_names
+            else None
+        )
+
+        if availability and availability["products"]:
+            result["service_availability"] = availability
+            result["grounding_data"] = availability
+            result["response_text"] = render_service_fact(availability)
+            if not availability["any_available"]:
+                return _finish(
+                    _service_discovery_turn(
+                        result, preference_state, catalog_list, availability
+                    )
+                )
+            return _finish(result)
+
         previous_product = None
         if previous_decision_result:
             previous_product = previous_decision_result.get("selected_sku")
@@ -798,6 +940,60 @@ def process_conversation_turn(
         result["response_text"] = recovery["message"]
         _refresh_state_debug(result)
     return _finish(result)
+
+
+def _service_discovery_turn(
+    result: Dict[str, Any],
+    preference_state: Dict[str, Any],
+    catalog: List[Dict[str, Any]],
+    availability: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Nothing on screen carries the service — find options that do.
+
+    This is an ordinary recommendation over the same shopper state with the
+    service requirement applied, so eligibility, ranking and grounding are the
+    engine's usual ones. Selection is the deterministic path: the alternatives
+    are already ranked, and the shopper is waiting on a service answer.
+    """
+    decision_preferences = to_decision_preferences(preference_state)
+    shown = [item["sku_id"] for item in availability["products"] if item.get("sku_id")]
+    decision = _service_discovery_alternatives(
+        preference_state, decision_preferences, catalog, shown
+    )
+    result["service_discovery"] = {
+        "service": availability["service"],
+        "region": availability.get("region"),
+        "unavailable_for": [item["name"] for item in availability["products"] if item.get("name")],
+        "alternatives_found": decision.get("decision") == "ALLOW",
+    }
+    result["response_strategy"] = "service_discovery"
+    if decision.get("decision") != "ALLOW" or not decision.get("ranked_candidates"):
+        # Searched and found nothing that keeps the shopper's requirements, so
+        # say both halves rather than leaving the answer at "no".
+        result["response_text"] = (
+            result["response_text"]
+            + " I looked for another option that does include it, and nothing"
+            " else matches what you're looking for."
+        )
+        return result
+
+    result["intent"] = "recommend"
+    result["decision_preferences"] = decision_preferences
+    result["decision_result"] = decision
+    result["shopping_selection"] = deterministic_selection_fallback(decision, preference_state)
+    result["shopping_selection"]["selected_product_ids"] = result["shopping_selection"][
+        "selected_product_ids"
+    ][:2]
+    result["shopping_selection"]["selections"] = result["shopping_selection"]["selections"][:2]
+    result["grounding_evidence"] = build_recommendation_evidence(
+        decision, decision_preferences, shopping_selection=result["shopping_selection"]
+    )
+    result["pipeline_actions"] = {
+        "eligibility_recomputed": True,
+        "ranking_recomputed": True,
+        "shopping_selection_generated": False,
+    }
+    return result
 
 
 def process_recommendation_turn(*args: Any, **kwargs: Any) -> Dict[str, Any]:

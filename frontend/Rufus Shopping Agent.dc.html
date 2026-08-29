@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,900&display=swap" />
+<style>
+  html,body{margin:0;padding:0;background:#e7e9ec;-webkit-font-smoothing:antialiased;}
+  *{box-sizing:border-box;}
+  input,textarea{font-family:inherit;}
+  input::placeholder,textarea::placeholder{color:#565959;opacity:1;}
+  textarea{scrollbar-width:thin;}
+  a{color:#0972d3;text-decoration:none;}
+  a:hover{color:#0b5faa;text-decoration:underline;}
+  @keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadein{from{opacity:0;}to{opacity:1;}}
+  @keyframes dotpulse{0%,60%,100%{opacity:.28;}30%{opacity:1;}}
+  @keyframes caret{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;font-family:'Amazon Ember','Helvetica Neue',Helvetica,Arial,sans-serif;">
+  <div style="width:390px;height:844px;background:#ffffff;border-radius:38px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(15,17,17,.22);">
+
+    <div style="height:50px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 6px;background:#ffffff;">
+      <div style="display:flex;align-items:center;gap:5px;">
+        <span style="font-size:14px;font-weight:600;color:#0f1111;letter-spacing:.2px;">{{ clock }}</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0f1111" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-9.3-5"></path><path d="M6 9v5l-2 3h13"></path><path d="M10.5 20a2 2 0 0 0 3.2.2"></path><path d="M3 3l18 18"></path></svg>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="display:flex;align-items:flex-end;gap:2px;height:11px;">
+          <div style="width:3px;height:4px;background:#0f1111;border-radius:1px;"></div>
+          <div style="width:3px;height:6px;background:#0f1111;border-radius:1px;"></div>
+          <div style="width:3px;height:8px;background:#0f1111;border-radius:1px;"></div>
+          <div style="width:3px;height:11px;background:#b9bdbd;border-radius:1px;"></div>
+        </div>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="#0f1111" stroke-width="1.6" stroke-linecap="round"><path d="M1 4.2A10.5 10.5 0 0 1 15 4.2"></path><path d="M3.6 6.9a6.8 6.8 0 0 1 8.8 0"></path><path d="M6.2 9.5a3.1 3.1 0 0 1 3.6 0"></path></svg>
+        <div style="display:flex;align-items:center;gap:1px;">
+          <div style="width:24px;height:12px;border-radius:3.5px;background:#0f1111;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:8px;font-weight:700;color:#ffffff;letter-spacing:-.2px;">90</span>
+          </div>
+          <div style="width:1.5px;height:4px;background:#0f1111;opacity:.35;border-radius:0 1px 1px 0;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px 12px;background:#ffffff;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f1111" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"></path></svg>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <span style="font-family:Nunito,'Amazon Ember',sans-serif;font-weight:900;font-style:italic;font-size:25px;line-height:1.1;letter-spacing:-.7px;padding-right:2px;background:linear-gradient(100deg,#4cc9f7 0%,#22a3ee 45%,#1478dd 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;">Rufus</span>
+          <span style="font-size:19px;font-weight:400;color:#0f1111;letter-spacing:-.1px;">for shopping</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0f1111" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5A9 9 0 1 1 3 12"></path><path d="M3.2 4.4v5.2h5.2"></path><path d="M12 8v4.4l2.8 1.7"></path></svg>
+        <div onClick="{{ onMenu }}" style="display:flex;flex-direction:column;gap:3px;padding:2px 4px;cursor:pointer;user-select:none;" style-active="opacity:.5;">
+          <div style="width:3.4px;height:3.4px;border-radius:50%;background:#0f1111;"></div>
+          <div style="width:3.4px;height:3.4px;border-radius:50%;background:#0f1111;"></div>
+          <div style="width:3.4px;height:3.4px;border-radius:50%;background:#0f1111;"></div>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ onCloseMenu }}" style="position:absolute;inset:0;z-index:30;"></div>
+      <div style="position:absolute;top:84px;right:12px;width:254px;z-index:31;background:#ffffff;border:1px solid #d5d9d9;border-radius:10px;box-shadow:0 6px 22px rgba(15,17,17,.18);overflow:hidden;padding:5px 0 6px;animation:rise .16s ease both;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#565959;padding:9px 14px 5px;">Shopping mode</div>
+        <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+          <div onClick="{{ m.onPick }}" style="display:flex;align-items:flex-start;gap:9px;padding:8px 14px;cursor:pointer;user-select:none;background:{{ m.bg }};" style-hover="background:#f3f4f4;" style-active="background:#eaebeb;">
+            <div style="width:16px;flex:none;padding-top:2px;display:flex;">
+              <sc-if value="{{ m.selected }}" hint-placeholder-val="{{ true }}">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#0f6fc5" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 8.4l3.9 3.9L13.8 4"></path></svg>
+              </sc-if>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;">
+              <div style="font-size:14.5px;line-height:1.25;color:#0f1111;font-weight:{{ m.weight }};">{{ m.label }}</div>
+              <div style="font-size:12.5px;line-height:1.3;color:#565959;">{{ m.note }}</div>
+            </div>
+          </div>
+        </sc-for>
+        <div style="height:1px;background:#eceded;margin:6px 0;"></div>
+        <div onClick="{{ onReset }}" style="padding:9px 14px 9px 39px;font-size:14.5px;line-height:1.25;color:#0f1111;cursor:pointer;user-select:none;" style-hover="background:#f3f4f4;" style-active="background:#eaebeb;">Reset conversation</div>
+      </div>
+    </sc-if>
+
+    <div data-scroll="1" style="flex:1;overflow-y:auto;overflow-x:hidden;background:#ffffff;position:relative;">
+
+      <sc-if value="{{ isCold }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%;min-height:520px;display:flex;flex-direction:column;justify-content:center;padding:0 20px;animation:fadein .4s ease both;">
+          <div style="font-size:30px;line-height:1.22;font-weight:700;color:#0b62c4;letter-spacing:-.4px;max-width:240px;">How can I help you today?</div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;flex-direction:column;gap:22px;padding:{{ listPad }};">
+        <sc-for list="{{ blocks }}" as="block" hint-placeholder-count="0">
+          <div data-blk="1" data-kind="{{ block.kind }}" style="animation:rise .3s cubic-bezier(.2,.8,.3,1) both;">
+
+            <sc-if value="{{ block.isUser }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;justify-content:flex-end;">
+                <div style="max-width:82%;background:#eaebeb;color:#0f1111;font-size:17px;line-height:1.38;padding:12px 18px;border-radius:22px;">{{ block.text }}</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ block.isProgress }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:13px;padding:2px 0;">
+                <sc-for list="{{ block.steps }}" as="step" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:11px;animation:rise .3s ease both;">
+                    <div style="width:9px;height:9px;border-radius:50%;flex:none;background:{{ step.dot }};"></div>
+                    <div style="font-size:15.5px;line-height:1.35;color:{{ step.color }};font-weight:{{ step.weight }};">{{ step.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ block.isDots }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;height:22px;padding-left:1px;">
+                <div style="width:13px;height:13px;border-radius:50%;background:#0b3d6b;animation:dotpulse 1.15s ease-in-out infinite;animation-delay:0s;"></div>
+                <div style="width:13px;height:13px;border-radius:50%;background:#2f6ea8;margin-left:-4px;animation:dotpulse 1.15s ease-in-out infinite;animation-delay:.12s;"></div>
+                <div style="width:13px;height:13px;border-radius:50%;background:#6ba3e0;margin-left:-4px;animation:dotpulse 1.15s ease-in-out infinite;animation-delay:.24s;"></div>
+                <div style="width:13px;height:13px;border-radius:50%;background:#b9d7f7;margin-left:-4px;animation:dotpulse 1.15s ease-in-out infinite;animation-delay:.36s;"></div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ block.isRecs }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:26px;">
+                <sc-for list="{{ block.products }}" as="p" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;gap:9px;">
+                    <div style="display:flex;align-items:baseline;gap:12px;">
+                      <div style="flex:1;min-width:0;font-size:16.5px;font-weight:700;color:#0f1111;">{{ p.role }}</div>
+                      <sc-if value="{{ p.showMore }}" hint-placeholder-val="{{ true }}">
+                        <div onClick="{{ p.onMore }}" style="flex:none;font-size:15px;color:#146eb4;cursor:pointer;user-select:none;" style-hover="text-decoration:underline;" style-active="opacity:.55;">see more</div>
+                      </sc-if>
+                    </div>
+                    <div style="border:1px solid #d5d9d9;border-radius:10px;overflow:hidden;display:flex;background:#ffffff;">
+                      <div style="width:112px;flex:none;background:#ffffff;border-right:1px solid #eceded;display:flex;align-items:center;justify-content:center;padding:8px;">
+                        <image-slot id="{{ p.slotId }}" src="{{ p.photo }}" shape="rounded" radius="4" fit="cover" placeholder="Drop product photo" style="width:96px;height:96px;"></image-slot>
+                      </div>
+                      <div style="flex:1;min-width:0;padding:12px 13px 13px;display:flex;flex-direction:column;gap:5px;">
+                        <div style="font-size:14.5px;line-height:1.35;color:#0f1111;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ p.name }}</div>
+                        <div style="display:flex;align-items:center;gap:5px;">
+                          <span style="font-size:13.5px;color:#0f1111;">{{ p.rating }}</span>
+                          <span style="position:relative;display:inline-block;line-height:1;font-size:13px;letter-spacing:.5px;color:#d5d9d9;">★★★★★<span style="position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap;color:#ffa41c;width:{{ p.stars }};">★★★★★</span></span>
+                          <span style="font-size:13px;color:#565959;">{{ p.reviews }}</span>
+                        </div>
+                        <div style="display:flex;align-items:flex-start;gap:1px;padding-top:1px;">
+                          <span style="font-size:12.5px;color:#0f1111;line-height:1;padding-top:2px;">$</span>
+                          <span style="font-size:22px;font-weight:500;color:#0f1111;line-height:.86;letter-spacing:-.4px;">{{ p.dollars }}</span>
+                          <span style="font-size:12.5px;color:#0f1111;line-height:1;padding-top:2px;">{{ p.cents }}</span>
+                        </div>
+                        <sc-if value="{{ p.hasList }}" hint-placeholder-val="{{ true }}">
+                          <div style="font-size:12.5px;color:#565959;">Typical: <span style="text-decoration:line-through;">{{ p.list }}</span></div>
+                        </sc-if>
+                        <div style="display:flex;flex-direction:column;gap:1px;padding-top:1px;">
+                          <div style="display:flex;align-items:center;gap:6px;">
+                            <div style="display:flex;align-items:flex-end;gap:1px;">
+                              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#ff6200" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.8 8.2l3.6 3.9L14.2 2.4"></path></svg>
+                              <span style="font-size:14.5px;font-weight:700;color:#0d7bc7;letter-spacing:-.5px;line-height:1;">prime</span>
+                            </div>
+                            <span style="font-size:12.5px;line-height:1;color:#0f1111;">{{ p.program }}</span>
+                          </div>
+                          <div style="font-size:12.5px;line-height:1.4;color:#0f1111;"><span style="font-weight:700;">FREE</span> {{ p.deliveryType }} <span style="font-weight:700;">{{ p.deliveryDate }}</span></div>
+                        </div>
+                        <div onClick="{{ p.onCart }}" style="align-self:flex-start;margin-top:7px;padding:9px 20px;border-radius:100px;font-size:14px;font-weight:500;color:#0f1111;cursor:pointer;user-select:none;border:1px solid #fcd200;background:#ffd814;" style-hover="background:#f7ca00;border-color:#f2c200;" style-active="background:#f0b800;border-color:#e3ae00;">Add to cart</div>
+                      </div>
+                    </div>
+                    <div style="font-size:15px;line-height:1.47;color:#565959;text-wrap:pretty;">{{ p.why }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ block.isFeedback }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:18px;margin-top:11px;">
+                <div onClick="{{ block.onUp }}" style="cursor:pointer;padding:2px;display:flex;" style-active="opacity:.6;">
+                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="{{ block.upColor }}" stroke-width="1.9" stroke-linejoin="round"><path d="M3.4 10.6h3.1v9.3H3.4z"></path><path d="M6.5 11.2l4.1-7.1c1.5.1 2.3 1 2.3 2.4l-.5 3.3h5.3c1.4 0 2.3 1.1 2 2.5l-1.4 6c-.2 1-1 1.6-2 1.6H6.5"></path></svg>
+                </div>
+                <div onClick="{{ block.onDown }}" style="cursor:pointer;padding:2px;display:flex;" style-active="opacity:.6;">
+                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="{{ block.downColor }}" stroke-width="1.9" stroke-linejoin="round"><path d="M20.6 13.4h-3.1V4.1h3.1z"></path><path d="M17.5 12.8l-4.1 7.1c-1.5-.1-2.3-1-2.3-2.4l.5-3.3H6.3c-1.4 0-2.3-1.1-2-2.5l1.4-6c.2-1 1-1.6 2-1.6h9.8"></path></svg>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ block.isService }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <div style="font-size:16.5px;font-weight:700;color:#0f1111;">{{ block.svcHeading }}</div>
+                <div style="border:1px solid #d5d9d9;border-radius:10px;overflow:hidden;background:#ffffff;">
+                  <sc-for list="{{ block.svcRows }}" as="r" hint-placeholder-count="2">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 14px;border-top:{{ r.border }};">
+                      <div style="font-size:14.5px;color:#0f1111;line-height:1.3;">{{ r.label }}</div>
+                      <div style="font-size:14.5px;font-weight:700;line-height:1.3;white-space:nowrap;color:{{ r.color }};">{{ r.value }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="font-size:12.5px;line-height:1.4;color:#565959;">{{ block.svcNote }}</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ block.isCompare }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid #d5d9d9;border-radius:10px;overflow:hidden;background:#ffffff;">
+                <div style="display:grid;grid-template-columns:88px 1fr 1fr;align-items:end;gap:0;padding:12px 12px 11px;background:#fbfbfb;border-bottom:1px solid #eceded;">
+                  <div></div>
+                  <div style="display:flex;flex-direction:column;gap:6px;padding-right:8px;">
+                    <sc-if value="{{ block.isCompare }}" hint-placeholder-val="{{ false }}">
+                      <image-slot id="{{ block.cmpASlot }}" src="{{ block.cmpAPhoto }}" shape="rounded" radius="4" fit="cover" placeholder="" style="width:46px;height:46px;"></image-slot>
+                    </sc-if>
+                    <div style="font-size:13px;line-height:1.28;font-weight:700;color:#0f1111;">{{ block.cmpAName }}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <sc-if value="{{ block.isCompare }}" hint-placeholder-val="{{ false }}">
+                      <image-slot id="{{ block.cmpBSlot }}" src="{{ block.cmpBPhoto }}" shape="rounded" radius="4" fit="cover" placeholder="" style="width:46px;height:46px;"></image-slot>
+                    </sc-if>
+                    <div style="font-size:13px;line-height:1.28;font-weight:700;color:#0f1111;">{{ block.cmpBName }}</div>
+                  </div>
+                </div>
+                <sc-for list="{{ block.cmpRows }}" as="r" hint-placeholder-count="6">
+                  <div style="display:grid;grid-template-columns:88px 1fr 1fr;align-items:baseline;padding:11px 12px;border-top:{{ r.border }};">
+                    <div style="font-size:12.5px;color:#565959;line-height:1.3;padding-right:6px;">{{ r.label }}</div>
+                    <div style="font-size:14px;color:#0f1111;line-height:1.3;padding-right:8px;">{{ r.a }}</div>
+                    <div style="font-size:14px;color:#0f1111;line-height:1.3;">{{ r.b }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ block.isSuggest }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;align-items:flex-start;gap:11px;">
+                <sc-for list="{{ block.suggestions }}" as="s" hint-placeholder-count="3">
+                  <div onClick="{{ s.onPick }}" style="background:#c5daf9;color:#0f3d8c;font-size:16.5px;font-weight:400;line-height:1.25;padding:12px 22px;border-radius:100px;cursor:pointer;user-select:none;" style-hover="background:#b8d1f6;" style-active="background:#a9c6f2;">{{ s.label }}</div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ block.isText }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:17px;line-height:1.47;color:#0f1111;text-wrap:pretty;">
+                <sc-for list="{{ block.parts }}" as="part" hint-placeholder-count="1"><span style="font-weight:{{ part.weight }};">{{ part.t }}</span></sc-for>
+              </div>
+            </sc-if>
+
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:none;background:#ffffff;border-radius:20px 20px 0 0;box-shadow:0 -2px 10px rgba(15,17,17,.06);padding:9px 14px 11px;position:relative;z-index:2;">
+      <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:0;right:0;bottom:calc(100% + 12px);display:flex;justify-content:center;pointer-events:none;">
+          <div style="background:#0f1111;color:#ffffff;font-size:14px;font-weight:500;padding:9px 20px;border-radius:100px;box-shadow:0 3px 12px rgba(15,17,17,.25);animation:rise .22s ease both;">Added</div>
+        </div>
+      </sc-if>
+      <div style="display:flex;align-items:flex-end;gap:12px;">
+        <div onClick="{{ noop }}" style="width:36px;height:36px;border-radius:50%;background:#f3f4f4;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f1111" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+        </div>
+        <textarea ref="{{ taRef }}" value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onKey }}" onFocus="{{ onFocus }}" onBlur="{{ onBlur }}" rows="1" placeholder="Ask a shopping question" style="flex:1;border:none;outline:none;font-size:17px;line-height:1.4;color:#0f1111;background:transparent;padding:6px 0;min-width:0;resize:none;height:36px;max-height:210px;overflow-y:hidden;"></textarea>
+        <div onClick="{{ onSend }}" style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer;background:{{ sendBg }};">
+          <sc-if value="{{ hasDraft }}" hint-placeholder-val="{{ false }}">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"></path><path d="M5.5 11.5L12 5l6.5 6.5"></path></svg>
+          </sc-if>
+          <sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0f1111" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="11" rx="3"></rect><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0"></path><path d="M12 18v3.2"></path></svg>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:none;height:78px;position:relative;background:#ffffff;">
+      <div style="position:absolute;left:0;top:0;width:302px;height:70px;border-top:1px solid #d5d9d9;border-right:1px solid #d5d9d9;border-top-right-radius:18px;"></div>
+      <div style="position:absolute;left:0;top:0;right:0;height:56px;display:flex;align-items:center;">
+        <div style="width:302px;display:flex;align-items:center;justify-content:space-around;padding:0 6px;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0f1111" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 11.1L12 3.9l8.6 7.2"></path><path d="M5.6 12.6v7.5h12.8v-7.5"></path><path d="M10 20.1v-4.3h4v4.3"></path></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0f1111" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.1" r="3.9"></circle><path d="M5.6 20.2c.9-3.4 3.4-5.2 6.4-5.2s5.5 1.8 6.4 5.2"></path></svg>
+          <div style="position:relative;display:flex;">
+            <svg width="28" height="26" viewBox="0 0 26 24" fill="none" stroke="#0f1111" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1.8 5.2h3.1l3.3 9.9h10.3l3.1-7.2H6.6"></path><circle cx="10" cy="19.2" r="1.7"></circle><circle cx="17.4" cy="19.2" r="1.7"></circle></svg>
+            <span style="position:absolute;top:-3px;left:13px;font-size:11.5px;font-weight:500;color:#0f1111;">{{ cartCount }}</span>
+          </div>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0f1111" stroke-width="1.8" stroke-linecap="round"><path d="M3.6 7.6h16.8"></path><path d="M3.6 12h16.8"></path><path d="M3.6 16.4h16.8"></path></svg>
+        </div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:Nunito,'Amazon Ember',sans-serif;font-weight:900;font-style:italic;font-size:30px;line-height:1.1;letter-spacing:-1px;padding:0 2px 3px 0;background:linear-gradient(100deg,#4cc9f7 0%,#22a3ee 45%,#1478dd 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;">R</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:440,&quot;height&quot;:900}}">
+/* ---- turn scheduling ----
+   The demo flows are chained setTimeout calls. Resetting or switching modes has
+   to drop the tail of a turn that's still playing out, so timers scheduled from
+   this script are tracked and cancelled together. The flows below are untouched
+   — they still call setTimeout normally and pick this up by scope. */
+
+const rawSetTimeout = globalThis.setTimeout.bind(globalThis);
+const rawClearTimeout = globalThis.clearTimeout.bind(globalThis);
+const pendingTimers = new Set();
+
+function setTimeout(fn, ms) {
+  let id;
+  id = rawSetTimeout(() => { pendingTimers.delete(id); fn(); }, ms);
+  pendingTimers.add(id);
+  return id;
+}
+
+function clearTimeout(id) {
+  pendingTimers.delete(id);
+  return rawClearTimeout(id);
+}
+
+function cancelScheduledTurns() {
+  pendingTimers.forEach(id => rawClearTimeout(id));
+  pendingTimers.clear();
+}
+
+/* ---- fixtures ---- */
+
+const PRODUCTS = [
+  {
+    id: "polar",
+    days: 1,
+    service: false,
+    window: "10 AM - 12 PM",
+    short: "Polar Motion Elite",
+    role: "Best overall",
+    name: 'Polar Motion Elite 13" Cooling Hybrid Queen Mattress, Gel Memory Foam and Pocketed Coils',
+    rating: 4.6,
+    reviews: "1,284",
+    dollars: "519",
+    cents: "00",
+    list: "$619.00",
+    delivery: "Tue, Sep 1",
+    prime: true,
+    photo: "products/polar.png",
+    why: "Excellent cooling and motion isolation. The strongest match for what you told me matters most.",
+    art: { h: "41%", cover: "#f1f5f9", band: "#20395a", base: "#dde2e8", wall: "#eef1f4", floor: "#dee3e7", frame: "#b8c0c8", pillow: "#f4f6f8" }
+  },
+  {
+    id: "zenith",
+    days: 2,
+    service: false,
+    window: "",
+    photo: "products/zenith.png",
+    short: "Zenith Cool Motion",
+    role: "Also great for cooling",
+    name: 'Zenith Cool Motion 12" Gel Hybrid Queen Mattress with Phase-Change Cooling Cover',
+    rating: 4.5,
+    reviews: "863",
+    dollars: "529",
+    cents: "00",
+    list: "$599.00",
+    delivery: "Wed, Sep 2",
+    prime: true,
+    why: "Cools just as well as Polar, with a little more movement felt across the bed.",
+    art: { h: "30%", cover: "#edf7fc", band: "#0e9ad2", base: "#dbe4ea", wall: "#eaf3f9", floor: "#dae5ec", frame: "#a6b7c3", pillow: "#f2f8fb" }
+  },
+  {
+    id: "therma",
+    days: 3,
+    service: false,
+    window: "12 PM - 5 PM",
+    photo: "products/therma.png",
+    short: "ThermaQuiet 6",
+    role: "Better value",
+    name: 'ThermaQuiet 6 11" Memory Foam Queen Mattress, Copper-Infused Cooling Layer, Medium Feel',
+    rating: 4.4,
+    reviews: "2,117",
+    dollars: "499",
+    cents: "00",
+    list: "",
+    delivery: "Thu, Sep 3",
+    prime: true,
+    why: "Excellent motion isolation and very good cooling, and it saves you $20 next to Polar.",
+    art: { h: "35%", cover: "#fbf5ee", band: "#b06e37", base: "#e7ded4", wall: "#f6f0e8", floor: "#e2d5c5", frame: "#b98b5c", pillow: "#fbf6ef" }
+  },
+  {
+    id: "aeroflex",
+    days: 1,
+    service: false,
+    window: "",
+    photo: "products/aeroflex.png",
+    short: "AeroFlex Breeze",
+    role: "Closest to $450",
+    name: 'AeroFlex Breeze 10" Queen Mattress, Ventilated Gel Foam with Airflow Channel Base',
+    rating: 4.3,
+    reviews: "1,942",
+    dollars: "449",
+    cents: "00",
+    list: "$529.00",
+    delivery: "Tue, Sep 1",
+    prime: true,
+    why: "Cooling stays strong at this price, but it's an all-foam build — you'll feel more movement across the bed than with Polar.",
+    art: { h: "26%", cover: "#f4f8f4", band: "#3f7d63", base: "#dfe6e1", wall: "#eef2ee", floor: "#dee5df", frame: "#9fb3a6", pillow: "#f5f8f5" }
+  },
+  {
+    id: "nimbus",
+    days: 2,
+    service: true,
+    window: "12 PM – 4 PM",
+    photo: "products/nimbus.png",
+    short: "Nimbus Cloud Hybrid",
+    role: "Also worth a look",
+    name: 'Nimbus Cloud Hybrid 12" Queen Mattress, Cooling Gel Cover with Zoned Pocketed Coils',
+    rating: 4.4,
+    reviews: "1,287",
+    dollars: "539",
+    cents: "00",
+    list: "",
+    delivery: "Wed, Sep 2",
+    prime: true,
+    why: "Zoned support keeps the hips and lower back more supported, with breathable foam and effective motion isolation.",
+    art: { h: "33%", cover: "#f7f4ee", band: "#8a949c", base: "#e4ddd3", wall: "#f4efe7", floor: "#d9c9b4", frame: "#c09565", pillow: "#fbf8f2" }
+  },
+  {
+    id: "havenrest",
+    days: 8,
+    service: false,
+    window: "9 AM - 1 PM",
+    photo: "products/havenrest.png",
+    short: "HavenRest Midnight Luxe",
+    role: "Softer for pressure relief",
+    name: 'HavenRest Midnight Luxe 13" Queen Mattress, Lumbar-Zoned Hybrid with Cushioned Pillow Top',
+    rating: 4.5,
+    reviews: "412",
+    dollars: "579",
+    cents: "00",
+    list: "$679.00",
+    delivery: "Sep 8 - 9",
+    prime: true,
+    why: "A medium-firm hybrid with lumbar zoning and a cushioned top, especially useful if your partner wants more pressure relief.",
+    art: { h: "38%", cover: "#eef1f6", band: "#1b2a44", base: "#d9dee6", wall: "#edeef0", floor: "#dcd7cf", frame: "#8e6f52", pillow: "#f6f7f9" }
+  },
+  {
+    id: "cirro",
+    days: 1,
+    service: true,
+    window: "10 AM – 12 PM",
+    photo: "products/cirro.png",
+    short: "CirroLoft CoolNest",
+    role: "Lowest price that still cools",
+    name: 'CirroLoft CoolNest 14" Queen Hybrid Mattress, Cooling Pillow Top with Edge Support Coils',
+    rating: 4.3,
+    reviews: "3,004",
+    dollars: "429",
+    cents: "00",
+    list: "$499.00",
+    delivery: "Tue, Sep 1",
+    prime: true,
+    why: "The least expensive cooling hybrid I would put in front of you, with firmer edges than the all-foam options.",
+    art: { h: "43%", cover: "#f2f6f8", band: "#5b7f96", base: "#dce3e7", wall: "#eff1f2", floor: "#e0e2e0", frame: "#aeb5b8", pillow: "#f7f9fa" }
+  }
+];
+
+const MORE = {
+  "Best overall": { heading: "More top-rated cooling hybrids", ids: ["nimbus", "havenrest"] },
+  "Also great for cooling": { heading: "More options with cooling covers", ids: ["cirro", "nimbus"] },
+  "Better value": { heading: "More value picks that still cool well", ids: ["cirro", "nimbus"] },
+  "Closest to $450": { heading: "More options near your budget", ids: ["cirro", "nimbus"] },
+  "Still the balanced pick": { heading: "More balanced couple-friendly choices", ids: ["nimbus", "havenrest"] }
+};
+const MORE_DEFAULT = { heading: "More options like these", ids: ["nimbus", "cirro"] };
+
+const PROGRAM = d => d === 1 ? "Tomorrow" : d === 2 ? "Two-Day" : "Standard";
+
+const BY_ID = {};
+PRODUCTS.forEach(p => { BY_ID[p.id] = p; });
+
+// Demo fixtures are never overwritten by a live turn.
+const FIXTURE_IDS = new Set(PRODUCTS.map(p => p.id));
+
+const SHORTLIST = ["polar", "zenith", "therma"];
+
+const REFINED = {
+  steps: ["Revisiting what matters to you", "Looking below $450", "Checking cooling at the lower price", "Updating your shortlist"],
+  items: [
+    { id: "aeroflex", role: "Closest to $450" },
+    { id: "therma", role: "Still the balanced pick", why: "$49 over your new target, but it keeps the strong motion isolation that AeroFlex gives up." }
+  ],
+  intro: [
+    { t: "Keeping cooling first, here's what $450 looks like.", b: true },
+    { t: " You can get there, but the trade-off is motion isolation — the cooler options at this price are all-foam, so you'll feel your partner move more." }
+  ],
+  after: [
+    { t: "Polar Motion Elite is still the better match on your original priorities if $70 more is workable." }
+  ]
+};
+
+const PRODUCT_FACTS = {
+  polar: [
+    { t: "Polar Motion Elite", b: true },
+    { t: " is a 13-inch gel-foam and pocketed-coil hybrid, medium feel, with a 100-night trial. It's the strongest of the three on both cooling and motion isolation." }
+  ],
+  zenith: [
+    { t: "Zenith Cool Motion", b: true },
+    { t: " is a 12-inch gel hybrid with a phase-change cover — the coolest surface of the three. Medium feel, 100-night trial, $529." }
+  ],
+  therma: [
+    { t: "ThermaQuiet 6", b: true },
+    { t: " is an 11-inch memory foam with a copper-infused cooling layer. Excellent motion isolation, very good cooling, and the lowest price of the three at $499." }
+  ],
+  cirro: [
+    { t: "CirroLoft CoolNest", b: true },
+    { t: " is a 14-inch cooling hybrid with a pillow top and edge-support coils, medium-firm, 120-night trial, $429. It ships locally, so haul-away is included." }
+  ],
+  nimbus: [
+    { t: "Nimbus Cloud Hybrid", b: true },
+    { t: " is a 12-inch hybrid with zoned pocketed coils and a cooling gel cover, medium feel, 100-night trial, $539. Haul-away is included for your ZIP." }
+  ],
+  havenrest: [
+    { t: "HavenRest Midnight Luxe", b: true },
+    { t: " is a 13-inch lumbar-zoned hybrid with a cushioned pillow top, medium-firm, 365-night trial, $579." }
+  ],
+  aeroflex: [
+    { t: "AeroFlex Breeze", b: true },
+    { t: " is a 10-inch ventilated gel foam at $449. Good cooling for the price, but the weakest of the set on motion isolation." }
+  ]
+};
+
+const PRODUCT_REVIEWS = {
+  polar: [{ t: "Hot sleepers consistently say Polar runs cool through the night, and couples mention barely feeling movement. The most common complaint is that it feels firmer than expected for the first week or two." }],
+  zenith: [{ t: "Reviewers single out the cooling cover — several say it's the first mattress that stayed cool for them. The recurring complaint is edge support when sitting on the side of the bed." }],
+  therma: [{ t: "Owners praise how still it stays when a partner moves, and call it good value. The common complaint is a noticeable foam smell for the first few days." }],
+  cirro: [
+    { t: "CirroLoft CoolNest", b: true },
+    { t: " is a 14-inch cooling hybrid with a pillow top and edge-support coils, medium-firm, 120-night trial, $429. It ships locally, so haul-away is included." }
+  ],
+  nimbus: [
+    { t: "Nimbus Cloud Hybrid", b: true },
+    { t: " is a 12-inch hybrid with zoned pocketed coils and a cooling gel cover, medium feel, 100-night trial, $539. Haul-away is included for your ZIP." }
+  ],
+  havenrest: [
+    { t: "HavenRest Midnight Luxe", b: true },
+    { t: " is a 13-inch lumbar-zoned hybrid with a cushioned pillow top, medium-firm, 365-night trial, $579." }
+  ],
+  aeroflex: [{ t: "Reviewers like the price and the airflow, but a number of couples mention feeling movement across the bed." }],
+  cirro: [{ t: "Owners call it a lot of mattress for the money and mention firm edges that hold up when you sit on the side. The recurring complaint is that it arrives heavy and awkward to move alone." }],
+  nimbus: [{ t: "Reviewers with back pain single out the zoned support, and couples say movement stays contained. A few mention it sleeps warmer than they expected." }],
+  havenrest: [{ t: "Owners praise the pillow top for hip and shoulder pressure, and the 365-night trial comes up often. The common complaint is the price." }]
+};
+
+const SUGGESTIONS = ["Compare the first two", "Which sleeps coolest?", "How do I get rid of my old mattress?"];
+
+const HAUL = {
+  steps: ["Checking your delivery ZIP", "Checking haul-away availability", "Filtering to items that include it"],
+  intro: [
+    { t: "These options don't include haul-away for 94109.", b: true },
+    { t: " I found a couple that do, while staying close to what you're looking for." }
+  ],
+  heading: [{ t: "Options with haul-away", b: true }],
+  ids: [{ id: "cirro" }, { id: "nimbus" }],
+  after: [
+    { t: "Haul-away includes professional disposal of your old mattress and may be scheduled with your delivery or separately." }
+  ]
+};
+
+const UNVERIFIED = [
+  { t: "I can't confirm that for this delivery.", b: true },
+  { t: " Haul-away covers your old mattress, but I don't have verified information that the delivery team will disassemble or remove your bed frame." }
+];
+
+const SUGGESTIONS_UNVERIFIED = ["Which would you pick for me?", "Compare my top options", "Show me options under $550"];
+
+const PRICE = { polar: 519, zenith: 529, therma: 499, aeroflex: 449, nimbus: 539, havenrest: 579, cirro: 429 };
+const RANK = ["polar", "zenith", "therma", "cirro", "nimbus", "aeroflex", "havenrest"];
+const FOAM = { therma: true, aeroflex: true };
+const MOTION_RANK = { Excellent: 3, "Very good": 2, Good: 1, Fair: 0 };
+
+const SUGGESTIONS_HAUL = ["Compare these two", "Can haul-away happen on delivery day?", "Back to the cooling picks"];
+
+const SUGGESTIONS_COMPARE = ["Which sleeps coolest?", "What do customers say?", "Does either include haul-away?", "Will they set it up and take away my old mattress?"];
+
+const SUGGESTIONS_SERVICE = ["Show me the delivery details", "What does haul-away include?", "Find something closer to $450"];
+
+const SERVICE = {
+  steps: ["Checking delivery options", "Verifying setup and haul-away"],
+  answer: [
+    { t: "Delivery is free and arrives boxed for this item.", b: true },
+    { t: " Haul-away of your old mattress isn't included, and I can't confirm in-home setup yet." }
+  ],
+  heading: "Delivery services",
+  rows: [
+    { label: "Free delivery", value: "Included", color: "#0f1111" },
+    { label: "Old mattress haul-away", value: "Not included", color: "#565959" },
+    { label: "In-home setup", value: "Not confirmed", color: "#565959" }
+  ],
+  note: "Based on this item and your delivery location"
+};
+
+const SPECS = {
+  polar:    { Cooling: "Excellent", "Motion isolation": "Excellent", Price: "$519", "Queen size": "Available", Feel: "Medium", Trial: "100 nights" },
+  zenith:   { Cooling: "Excellent", "Motion isolation": "Very good", Price: "$529", "Queen size": "Available", Feel: "Medium", Trial: "100 nights" },
+  therma:   { Cooling: "Very good", "Motion isolation": "Excellent", Price: "$499", "Queen size": "Available", Feel: "Medium", Trial: "100 nights" },
+  aeroflex: { Cooling: "Very good", "Motion isolation": "Fair", Price: "$449", "Queen size": "Available", Feel: "Medium-soft", Trial: "90 nights" },
+  cirro:    { Cooling: "Very good", "Motion isolation": "Good", Price: "$429", "Queen size": "Available", Feel: "Medium-firm", Trial: "120 nights" },
+  nimbus:   { Cooling: "Good", "Motion isolation": "Very good", Price: "$539", "Queen size": "Available", Feel: "Medium", Trial: "100 nights" },
+  havenrest:{ Cooling: "Good", "Motion isolation": "Excellent", Price: "$579", "Queen size": "Available", Feel: "Medium-firm", Trial: "365 nights" }
+};
+
+const SPEC_FALLBACK = { Cooling: "—", "Motion isolation": "—", Price: "—", "Queen size": "Available", Feel: "—", Trial: "—" };
+
+const CMP_ROWS = ["Cooling", "Motion isolation", "Price", "Queen size", "Feel", "Trial"];
+
+const VERDICTS = {
+  "polar|zenith": [
+    { t: "Polar Motion Elite still has the edge for you.", b: true },
+    { t: " Cooling is essentially a tie, but Polar has better motion isolation and costs $16 less." }
+  ],
+  "aeroflex|therma": [
+    { t: "ThermaQuiet 6 is the safer pick of these two.", b: true },
+    { t: " AeroFlex saves you $86, but you'd give up most of the motion isolation you said mattered." }
+  ]
+};
+
+const COMPARISON = {
+  intro: [{ t: "Here's the clearest side-by-side view." }]
+};
+
+const SCRIPTED = {
+  steps: [
+    "Understanding what matters most",
+    "Looking at queen mattresses",
+    "Comparing cooling and motion isolation",
+    "Finding the best matches"
+  ],
+  reply: [
+    { t: "Polar Motion Elite is my top pick for you.", b: true },
+    { t: " It gives you the strongest combination of cooling and motion isolation while staying just under your $550 target. I found two other options worth considering depending on what you want to prioritize." }
+  ]
+};
+
+const FOLLOW_UP = [
+  { t: "Tell me more about what matters — feel, cooling, budget, or delivery — and I'll narrow the shortlist." }
+];
+
+const REPLIES = {
+  "Does either include haul-away?": [
+    { t: "Polar Motion Elite", b: true },
+    { t: " includes old-mattress haul-away with its delivery service. For " },
+    { t: "Zenith Cool Motion", b: true },
+    { t: " it depends on the carrier for your address — I can check that for you." }
+  ],
+  "Does either include haul-away?": [
+    { t: "Polar Motion Elite", b: true },
+    { t: " includes old-mattress haul-away with its delivery service. For " },
+    { t: "Zenith Cool Motion", b: true },
+    { t: " it depends on the carrier for your address — I can check that for you." }
+  ],
+  "Show me the delivery details": [
+    { t: "Polar Motion Elite ships free for Prime members and arrives " },
+    { t: "Tue, Sep 1", b: true },
+    { t: ". It comes compressed in a single box, and haul-away is scheduled with the same delivery." }
+  ],
+  "What does haul-away include?": [
+    { t: "The delivery team takes your old mattress from the room it's in and removes it when they drop off the new one. It covers one mattress, and there's no extra charge with this item." }
+  ],
+  "Find something closer to $450": [
+    { t: "I can do that — I'll keep strong cooling as the priority and look at what lands nearer $450." }
+  ],
+  "Which sleeps coolest?": [
+    { t: "Zenith Cool Motion", b: true },
+    { t: " sleeps coolest — its phase-change cover pulls heat away fastest. Polar is very close behind and holds up better on motion, which is why I put it first." }
+  ],
+  "What do customers say?": [
+    { t: "Hot sleepers consistently say Polar runs cool through the night, and couples mention barely feeling movement. The most common complaint is that it feels firmer than expected for the first week or two." }
+  ]
+};
+
+/* ---- live-mode presentation fixtures ----
+   The Python engine is authoritative for which products are selected, their
+   order, names, prices, attributes, rationale and tradeoffs. It carries none of
+   the decorative commerce chrome an Amazon card shows, so the prototype
+   fixtures it here, keyed by backend sku_id.
+
+   These fields are presentation only. They never travel back to the engine and
+   never influence ranking, filtering, grounding or any agent decision — they
+   exist so a live recommendation renders in the same Claude Design card as a
+   demo one instead of degrading into a sparser layout.
+
+   listBump is added to the engine's real price to derive the struck-through
+   "Typical" line, so the decoration always stays consistent with real pricing. */
+
+const LIVE_PRODUCT_PRESENTATION = {
+  S01: { photo: "products/polar.png", rating: 4.7, reviews: "200", days: 1, service: true, window: "10 AM - 12 PM", delivery: "Tue, Sep 1", prime: true, listBump: 0 },
+  S02: { photo: "products/zenith.png", rating: 4.8, reviews: "337", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 80 },
+  S03: { photo: "products/therma.png", rating: 4.3, reviews: "474", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 120 },
+  S04: { photo: "products/aeroflex.png", rating: 4.4, reviews: "611", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 0 },
+  S05: { photo: "products/nimbus.png", rating: 4.2, reviews: "748", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 150 },
+  S06: { photo: "products/havenrest.png", rating: 4.5, reviews: "885", days: 8, service: true, window: "9 AM - 1 PM", delivery: "Sep 8 - 9", prime: true, listBump: 100 },
+  S07: { photo: "products/cirro.png", rating: 4.6, reviews: "1,022", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 0 },
+  S08: { photo: "products/polar.png", rating: 4.7, reviews: "1,159", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 80 },
+  S09: { photo: "products/zenith.png", rating: 4.8, reviews: "1,296", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 120 },
+  S10: { photo: "products/therma.png", rating: 4.3, reviews: "1,433", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 0 },
+  S11: { photo: "products/aeroflex.png", rating: 4.4, reviews: "1,570", days: 3, service: true, window: "12 PM - 5 PM", delivery: "Thu, Sep 3", prime: true, listBump: 150 },
+  S12: { photo: "products/nimbus.png", rating: 4.2, reviews: "1,707", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 100 },
+  S13: { photo: "products/havenrest.png", rating: 4.5, reviews: "1,844", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 0 },
+  S14: { photo: "products/cirro.png", rating: 4.6, reviews: "1,981", days: 8, service: false, window: "", delivery: "Sep 8 - 9", prime: true, listBump: 80 },
+  S15: { photo: "products/polar.png", rating: 4.7, reviews: "2,118", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 120 },
+  S16: { photo: "products/zenith.png", rating: 4.8, reviews: "2,255", days: 3, service: true, window: "10 AM - 12 PM", delivery: "Thu, Sep 3", prime: true, listBump: 0 },
+  S17: { photo: "products/therma.png", rating: 4.3, reviews: "2,392", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 150 },
+  S18: { photo: "products/aeroflex.png", rating: 4.4, reviews: "2,529", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 100 },
+  S19: { photo: "products/nimbus.png", rating: 4.2, reviews: "2,666", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 0 },
+  S20: { photo: "products/havenrest.png", rating: 4.5, reviews: "2,803", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 80 },
+  S21: { photo: "products/cirro.png", rating: 4.6, reviews: "2,940", days: 1, service: true, window: "9 AM - 1 PM", delivery: "Tue, Sep 1", prime: true, listBump: 120 },
+  S22: { photo: "products/polar.png", rating: 4.7, reviews: "3,077", days: 8, service: false, window: "", delivery: "Sep 8 - 9", prime: true, listBump: 0 },
+  S23: { photo: "products/zenith.png", rating: 4.8, reviews: "214", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 150 },
+  S24: { photo: "products/therma.png", rating: 4.3, reviews: "351", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 100 },
+  S25: { photo: "products/aeroflex.png", rating: 4.4, reviews: "488", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 0 },
+  S26: { photo: "products/nimbus.png", rating: 4.2, reviews: "625", days: 2, service: true, window: "12 PM - 5 PM", delivery: "Wed, Sep 2", prime: true, listBump: 80 },
+  S27: { photo: "products/havenrest.png", rating: 4.5, reviews: "762", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 120 },
+  S28: { photo: "products/cirro.png", rating: 4.6, reviews: "899", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 0 },
+  S29: { photo: "products/polar.png", rating: 4.7, reviews: "1,036", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 150 },
+  S30: { photo: "products/zenith.png", rating: 4.8, reviews: "1,173", days: 8, service: false, window: "", delivery: "Sep 8 - 9", prime: true, listBump: 100 },
+  S31: { photo: "products/therma.png", rating: 4.3, reviews: "1,310", days: 2, service: true, window: "10 AM - 12 PM", delivery: "Wed, Sep 2", prime: true, listBump: 0 },
+  S32: { photo: "products/aeroflex.png", rating: 4.4, reviews: "1,447", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 80 },
+  S33: { photo: "products/nimbus.png", rating: 4.2, reviews: "1,584", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 120 },
+  S34: { photo: "products/havenrest.png", rating: 4.5, reviews: "1,721", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 0 },
+  S35: { photo: "products/cirro.png", rating: 4.6, reviews: "1,858", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 150 },
+  S36: { photo: "products/polar.png", rating: 4.7, reviews: "1,995", days: 2, service: true, window: "9 AM - 1 PM", delivery: "Wed, Sep 2", prime: true, listBump: 100 },
+  S37: { photo: "products/zenith.png", rating: 4.8, reviews: "2,132", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 0 },
+  S38: { photo: "products/therma.png", rating: 4.3, reviews: "2,269", days: 8, service: false, window: "", delivery: "Sep 8 - 9", prime: true, listBump: 80 },
+  S39: { photo: "products/aeroflex.png", rating: 4.4, reviews: "2,406", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 120 },
+  S40: { photo: "products/nimbus.png", rating: 4.2, reviews: "2,543", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 0 },
+  S41: { photo: "products/havenrest.png", rating: 4.5, reviews: "2,680", days: 1, service: true, window: "12 PM - 5 PM", delivery: "Tue, Sep 1", prime: true, listBump: 150 },
+  S42: { photo: "products/cirro.png", rating: 4.6, reviews: "2,817", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 100 },
+  S43: { photo: "products/polar.png", rating: 4.7, reviews: "2,954", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 0 },
+  S44: { photo: "products/zenith.png", rating: 4.8, reviews: "3,091", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 80 },
+  S45: { photo: "products/therma.png", rating: 4.3, reviews: "228", days: 1, service: false, window: "", delivery: "Tue, Sep 1", prime: true, listBump: 120 },
+  S46: { photo: "products/aeroflex.png", rating: 4.4, reviews: "365", days: 8, service: true, window: "10 AM - 12 PM", delivery: "Sep 8 - 9", prime: true, listBump: 0 },
+  S47: { photo: "products/nimbus.png", rating: 4.2, reviews: "502", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 150 },
+  S48: { photo: "products/havenrest.png", rating: 4.5, reviews: "639", days: 3, service: false, window: "", delivery: "Thu, Sep 3", prime: true, listBump: 100 },
+};
+
+// Seven product photographs cover 48 SKUs. The mapping is deterministic per
+// sku_id, so a product always shows the same image.
+const LIVE_PRESENTATION_FALLBACK = { photo: "products/polar.png", rating: 4.4, reviews: "1,024", days: 2, service: false, window: "", delivery: "Wed, Sep 2", prime: true, listBump: 0 };
+
+/* ---- shopping mode ---- */
+
+const MODES = [
+  { id: "demo", label: "Demo", note: "Reliable scripted experience" },
+  { id: "live", label: "Live", note: "Connected to shopping agent" }
+];
+
+// Conversational context. Demo routing reads and writes this; a reset or a mode
+// switch replaces it wholesale so nothing carries across.
+const newContext = () => ({ size: null, budget: null, priorities: [], recent: [], comparison: [], subject: null, refined: false });
+
+// Same-origin: the API server also hosts this page.
+const LIVE_API = "/api";
+
+// The prototype reserves the multi-step timeline for genuine multi-step shopping
+// work — a recommendation search, a refinement that rebuilds the shortlist, or
+// service discovery that checks availability and then finds alternatives. Every
+// other turn gets dots. These labels describe that shopping work, in the
+// prototype's voice; they are not backend stages.
+const LIVE_PROGRESS = {
+  recommend: [
+    "Understanding what matters most",
+    "Looking at your options",
+    "Comparing what matters to you",
+    "Finding the best matches"
+  ],
+  refine: [
+    "Revisiting what matters to you",
+    "Looking at your new price range",
+    "Checking the trade-offs",
+    "Updating your shortlist"
+  ],
+  service: [
+    "Checking haul-away availability",
+    "Looking for options that include it",
+    "Finding the closest matches"
+  ]
+};
+
+const LIVE_STEP_INTERVAL = 1100; // the prototype's cadence
+
+const LIVE_FAILED = {
+  blocks: [{
+    kind: "text",
+    parts: [
+      { t: "I couldn't reach the shopping agent.", b: true },
+      { t: " Try again in a moment, or switch to Demo from the menu." }
+    ]
+  }]
+};
+
+class Component extends DCLogic {
+  state = { blocks: [], draft: "", busy: false, turn: 0, cart: {}, feedback: {}, toast: 0, mode: "demo", menuOpen: false };
+
+  addToCart = (id) => {
+    this.setState(s => ({ cart: Object.assign({}, s.cart, { [id]: true }), toast: s.toast + 1 }));
+    clearTimeout(this._toastT);
+    this._toastT = setTimeout(() => this.setState({ toast: 0 }), 1500);
+  };
+
+  moreFor(role, block) {
+    if (this.state.busy) return;
+    if (this.state.mode === "live") { this.runLiveMore(role, block); return; }
+    const m = MORE[role] || MORE_DEFAULT;
+    this.pinned = null;
+    this.setState({ busy: true });
+    this.push({ kind: "dots" });
+    setTimeout(() => {
+      this.dropLast();
+      this.push({ kind: "text", parts: [{ t: m.heading, b: true }] });
+      setTimeout(() => this.push({ kind: "recs", items: m.ids.map(id => ({ id })), more: true }), 240);
+      m.ids.forEach(id => { if (this.ctx.recent.indexOf(id) < 0) this.ctx.recent.push(id); });
+      setTimeout(() => this.setState({ busy: false }), 620);
+      this.finish(620);
+    }, 750);
+  }
+
+  scroll = React.createRef();
+  ta = React.createRef();
+
+  MAX_TA = 210; // ~1/4 of the 844px screen
+
+  autoSize = (t, focused) => {
+    if (!t) return;
+    t.style.height = "auto";
+    const base = focused ? 56 : 36;
+    const h = Math.max(base, Math.min(t.scrollHeight, this.MAX_TA));
+    t.style.height = h + "px";
+    t.style.overflowY = t.scrollHeight > this.MAX_TA ? "auto" : "hidden";
+  };
+
+  resetTA = () => {
+    const t = this.ta.current;
+    if (!t) return;
+    t.style.height = "36px";
+    t.style.overflowY = "hidden";
+  };
+
+
+
+  push(block) {
+    this.setState(s => ({ blocks: s.blocks.concat([block]) }));
+    setTimeout(() => this.reveal(), 60);
+  }
+
+  patchLast(fn) {
+    this.setState(s => {
+      const b = s.blocks.slice();
+      b[b.length - 1] = fn(b[b.length - 1]);
+      return { blocks: b };
+    });
+  }
+
+  dropLast() {
+    this.setState(s => ({ blocks: s.blocks.slice(0, -1) }));
+  }
+
+  reveal() {
+    const doc = this.doc
+      || (this.ta.current && this.ta.current.ownerDocument)
+      || (this.el && this.el.ownerDocument);
+    if (!doc) return;
+    this.doc = doc;
+    if (!this.el || !this.el.isConnected) {
+      this.el = [].slice.call(doc.querySelectorAll("div"))
+        .find(n => (n.ownerDocument.defaultView || window).getComputedStyle(n).overflowY === "auto");
+    }
+    const el = this.el;
+    if (!el) return;
+    {
+      const wrap = el.lastElementChild;
+      const last = wrap && wrap.lastElementChild;
+      if (!last) return;
+      const maxScroll = Math.max(0, el.scrollHeight - el.clientHeight);
+      if (this.pinned && !this.pinned.isConnected) this.pinned = null; // stale node, fall through
+      if (this.pinned) {
+        // A list or comparison was shown this turn: hold the pin instead of running to the bottom.
+        this.glide(el, Math.max(0, Math.min(this.pinned.offsetTop - 14, maxScroll)));
+        return;
+      }
+      const lk = last.getAttribute("data-kind");
+      if (lk === "progress" || lk === "dots") {
+        // Keep the whole thinking timeline above the fold as it grows.
+        const bottom = last.offsetTop + last.offsetHeight + 12 - el.clientHeight;
+        this.glide(el, Math.max(0, Math.min(bottom, maxScroll)));
+        return;
+      }
+      if (lk === "recs" || lk === "compare") {
+        // Don't run to the bottom. Pin the assistant message that introduces the
+        // list or comparison to the top, so it starts just below it.
+        const kids = [].slice.call(wrap.children);
+        let anchor = last;
+        for (let i = kids.length - 2; i >= 0; i--) {
+          if (kids[i].getAttribute("data-kind") === "text") anchor = kids[i];
+          else break;
+        }
+        this.pinned = anchor;
+        this.glide(el, Math.max(0, Math.min(anchor.offsetTop - 14, maxScroll)));
+        return;
+      }
+      this.glide(el, maxScroll);
+    }
+  }
+
+  glide(el, to) {
+    const win = el.ownerDocument.defaultView || window;
+    if (this._glide) clearInterval(this._glide);
+    const from = el.scrollTop, dist = to - from;
+    if (Math.abs(dist) < 2) return;
+    const dur = Math.min(950, 460 + Math.abs(dist) * 0.32); // a touch slower than native smooth
+    const t0 = win.performance.now();
+    this._glide = setInterval(() => {
+      const p = Math.min(1, (win.performance.now() - t0) / dur);
+      el.scrollTop = from + dist * (1 - Math.pow(1 - p, 3));
+      if (p >= 1) { clearInterval(this._glide); this._glide = null; }
+    }, 16);
+  }
+
+  send = (e) => {
+    if (e && e.target && e.target.ownerDocument) this.doc = e.target.ownerDocument;
+    const text = this.state.draft.trim();
+    this.resetTA();
+    this.submit(text);
+  };
+
+  ctx = newContext();
+
+  /* --- menu --- */
+
+  toggleMenu = (e) => {
+    if (e && e.target && e.target.ownerDocument) this.doc = e.target.ownerDocument;
+    if (this.state.menuOpen) { this.closeMenu(); return; }
+    this.setState({ menuOpen: true });
+    if (this.doc && !this.escHandler) {
+      this.escHandler = ev => { if (ev.key === "Escape") this.closeMenu(); };
+      this.doc.addEventListener("keydown", this.escHandler);
+    }
+  };
+
+  closeMenu = () => {
+    if (this.escHandler && this.doc) {
+      this.doc.removeEventListener("keydown", this.escHandler);
+      this.escHandler = null;
+    }
+    this.setState({ menuOpen: false });
+  };
+
+  componentWillUnmount() {
+    this.closeMenu();
+    cancelScheduledTurns();
+    if (this._glide) clearInterval(this._glide);
+  }
+
+  /* --- mode --- */
+
+  // Conversation state never crosses the demo/live boundary. Cart stays.
+  selectMode = (mode) => {
+    this.closeMenu();
+    if (mode === this.state.mode) return;
+    this.resetConversation();
+    this.setState({ mode });
+  };
+
+  resetConversation = () => {
+    cancelScheduledTurns();
+    this.liveEpoch += 1;
+    this.liveHint = null;
+    this.endLiveSession();
+    if (this._glide) { clearInterval(this._glide); this._glide = null; }
+    this.pinned = null;
+    this.pending = null;
+    this.ctx = newContext();
+    this.resetTA();
+    this.closeMenu();
+    this.setState({ blocks: [], draft: "", busy: false, turn: 0, feedback: {}, toast: 0 });
+  };
+
+  /* --- live mode seam ---
+     The single path between user input and the Python shopping agent. It
+     resolves to a turn — { blocks: [...], products: [...] } — already in the
+     block shapes the renderer understands, so live and demo share one UI.
+     Routing, ranking and copy decisions belong to the agent behind this call. */
+
+  liveSession = null;
+  liveEpoch = 0;
+  liveTurnId = 0;
+  liveHint = null;
+
+  async liveSessionId() {
+    if (this.liveSession) return this.liveSession;
+    const res = await fetch(LIVE_API + "/session", { method: "POST" });
+    if (!res.ok) throw new Error("session request failed: " + res.status);
+    this.liveSession = (await res.json()).session_id;
+    return this.liveSession;
+  }
+
+  postLiveTurn(sessionId, text) {
+    return fetch(LIVE_API + "/session/" + sessionId + "/turn", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+  }
+
+  async submitLiveTurn(text) {
+    let res = await this.postLiveTurn(await this.liveSessionId(), text);
+    if (res.status === 404) {
+      // Sessions are in-memory: the server restarted or the session expired.
+      this.liveSession = null;
+      res = await this.postLiveTurn(await this.liveSessionId(), text);
+    }
+    if (!res.ok) throw new Error("turn request failed: " + res.status);
+    return res.json();
+  }
+
+  // "see more" for one category. No user message is posted and the shortlist
+  // stays on screen, matching moreFor() in the design source.
+  async submitLiveMore(category, shown) {
+    const res = await fetch(LIVE_API + "/session/" + await this.liveSessionId() + "/more", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ category: category || "", shown: shown || [] })
+    });
+    if (!res.ok) throw new Error("see more request failed: " + res.status);
+    return res.json();
+  }
+
+  runLiveMore(category, block) {
+    const epoch = this.liveEpoch;
+    const shown = ((block && block.items) || []).map(it => it.id);
+    const started = Date.now();
+    this.pinned = null;
+    this.setState({ busy: true });
+    this.push({ kind: "dots" });
+    Promise.resolve()
+      .then(() => this.submitLiveMore(category, shown))
+      .catch(error => {
+        console.warn("live see more failed:", error);
+        return LIVE_FAILED;
+      })
+      .then(turn => {
+        if (epoch !== this.liveEpoch) return;
+        setTimeout(() => {
+          this.dropLast();
+          this.renderTurn(turn && turn.blocks ? turn : LIVE_FAILED);
+        }, Math.max(0, 400 - (Date.now() - started)));
+      });
+  }
+
+  // Free the server-side session. Fire and forget — the client has already
+  // dropped its id, so a failure here costs nothing.
+  endLiveSession() {
+    const id = this.liveSession;
+    this.liveSession = null;
+    if (id) fetch(LIVE_API + "/session/" + id, { method: "DELETE" }).catch(() => {});
+  }
+
+  // Progressive delivery. Blocks are identical to the buffered payload; only
+  // their arrival is staged, so the choreography is unchanged: prose, then the
+  // structured result, then the pills.
+  async streamLiveTurn(text, onEvent) {
+    const send = () => fetch(LIVE_API + "/session/" + this.liveSession + "/turn/stream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+    await this.liveSessionId();
+    let res = await send();
+    if (res.status === 404) {
+      this.liveSession = null;
+      await this.liveSessionId();
+      res = await send();
+    }
+    if (!res.ok || !res.body) throw new Error("stream request failed: " + res.status);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      let split;
+      while ((split = buffer.indexOf("\n\n")) >= 0) {
+        const frame = buffer.slice(0, split);
+        buffer = buffer.slice(split + 2);
+        let event = null, data = null;
+        frame.split("\n").forEach(line => {
+          if (line.indexOf("event: ") === 0) event = line.slice(7);
+          else if (line.indexOf("data: ") === 0) data = line.slice(6);
+        });
+        if (event && data) onEvent(event, JSON.parse(data));
+      }
+    }
+  }
+
+  runLiveBuffered(text) {
+    const epoch = this.liveEpoch;
+    const started = Date.now();
+    this.push({ kind: "dots" });
+    Promise.resolve()
+      .then(() => this.submitLiveTurn(text))
+      .catch(error => {
+        console.warn("live turn failed:", error);
+        return LIVE_FAILED;
+      })
+      .then(turn => {
+        if (epoch !== this.liveEpoch) return; // reset or mode switch while in flight
+        setTimeout(() => {
+          this.dropLast();
+          this.renderTurn(turn && turn.blocks ? turn : LIVE_FAILED);
+        }, Math.max(0, 400 - (Date.now() - started)));
+      });
+  }
+
+  // Whether the shopper named one of the products already on screen.
+  namesLiveProduct(text) {
+    const lowered = String(text || "").toLowerCase();
+    return Object.keys(BY_ID).some(id => {
+      if (FIXTURE_IDS.has(id)) return false;
+      const name = String((BY_ID[id] || {}).name || "").toLowerCase();
+      if (!name) return false;
+      const head = name.split(" ").slice(0, 2).join(" ");
+      return lowered.indexOf(name) >= 0 || (head.length > 6 && lowered.indexOf(head) >= 0);
+    });
+  }
+
+  // Which loading treatment this turn deserves, decided before it starts.
+  // `liveHint` is the engine's own account of the shopper's state, so "are we
+  // still collecting the basics" is answered authoritatively rather than guessed.
+  liveLoading(text) {
+    const hint = this.liveHint || { missing_basics: ["size", "budget"], has_products: false };
+    const missing = hint.missing_basics || [];
+    const t = String(text || "");
+
+    if (missing.length) {
+      // Still gathering size and budget: these turns ask or acknowledge, which
+      // the prototype answers with dots. The exception is the message that
+      // completes the basics — whether it supplies the last one or both at once
+      // — because the shortlist search starts on that turn.
+      const suppliesBudget = /\$\s?\d|\b\d{3,4}\b|budget|spend|afford|cheap|under\b/i.test(t);
+      const suppliesSize = /\b(twin xl|cal king|twin|full|queen|king)\b/i.test(t);
+      const completed = missing.every(
+        basic => (basic === "budget" ? suppliesBudget : suppliesSize)
+      );
+      return completed ? LIVE_PROGRESS.recommend : null;
+    }
+    // Service discovery: availability is checked, then alternatives are found.
+    // Naming one product keeps it a narrow fact, which the prototype answers
+    // with dots — the same distinction the engine routes on.
+    if (/haul|get rid of|dispose|disposal|take away|takes away|removal|old mattress|delivery|deliver|set ?-? ?up/i.test(t)) {
+      return this.namesLiveProduct(t) ? null : LIVE_PROGRESS.service;
+    }
+    // A new price or priority rebuilds the shortlist.
+    if (hint.has_products && /closer to|cheaper|less expensive|lower budget|more like|instead of|under \$|below \$|around \$|spend less|something else/i.test(t)) {
+      return LIVE_PROGRESS.refine;
+    }
+    // Narrow follow-ups about what is already on screen are single-step.
+    if (hint.has_products && /compare|versus|\bvs\b|which|what do customers|reviews?|customers say|coolest|firmest|trial|warranty|does (it|either|this)|tell me more/i.test(t)) {
+      return null;
+    }
+    if (/mattress|bed|king|queen|full|twin|firm|soft|cool|show me|recommend|looking for|i need|options/i.test(t)) {
+      return LIVE_PROGRESS.recommend;
+    }
+    return null;
+  }
+
+  // Advance the timeline at the prototype's cadence, holding on the last step
+  // until real results arrive. The steps never outlast the work, and stop for
+  // good once the tree has been retired for this turn.
+  advanceLiveSteps(pid, count, isRunning) {
+    let index = 0;
+    const tick = () => {
+      if (index >= count - 1 || !isRunning()) return;
+      index += 1;
+      this.setState(s => ({
+        blocks: s.blocks.map(b =>
+          b.pid === pid && b.kind === "progress" ? Object.assign({}, b, { active: index }) : b)
+      }));
+      setTimeout(() => this.reveal(), 40);
+      setTimeout(tick, LIVE_STEP_INTERVAL);
+    };
+    setTimeout(tick, LIVE_STEP_INTERVAL);
+  }
+
+  runLive(text) {
+    const epoch = this.liveEpoch;
+    const stale = () => epoch !== this.liveEpoch;
+    let structureCount = 0;
+    let started = false;
+
+    const pid = "live-" + (++this.liveTurnId);
+    const steps = this.liveLoading(text);
+
+    // The progress tree is a turn-level artifact. It appears once, near the
+    // start of a turn that warrants it, and is retired the moment real content
+    // lands — every later pause in the same turn shows dots at the new end
+    // instead. A new turn gets a fresh `pid` and a fresh chance at a tree.
+    let treeConsumed = false;
+    const loadingBlock = () =>
+      steps && !treeConsumed
+        ? { kind: "progress", pid, steps, active: 0 }
+        : { kind: "dots", pid };
+
+    this.push(loadingBlock());
+    if (steps) {
+      this.advanceLiveSteps(pid, steps.length, () => !treeConsumed && !stale());
+    }
+    // The loading block stays until the prose lands, so a turn never looks
+    // finished while it is still being written.
+    const dropDots = blocks => blocks.filter(b => b.pid !== pid);
+
+    const onEvent = (event, data) => {
+      if (stale()) return;
+      started = true;
+      if (event === "presentation") {
+        // Results are visible, so the tree has done its job. The turn may still
+        // be running, and that continuation is dots below the content.
+        this.registerProducts(data.products);
+        structureCount += data.blocks.length;
+        treeConsumed = true;
+        this.setState(s => ({
+          blocks: dropDots(s.blocks).concat(data.blocks, [loadingBlock()])
+        }));
+        setTimeout(() => this.reveal(), 40);
+      } else if (event === "message") {
+        // The prose introduces the results, so it lands above them.
+        treeConsumed = true;
+        this.setState(s => {
+          const blocks = dropDots(s.blocks);
+          if (data.block) blocks.splice(blocks.length - structureCount, 0, data.block);
+          return { blocks };
+        });
+        setTimeout(() => this.reveal(), 40);
+      } else if (event === "complete") {
+        if (data.state_hint) this.liveHint = data.state_hint;
+        this.setState(s => ({ blocks: dropDots(s.blocks) }));
+        if ((data.replies || []).length) this.push({ kind: "suggest", items: data.replies });
+        this.push({ kind: "feedback" });
+        this.setState({ busy: false });
+      }
+    };
+
+    this.streamLiveTurn(text, onEvent).catch(error => {
+      console.warn("live stream failed:", error);
+      if (stale() || started) return;
+      // Nothing rendered yet, so the buffered seam can still serve this turn.
+      this.setState(s => ({ blocks: dropDots(s.blocks) }));
+      this.runLiveBuffered(text);
+    });
+  }
+
+  // Backend product truth + presentation-only metadata -> the Claude Design card
+  // view model. The engine owns identity, price, name and rationale; the fixture
+  // above owns the decorative commerce chrome. A comparison turn names products
+  // without prices, so a price a recommendation turn already supplied is kept.
+  registerProducts(list) {
+    (list || []).forEach(p => {
+      if (!p || !p.id || FIXTURE_IDS.has(p.id)) return;
+      const prior = BY_ID[p.id] || {};
+      const chrome = LIVE_PRODUCT_PRESENTATION[p.id] || LIVE_PRESENTATION_FALLBACK;
+      const price = p.price != null ? p.price : prior.price;
+      const merged = Object.assign({}, prior, chrome, p, {
+        price,
+        short: p.short || prior.short,
+        role: "",
+        why: "",
+        art: {},
+        list: chrome.listBump && price != null
+          ? "$" + (price + chrome.listBump).toLocaleString("en-US") + ".00"
+          : ""
+      });
+      if (!p.dollars && prior.dollars) {
+        merged.dollars = prior.dollars;
+        merged.cents = prior.cents;
+      }
+      BY_ID[p.id] = merged;
+    });
+  }
+
+  renderTurn(turn) {
+    this.registerProducts(turn.products);
+    const blocks = turn.blocks || [];
+    blocks.forEach((b, i) => (i === 0 ? this.push(b) : setTimeout(() => this.push(b), i * 260)));
+    this.finish(blocks.length * 260 + 60);
+    this.setState({ busy: false });
+  }
+
+  /* --- reference resolution over recently presented products --- */
+  resolveRefs(t) {
+    const recent = this.ctx.comparison.length ? this.ctx.comparison : this.ctx.recent;
+    if (!recent.length) return [];
+    const named = PRODUCTS.filter(p =>
+      new RegExp(p.name.split(" ").slice(0, 2).join("\\s+"), "i").test(t) ||
+      new RegExp("\\b" + p.id + "\\b", "i").test(t)
+    ).map(p => p.id);
+    if (named.length) return named;
+    if (/\bfirst two\b|\btop two\b|\bthose two\b|\bboth\b/i.test(t)) return recent.slice(0, 2);
+    if (/\bfirst\b|\b1st\b/i.test(t)) return recent.slice(0, 1);
+    if (/\bsecond\b|\b2nd\b/i.test(t)) return recent.slice(1, 2);
+    if (/\bthird\b|\b3rd\b/i.test(t)) return recent.slice(2, 3);
+    if (/\bcheaper|cheapest|least expensive\b/i.test(t)) {
+      const sorted = recent.slice().sort((a, b) => +BY_ID[a].dollars.replace(",", "") - +BY_ID[b].dollars.replace(",", ""));
+      return sorted.slice(0, 1);
+    }
+    if (/original pick|top pick|the one you|your pick|first pick/i.test(t)) return recent.slice(0, 1);
+    if (/\bthat one\b|\bit\b|\bthis one\b|\bthem\b|\beither\b|\bthey\b/i.test(t)) {
+      if (this.ctx.subject) return [this.ctx.subject];
+      if (recent.length === 1) return recent;
+      return null; // ambiguous
+    }
+    return [];
+  }
+
+  classify(t) {
+    const hasCtx = this.ctx.recent.length > 0;
+    if (/^(hi|hey|hello|yo|howdy|hiya|sup|good (morning|afternoon|evening))\b[\s!.,]*$/i.test(t)) return "greeting";
+    if (/weather|poem|joke|who won|score|game last night|election|president|stock|recipe|write me (a|some)|sing|news/i.test(t)) return "off_topic";
+    if (/^(hmm+|maybe|idk|i don'?t know|not sure|ok(ay)?|sure|hm+|uh+|dunno)\b[\s!.,?]*$/i.test(t)) return "unclear";
+    if (hasCtx && (/(disassemb|dismantle|take apart|break down|haul|take away|remov)\w*[^.?!]{0,24}(bed ?frame|frame|box ?spring|headboard)/i.test(t)
+      || /(bed ?frame|frame|box ?spring|headboard)[^.?!]{0,24}(disassemb|dismantle|take apart|break down|haul|take away|remov)/i.test(t))) return "unverified_service";
+    if (/haul|get rid of|dispose|disposal|take away|takes away|removal|old mattress/i.test(t) && hasCtx) return "haul";
+    if (/set ?-? ?up|deliver|delivery/i.test(t) && hasCtx) return "service_question";
+    if (/compare|versus|\bvs\b|difference between|side by side|side-by-side/i.test(t) && hasCtx) return "compare";
+    if (/(keep|still).*(but|and).*(closer to|under|around|\$)|closer to \$|cheaper|lower budget|more like \$|drop the budget|instead of \$|options under \$|something under \$|under \$\s?[\d,]+/i.test(t) && hasCtx) return "preference_update";
+    if (hasCtx && /(which|what) (would |should )?(you|i) ?(would )?(pick|choose|recommend|go with)|pick for me|your pick/i.test(t)) return "pick_one";
+    if (hasCtx && /customers say|reviews?|people say|owners say|sleeps? cool|tell me more|what about|how (firm|cool)|does it|is it|is the|are the|which (one|sleeps|is)|trial|warranty|what'?s the|firmness|too (firm|soft)|side sleeper|stomach sleeper|back sleeper|feel like/i.test(t)) return "product_question";
+    if (/mattress|bed|king|queen|full|twin|firm|soft|cooling|budget|recommend|looking for|i need|show me|options/i.test(t)) return "recommend";
+    return "unclear";
+  }
+
+  readiness(t) {
+    const c = this.ctx;
+    if (/queen|king|twin|full|cal king/i.test(t)) c.size = (t.match(/queen|king|twin|full|cal king/i) || [])[0];
+    const money = t.match(/\$\s?([\d,]+)/);
+    if (money) c.budget = money[1];
+    if (/cool/i.test(t) && c.priorities.indexOf("cooling") < 0) c.priorities.push("cooling");
+    if (/motion|partner move|feel (them|you) move/i.test(t) && c.priorities.indexOf("motion isolation") < 0) c.priorities.push("motion isolation");
+    if (/show me|just show|browse|see options|give me a few/i.test(t)) return "exploratory";
+    if (c.size && c.budget) return "strong";
+    if (c.size || c.budget) return "exploratory";
+    return "low";
+  }
+
+  submit(text) {
+    if (!text || this.state.busy) return;
+    this.setState(s => ({
+      draft: "",
+      busy: true,
+      blocks: s.blocks.filter(b => b.kind !== "suggest")
+    }));
+    this.pinned = null;
+    this.push({ kind: "user", text });
+    this.setState(s => ({ turn: s.turn + 1 }));
+    if (this.state.mode === "live") {
+      // Demo's 420ms beat is scripted pacing; Live work has already started on
+      // the server, so the loading state follows the message immediately.
+      setTimeout(() => this.runLive(text), 80);
+      return;
+    }
+    setTimeout(() => this.route(text), 420);
+  }
+
+  finish(delay) {
+    setTimeout(() => this.push({ kind: "feedback" }), delay);
+  }
+
+  quick(parts, items, delay) {
+    this.push({ kind: "dots" });
+    setTimeout(() => {
+      this.dropLast();
+      this.push({ kind: "text", parts });
+      if (items) setTimeout(() => this.push({ kind: "suggest", items }), 300);
+      this.finish(items ? 620 : 320);
+      this.setState({ busy: false });
+    }, delay || 1100);
+  }
+
+  say(parts, items) {
+    this.push({ kind: "text", parts });
+    if (items) setTimeout(() => this.push({ kind: "suggest", items }), 300);
+    this.finish(items ? 620 : 320);
+    this.setState({ busy: false });
+  }
+
+  route(text) {
+    const kind = this.classify(text);
+    const c = this.ctx;
+
+    if (kind === "greeting") {
+      setTimeout(() => this.say([{ t: "Hi! What are you shopping for today?" }]), 250);
+      return;
+    }
+    if (kind === "off_topic") {
+      const parts = c.recent.length
+        ? [{ t: "I'm better on the mattress side of things. Want to keep narrowing down those options?" }]
+        : [{ t: "I can help with shopping questions. What are you looking for?" }];
+      setTimeout(() => this.say(parts), 300);
+      return;
+    }
+    if (kind === "unclear") {
+      const parts = c.recent.length
+        ? [{ t: "No rush. I can compare any two of these, pull up what customers say, or look at a different price — what would help?" }]
+        : [{ t: "Happy to help — what are you shopping for?" }];
+      setTimeout(() => this.say(parts), 300);
+      return;
+    }
+    if (kind === "unverified_service") {
+      this.quick(UNVERIFIED, SUGGESTIONS_UNVERIFIED, 1200);
+      return;
+    }
+    if (kind === "haul") {
+      if (c.haulShown && /same day|delivery day|schedule|when|separate/i.test(text)) {
+        this.quick([
+          { t: "Yes — you can have it taken away the same day your new mattress arrives", b: true },
+          { t: ", or pick a separate date after delivery. You'll choose the haul-away window at checkout, and the crew removes the old mattress for eco-friendly disposal." }
+        ], ["Compare these two", "Add CirroLoft to my cart", "Back to the cooling picks"], 1300);
+        return;
+      }
+      this.runHaul();
+      return;
+    }
+    if (kind === "service_question") { this.ctx.subject = (this.resolveRefs(text) || [])[0] || c.recent[0]; this.runService(); return; }
+
+    if (kind === "pick_one") {
+      const id = c.recent[0] || SHORTLIST[0];
+      const p = BY_ID[id];
+      c.subject = id;
+      this.quick([
+        { t: "I'd go with " + p.short + ".", b: true },
+        { t: " " + p.why + " It's $" + p.dollars + ", with " + ((SPECS[id] || {}).Trial || "a trial period") + " to try it at home." }
+      ], ["Compare my top options", "What do customers say?", "Add " + p.short + " to my cart"], 1400);
+      return;
+    }
+
+    if (kind === "compare") {
+      if (/top options|top two|my options|these options|top picks/i.test(text) && c.recent.length >= 2) {
+        const pair = c.recent.slice(0, 2);
+        c.comparison = pair;
+        c.subject = pair[0];
+        this.runCompare(pair);
+        return;
+      }
+      const refs = this.resolveRefs(text);
+      if (refs === null || (refs && refs.length === 1)) {
+        const names = c.recent.slice(0, 3).map(id => BY_ID[id].short);
+        this.quick([{ t: "Which two would you like me to line up — " + names.slice(0, 2).join(", ") + ", or " + names[2] + "?" }], null, 800);
+        return;
+      }
+      const pair = (refs && refs.length >= 2) ? refs.slice(0, 2) : c.recent.slice(0, 2);
+      c.comparison = pair;
+      c.subject = pair[0];
+      this.runCompare(pair);
+      return;
+    }
+
+    if (kind === "product_question") {
+      const refs = this.resolveRefs(text);
+      if (refs === null) {
+        const names = c.recent.slice(0, 3).map(id => BY_ID[id].short);
+        this.quick([{ t: "Just so I answer for the right one — " + names.slice(0, -1).join(", ") + ", or " + names[names.length - 1] + "?" }], null, 800);
+        return;
+      }
+      const id = (refs && refs[0]) || c.subject || c.recent[0];
+      c.subject = id;
+      if (/coolest|which sleeps cool|cooler/i.test(text)) {
+        const pool = (c.comparison.length ? c.comparison : c.recent).slice(0, 3);
+        const rank = { Excellent: 3, "Very good": 2, Good: 1 };
+        const score = id => rank[(SPECS[id] || {}).Cooling] || 0;
+        const sorted = pool.slice().sort((x, y) => score(y) - score(x));
+        const top = sorted[0], next = sorted[1];
+        const parts = [{ t: BY_ID[top].short, b: true }];
+        if (next && score(next) === score(top)) {
+          parts.push({ t: " and " + BY_ID[next].short + " are even on cooling — both rate " + (SPECS[top] || {}).Cooling.toLowerCase() + ". " + BY_ID[top].short + " edges ahead on motion isolation, which is why I put it first." });
+        } else if (next) {
+          parts.push({ t: " sleeps coolest of these — " + ((SPECS[top] || {}).Cooling || "").toLowerCase() + " cooling against " + ((SPECS[next] || {}).Cooling || "").toLowerCase() + " for " + BY_ID[next].short + "." });
+        } else {
+          parts.push({ t: " is the coolest of what I've shown you." });
+        }
+        this.quick(parts, ["What do customers say?", "Compare the first two", "Add " + BY_ID[top].short + " to my cart"], 1500);
+        return;
+      }
+      const reviewy = /customers say|review|people say|owners say|complaints|praise/i.test(text);
+      const copy = (reviewy ? PRODUCT_REVIEWS[id] : PRODUCT_FACTS[id])
+        || [{ t: BY_ID[id] ? BY_ID[id].short + ": " + BY_ID[id].why : "I don't have detail on that one yet — want me to pull up the full listing?" }];
+      this.quick(copy, null, 1500);
+      return;
+    }
+
+    if (kind === "preference_update") {
+      const money = text.match(/\$\s?([\d,]+)/);
+      if (money) c.budget = money[1];
+      c.refined = true;
+      this.runRefine();
+      return;
+    }
+
+    // recommend
+    const ready = this.readiness(text);
+    if (ready === "low") {
+      this.quick([{ t: "Happy to help you find one. What size are you after, and roughly what would you like to spend?" }], null, 900);
+      return;
+    }
+    this.runProgress();
+  }
+
+  refinePlan(budget) {
+    const b = parseInt(String(budget || "450").replace(/[^\d]/g, ""), 10) || 450;
+    const under = RANK.filter(id => PRICE[id] <= b);
+    if (!under.length) {
+      const cheapest = RANK.slice().sort((x, y) => PRICE[x] - PRICE[y])[0];
+      return {
+        b,
+        items: [{ id: cheapest, role: "Closest to $" + b }],
+        intro: [{ t: "Nothing in this set lands under $" + b + ".", b: true },
+                { t: " " + BY_ID[cheapest].short + " at $" + PRICE[cheapest] + " is the closest, and it still holds up on cooling." }],
+        after: []
+      };
+    }
+    const top = under[0], second = under[1];
+    const mot = id => MOTION_RANK[(SPECS[id] || {})["Motion isolation"]] || 0;
+    const items = [{ id: top, role: "Best under $" + b }];
+    if (second) {
+      const dearer = PRICE[second] > PRICE[top];
+      const steadier = mot(second) > mot(top);
+      items.push({
+        id: second,
+        role: steadier
+          ? (dearer ? "$" + (PRICE[second] - PRICE[top]) + " more for steadier motion" : "Steadier on motion")
+          : (dearer ? "Also under $" + b : "Cheaper, with more movement")
+      });
+    }
+    const keepsBoth = mot(top) >= 3;
+    let tradeoff;
+    if (keepsBoth) {
+      tradeoff = { t: " " + BY_ID[top].short + " lands under it, so you keep the cooling and motion isolation you asked for." };
+    } else if (FOAM[top]) {
+      tradeoff = { t: " You can get there, but the trade-off is motion isolation — " + BY_ID[top].short + " is all-foam, so you'll feel your partner move more." };
+    } else {
+      tradeoff = { t: " " + BY_ID[top].short + " keeps the cooling at that price, but motion isolation is only good rather than excellent, so you'll feel more movement than with " + BY_ID.polar.short + "." };
+    }
+    return {
+      b,
+      items,
+      intro: keepsBoth
+        ? [{ t: "$" + b + " still covers your strongest options.", b: true }, tradeoff]
+        : [{ t: "Here's what $" + b + " looks like.", b: true }, tradeoff],
+      after: keepsBoth
+        ? []
+        : [{ t: BY_ID.polar.short + " is still the better match on your original priorities if $" + (PRICE.polar - PRICE[top]) + " more is workable." }]
+    };
+  }
+
+  runRefine() {
+    const c = this.ctx;
+    const plan = this.refinePlan(c.budget);
+    const steps = ["Revisiting what matters to you", "Looking below $" + plan.b, "Checking cooling at that price", "Updating your shortlist"];
+    this.runSteps(steps, 1000, () => {
+      this.push({ kind: "text", parts: plan.intro });
+      setTimeout(() => this.push({ kind: "recs", items: plan.items }), 260);
+      if (plan.after.length) setTimeout(() => this.push({ kind: "text", parts: plan.after }), 620);
+      setTimeout(() => this.push({ kind: "suggest", items: ["Compare the first two", "What do customers say?", "Which sleeps coolest?"] }), 900);
+      this.finish(1200);
+      c.recent = plan.items.map(i => i.id);
+      c.comparison = [];
+      c.subject = null;
+      this.setState({ busy: false });
+    });
+  }
+
+  runSteps(list, interval, done) {
+    this.push({ kind: "progress", steps: list, active: 0 });
+    const advance = i => {
+      if (i < list.length) {
+        this.patchLast(b => Object.assign({}, b, { active: i }));
+        setTimeout(() => this.reveal(), 60); // keep the growing timeline pinned in view
+        setTimeout(() => advance(i + 1), interval);
+      } else {
+        setTimeout(() => { this.dropLast(); done(); }, 450);
+      }
+    };
+    setTimeout(() => advance(1), interval);
+  }
+
+  runHaul() {
+    this.runSteps(HAUL.steps, 1100, () => {
+      this.push({ kind: "text", parts: HAUL.intro });
+      setTimeout(() => this.push({ kind: "text", parts: HAUL.heading }), 240);
+      setTimeout(() => this.push({ kind: "recs", items: HAUL.ids, more: true }), 420);
+      setTimeout(() => this.push({ kind: "text", parts: HAUL.after }), 800);
+      setTimeout(() => this.push({ kind: "suggest", items: SUGGESTIONS_HAUL }), 1060);
+      HAUL.ids.forEach(it => { if (this.ctx.recent.indexOf(it.id) < 0) this.ctx.recent.unshift(it.id); });
+      this.ctx.haulShown = true;
+      this.finish(1240);
+      this.setState({ busy: false });
+    });
+  }
+
+  runService() {
+    this.runSteps(SERVICE.steps, 1250, () => {
+      this.push({ kind: "text", parts: SERVICE.answer });
+      setTimeout(() => this.push({ kind: "service" }), 260);
+      setTimeout(() => this.push({ kind: "suggest", items: SUGGESTIONS_SERVICE }), 560);
+      this.finish(860);
+      this.setState({ busy: false });
+    });
+  }
+
+  runCompare(pair) {
+    const p = pair || ["polar", "zenith"];
+    const verdict = VERDICTS[p.slice().sort().join("|")] || [
+      { t: BY_ID[p[0]].short + " is the closer match to your priorities.", b: true },
+      { t: " It holds up better on the things you said matter most." }
+    ];
+    this.push({ kind: "dots" });
+    setTimeout(() => {
+      this.dropLast();
+      this.push({ kind: "text", parts: COMPARISON.intro });
+      setTimeout(() => this.push({ kind: "compare", pair: p }), 240);
+      setTimeout(() => this.push({ kind: "text", parts: verdict }), 620);
+      setTimeout(() => this.push({ kind: "suggest", items: SUGGESTIONS_COMPARE }), 900);
+      this.finish(1200);
+      this.setState({ busy: false });
+    }, 1900);
+  }
+
+  runProgress() {
+    this.runSteps(SCRIPTED.steps, 1100, () => {
+      this.push({ kind: "text", parts: SCRIPTED.reply });
+      setTimeout(() => this.push({ kind: "recs" }), 260);
+      setTimeout(() => this.push({ kind: "suggest", items: SUGGESTIONS }), 520);
+      this.finish(820);
+      this.ctx.recent = SHORTLIST.slice();
+      this.ctx.comparison = [];
+      this.ctx.subject = null;
+      this.setState({ busy: false });
+    });
+  }
+
+  runDots() {
+    this.push({ kind: "dots" });
+    setTimeout(() => {
+      this.dropLast();
+      this.push({ kind: "text", parts: this.pending || FOLLOW_UP });
+      this.setState({ busy: false });
+    }, 1600);
+  }
+
+  renderVals() {
+    const fb = this.state.feedback || {};
+    const blocks = this.state.blocks.map((b, bi) => ({
+      upColor: fb[bi] === "up" ? "#0f1111" : "#9a9fa0",
+      downColor: fb[bi] === "down" ? "#0f1111" : "#9a9fa0",
+      onUp: () => this.setState(s => ({ feedback: Object.assign({}, s.feedback, { [bi]: s.feedback && s.feedback[bi] === "up" ? null : "up" }) })),
+      onDown: () => this.setState(s => ({ feedback: Object.assign({}, s.feedback, { [bi]: s.feedback && s.feedback[bi] === "down" ? null : "down" }) })),
+      kind: b.kind,
+      isUser: b.kind === "user",
+      isProgress: b.kind === "progress",
+      isDots: b.kind === "dots",
+      isText: b.kind === "text",
+      isRecs: b.kind === "recs",
+      isCompare: b.kind === "compare",
+      isSuggest: b.kind === "suggest",
+      products: b.kind === "recs" ? (b.items || SHORTLIST.map(id => ({ id }))).map(it => {
+        const p = BY_ID[it.id];
+        return {
+        role: it.role || p.role,
+        name: p.name,
+        rating: p.rating.toFixed(1),
+        stars: (p.rating / 5 * 100).toFixed(1) + "%",
+        reviews: "(" + p.reviews + ")",
+        dollars: p.dollars,
+        cents: p.cents,
+        list: p.list,
+        hasList: !!p.list,
+        program: PROGRAM(p.days),
+        deliveryType: p.service ? "delivery with haul-away service" : "delivery",
+        deliveryDate: p.service && p.window ? p.delivery + ", " + p.window : p.delivery,
+        prime: p.prime,
+        why: it.why || p.why,
+        h: p.art.h,
+        cover: p.art.cover,
+        band: p.art.band,
+        base: p.art.base,
+        slotId: "shot-" + p.id,
+        photo: p.photo || "",
+        showMore: !b.more,
+        onMore: () => this.moreFor(it.role || p.role, b),
+        onCart: () => this.addToCart(p.id)
+        };
+      }) : [],
+      cmpAPhoto: b.kind === "compare" ? ((BY_ID[b.pair[0]] || {}).photo || "") : "",
+      cmpBPhoto: b.kind === "compare" ? ((BY_ID[b.pair[1]] || {}).photo || "") : "",
+      cmpASlot: b.kind === "compare" ? "cmp-a-" + b.pair[0] : "",
+      cmpBSlot: b.kind === "compare" ? "cmp-b-" + b.pair[1] : "",
+      cmpAName: b.kind === "compare" ? ((b.names || [])[0] || (BY_ID[b.pair[0]] || {}).short || "") : "",
+      cmpBName: b.kind === "compare" ? ((b.names || [])[1] || (BY_ID[b.pair[1]] || {}).short || "") : "",
+      cmpRows: b.kind !== "compare" ? [] : (b.rows || CMP_ROWS.map(label => ({
+        label,
+        a: (SPECS[b.pair[0]] || SPEC_FALLBACK)[label] || "—",
+        b: (SPECS[b.pair[1]] || SPEC_FALLBACK)[label] || "—"
+      }))).map((r, i) => ({
+        label: r.label,
+        a: r.a,
+        b: r.b,
+        border: i === 0 ? "none" : "1px solid #eceded"
+      })),
+      suggestions: b.kind === "suggest" ? (b.items || SUGGESTIONS).map(s => ({
+        label: s,
+        onPick: e => {
+          if (e && e.target && e.target.ownerDocument) this.doc = e.target.ownerDocument;
+          this.submit(s);
+        }
+      })) : [],
+      text: b.text,
+      parts: (b.parts || []).map(p => ({ t: p.t, weight: p.b ? 700 : 400 })),
+      isService: b.kind === "service",
+      isFeedback: b.kind === "feedback",
+      // Live product detail reuses this block with backend-supplied fact rows.
+      svcHeading: b.heading || SERVICE.heading,
+      svcNote: b.note || SERVICE.note,
+      svcRows: b.kind === "service" ? (b.rows || SERVICE.rows).map((r, i) => ({
+        label: r.label,
+        value: r.value,
+        color: r.color,
+        border: i === 0 ? "none" : "1px solid #eceded"
+      })) : [],
+      steps: b.kind === "progress"
+        ? (b.steps || SCRIPTED.steps).slice(0, b.active + 1).map((label, i) => ({
+            label,
+            dot: i === b.active ? "#0f6fc5" : "#d5d9d9",
+            color: i === b.active ? "#0f1111" : "#8d9192",
+            weight: i === b.active ? 500 : 400
+          }))
+        : []
+    }));
+    const has = this.state.draft.trim().length > 0;
+    return {
+      clock: "15:29",
+      cartCount: Object.keys(this.state.cart).filter(k => this.state.cart[k]).length,
+      showToast: this.state.toast > 0,
+      blocks,
+      isCold: this.state.blocks.length === 0,
+      menuOpen: this.state.menuOpen,
+      onMenu: this.toggleMenu,
+      onCloseMenu: this.closeMenu,
+      onReset: this.resetConversation,
+      modes: MODES.map(m => {
+        const on = this.state.mode === m.id;
+        return {
+          label: m.label,
+          note: m.note,
+          selected: on,
+          weight: on ? 700 : 400,
+          bg: on ? "#f2f8ff" : "#ffffff",
+          onPick: () => this.selectMode(m.id)
+        };
+      }),
+      listPad: this.state.blocks.length === 0 ? "0" : "6px 20px 26px",
+      draft: this.state.draft,
+      hasDraft: has,
+      noDraft: !has,
+      sendBg: has ? "#0f6fc5" : "#ffffff",
+      scrollRef: this.scroll,
+      noop: () => {},
+      taRef: this.ta,
+      onDraft: e => {
+        if (e.target && e.target.ownerDocument) this.doc = e.target.ownerDocument;
+        this.setState({ draft: e.target.value });
+        this.autoSize(e.target, true);
+      },
+      onFocus: e => this.autoSize(e.target, true),
+      onBlur: e => { if (!this.state.draft.trim()) this.resetTA(); else this.autoSize(e.target, false); },
+      onKey: e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); this.send(e); } },
+      onSend: this.send
+    };
+  }
+}
+
+</script>
+</body>
+</html>

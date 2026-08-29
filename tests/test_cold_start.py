@@ -229,8 +229,26 @@ class ColdStartTests(unittest.TestCase):
             },
         )
         self.assertEqual(second["preference_state"]["hard_constraints"]["size"], "king")
-        self.assertEqual(second["modality"], "recommendation_cards")
-        self.assertIsNone(second["preference_state"]["pending_elicitation"])
+        # Size landed deterministically; budget is the remaining basic, so the
+        # agent spends its one follow-up on it before building a shortlist.
+        self.assertEqual(second["response_strategy"], "clarification")
+        self.assertEqual(
+            second["preference_state"]["pending_elicitation"]["id"],
+            "mattress_budget_range_v1",
+        )
+
+        third = process_conversation_turn(
+            "Under $1,000",
+            second["preference_state"],
+            SKU_CATALOG,
+            client=Client(update(readiness="exploratory")),
+            elicitation_response={
+                "elicitation_id": "mattress_budget_range_v1",
+                "option_id": "under_1000",
+            },
+        )
+        self.assertEqual(third["modality"], "recommendation_cards")
+        self.assertIsNone(third["preference_state"]["pending_elicitation"])
 
     def test_free_text_answer_clears_pending_and_uses_normal_extraction(self):
         first = self.turn(
@@ -301,7 +319,13 @@ class ColdStartTests(unittest.TestCase):
             "exploratory_shortlist",
         )
 
-    def test_ignored_budget_is_not_repeated_after_combined_question(self):
+    def test_missing_budget_gets_one_follow_up_after_combined_question(self):
+        """Size and budget both markedly improve the first shortlist.
+
+        A shopper who answers only the size half of the combined question is
+        asked once for the other half, rather than being taken straight to
+        results on half the signal.
+        """
         state = new_preference_state()
         state.update(
             {
@@ -309,6 +333,34 @@ class ColdStartTests(unittest.TestCase):
                 "clarification_question": "What size, and roughly what would you like to spend?",
                 "clarification_reason": "cold_start_basics",
                 "recommendation_readiness": "low",
+                "cold_start_questions_asked": 1,
+            }
+        )
+        turn = self.turn(
+            "King.",
+            update(
+                readiness="low",
+                size="king",
+                clarification=True,
+                question="And what is your budget?",
+                clarification_reason="cold_start_basics",
+            ),
+            state,
+        )
+        self.assertEqual(turn["response_strategy"], "clarification")
+        self.assertFalse(turn["clarification_bypassed"])
+        self.assertTrue(turn["preference_state"]["needs_clarification"])
+        self.assertEqual(turn["preference_state"]["cold_start_questions_asked"], 2)
+
+    def test_cold_start_never_asks_a_third_time(self):
+        """Two attempts is the ceiling; the shortlist is never gated on basics."""
+        state = new_preference_state()
+        state.update(
+            {
+                "needs_clarification": True,
+                "clarification_reason": "cold_start_basics",
+                "recommendation_readiness": "low",
+                "cold_start_questions_asked": 2,
             }
         )
         turn = self.turn(
@@ -325,6 +377,31 @@ class ColdStartTests(unittest.TestCase):
         self.assertEqual(turn["modality"], "recommendation_cards")
         self.assertTrue(turn["clarification_bypassed"])
         self.assertFalse(turn["preference_state"]["needs_clarification"])
+
+    def test_declining_the_basics_shows_options_immediately(self):
+        """"I don't know" is an answer: stop asking and start shopping."""
+        state = new_preference_state()
+        state.update(
+            {
+                "needs_clarification": True,
+                "clarification_reason": "cold_start_basics",
+                "recommendation_readiness": "low",
+                "cold_start_questions_asked": 1,
+            }
+        )
+        turn = self.turn(
+            "I don't know, budget doesn't matter.",
+            update(
+                readiness="low",
+                size="king",
+                clarification=True,
+                question="And what is your budget?",
+                clarification_reason="cold_start_basics",
+            ),
+            state,
+        )
+        self.assertEqual(turn["modality"], "recommendation_cards")
+        self.assertTrue(turn["clarification_bypassed"])
 
     def test_product_reaction_updates_preference_and_refines_immediately(self):
         state = new_preference_state()

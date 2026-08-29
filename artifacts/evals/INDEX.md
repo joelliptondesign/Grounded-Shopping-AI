@@ -5,10 +5,12 @@ See the [evaluation framework](../../docs/EVALUATION.md) and [Shopping Agent Cor
 
 | Eval suite | Version | Run | Mode | Configuration | Result | Report | Raw |
 |---|---|---|---|---|---|---|---|
+| Shopping Experience Calibration | v1 | 2026-08-29 22:43 UTC | Live | Luna routing | 5/5 passed | [Report](shopping-experience-calibration/v1/2026-08-29_224321_report.md) | [Raw Results](shopping-experience-calibration/v1/2026-08-29_224321_run.json) |
 | Shopping Experience Calibration | v1 | 2026-08-26 19:06 UTC | Live | Luna routing | 5/5 passed | [Report](shopping-experience-calibration/v1/2026-08-26_190614_report.md) | [Raw Results](shopping-experience-calibration/v1/2026-08-26_190614_run.json) |
 | Shopping Experience Calibration | v1 | 2026-08-26 18:23 UTC | Live | Luna routing | 5/5 passed | [Report](shopping-experience-calibration/v1/2026-08-26_182313_report.md) | [Raw Results](shopping-experience-calibration/v1/2026-08-26_182313_run.json) |
 | Shopping Experience Calibration | v1 | 2026-08-26 17:32 UTC | Live-Artifact-Rerender | Luna routing | 5/5 passed | [Report](shopping-experience-calibration/v1/2026-08-26_173208_report.md) | [Raw Results](shopping-experience-calibration/v1/2026-08-26_173208_run.json) |
 | Shopping Experience Calibration | v1 | 2026-08-26 17:28 UTC | Live | Luna routing | 5/5 passed | [Report](shopping-experience-calibration/v1/2026-08-26_172820_report.md) | [Raw Results](shopping-experience-calibration/v1/2026-08-26_172820_run.json) |
+| Shopping Agent Core | v2 | 2026-08-29 22:49 UTC | Deterministic | Luna routing | 25/26 passed | [Report](shopping-agent-core/v2/2026-08-29_224939_report.md) | [Raw Results](shopping-agent-core/v2/2026-08-29_224939_run.json) |
 | Shopping Agent Core | v2 | 2026-08-26 23:57 UTC | Deterministic | Luna routing | 25/26 passed | [Report](shopping-agent-core/v2/2026-08-26_235725_report.md) | [Raw Results](shopping-agent-core/v2/2026-08-26_235725_run.json) |
 | Shopping Agent Core | v2 | 2026-08-26 23:14 UTC | Deterministic | Luna routing | 26/26 passed | [Report](shopping-agent-core/v2/2026-08-26_231452_report.md) | [Raw Results](shopping-agent-core/v2/2026-08-26_231452_run.json) |
 | Shopping Agent Core | v2 | 2026-08-26 19:43 UTC | Deterministic | Luna routing | 19/19 passed | [Report](shopping-agent-core/v2/2026-08-26_194322_report.md) | [Raw Results](shopping-agent-core/v2/2026-08-26_194322_run.json) |
@@ -29,4 +31,5 @@ See the [evaluation framework](../../docs/EVALUATION.md) and [Shopping Agent Cor
 | Shopping Agent Core | v1 | 2026-08-26 16:20 UTC | Live | Luna routing | 29/44 passed | [Report](shopping-agent-core/v1/2026-08-26_162030_report.md) | [Raw Results](shopping-agent-core/v1/2026-08-26_162030_run.json) |
 | Shopping Agent Core | v1 | 2026-08-26 16:08 UTC | Live | Luna routing | 18/44 passed | [Report](shopping-agent-core/v1/2026-08-26_160836_report.md) | [Raw Results](shopping-agent-core/v1/2026-08-26_160836_run.json) |
 | Shopping Agent Core | v1 | 2026-08-26 15:47 UTC | Deterministic | Luna routing | 44/44 passed | [Report](shopping-agent-core/v1/2026-08-26_154719_report.md) | [Raw Results](shopping-agent-core/v1/2026-08-26_154719_run.json) |
+| Conversational Reference Continuity | v1 | 2026-08-29 22:45 UTC | Live | Luna routing | 5/6 passed | [Report](conversational-reference-continuity/v1/2026-08-29_224526_report.md) | [Raw Results](conversational-reference-continuity/v1/2026-08-29_224526_run.json) |
 | Conversational Reference Continuity | v1 | 2026-08-26 19:45 UTC | Live | Luna routing | 6/6 passed | [Report](conversational-reference-continuity/v1/2026-08-26_194539_report.md) | [Raw Results](conversational-reference-continuity/v1/2026-08-26_194539_run.json) |

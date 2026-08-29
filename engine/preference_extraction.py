@@ -274,6 +274,7 @@ EMPTY_STATE: Dict[str, Any] = {
     "pending_recovery": None,
     "recent_product_names": [],
     "recent_presentations": [],
+    "cold_start_questions_asked": 0,
 }
 
 
