@@ -1,11 +1,30 @@
-# Vercel deployment configuration only.
+# Python project metadata plus Vercel deployment configuration.
 #
-# Runtime dependencies are installed from requirements.txt; this file exists so
-# Vercel's FastAPI framework preset resolves the entrypoint unambiguously.
-# Without it the preset scans root-level modules (app.py, streamlit_app.py, ...)
-# for a top-level `app`, and neither of those is the API.
+# Vercel resolves dependencies with uv, which requires a real [project] table.
+# The dependencies below mirror requirements.txt, which remains the manifest for
+# the documented local workflow; Streamlit stays out of both because it is not
+# on the Live request path (see requirements-dev.txt).
 #
 # The application itself lives in api/server.py and is unchanged by deployment.
+
+[project]
+name = "grounded-shopping-ai"
+version = "0.1.0"
+description = "Grounded conversational shopping agent with a Claude Design frontend"
+requires-python = ">=3.9"
+dependencies = [
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.27.0",
+]
+
+[tool.uv]
+# The repository is an application, not a distributable library: it has no build
+# backend and its top-level directories are not an importable package layout.
+# Declaring it virtual keeps uv resolving dependencies without trying to build
+# the project itself.
+package = false
 
 [tool.vercel]
 entrypoint = "api.server:app"
