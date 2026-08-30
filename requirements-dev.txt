@@ -1,0 +1,5 @@
+# Everything in requirements.txt, plus the legacy Streamlit debug surface.
+# Streamlit is deliberately excluded from the deployed bundle: it is not on the
+# Live request path and pulls in pandas/pyarrow/numpy for nothing.
+-r requirements.txt
+streamlit>=1.32.0

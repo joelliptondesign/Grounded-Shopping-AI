@@ -1,0 +1,11 @@
+# Vercel deployment configuration only.
+#
+# Runtime dependencies are installed from requirements.txt; this file exists so
+# Vercel's FastAPI framework preset resolves the entrypoint unambiguously.
+# Without it the preset scans root-level modules (app.py, streamlit_app.py, ...)
+# for a top-level `app`, and neither of those is the API.
+#
+# The application itself lives in api/server.py and is unchanged by deployment.
+
+[tool.vercel]
+entrypoint = "api.server:app"

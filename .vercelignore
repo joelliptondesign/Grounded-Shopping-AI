@@ -1,0 +1,12 @@
+# Keep the deployed bundle to what the Live agent actually runs.
+# Nothing here is read at request time.
+artifacts/
+evals/
+tests/
+docs/
+scripts/
+bench/
+.pytest_cache/
+.pycache_compile/
+streamlit_app.py
+app.py

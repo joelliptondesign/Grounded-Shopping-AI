@@ -252,10 +252,10 @@ Fixtures demonstrate and test representative behavior; they are not a whitelist 
 
 ## Running the Repository
 
-The repository requires Python and the dependencies in `requirements.txt`:
+The repository requires Python. `requirements.txt` holds the runtime dependencies the deployed application needs; `requirements-dev.txt` adds the legacy Streamlit surface and is what contributors should install, since `tests/test_streamlit_app.py` imports it:
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements-dev.txt
 ```
 
 For live structured extraction and conversational generation, create a `.env` file in the repository root:
@@ -308,6 +308,8 @@ Run the six-journey focused live reference-continuity regression:
 python3 evals/conversational_reference_continuity.py --validate-only
 python3 evals/conversational_reference_continuity.py --live
 ```
+
+To deploy the same application to Vercel, see [Deployment](docs/DEPLOYMENT.md).
 
 See [Evaluation](docs/EVALUATION.md), [System Integrity](docs/evaluation/SYSTEM_INTEGRITY.md), and [Shopping Experience](docs/evaluation/SHOPPING_EXPERIENCE.md); then see [Shopping Agent Core](evals/shopping-agent-core/README.md) for the dataset contract and [Evaluation Runs](artifacts/evals/INDEX.md) for reports and raw results.
 
