@@ -1,5 +1,9 @@
 # Grounded Conversational Shopping Demo
 
+**Start here:** [Project case study: design, implementation, and evaluation](README-PORTFOLIO.md) · [Watch “Designing Agent Autonomy”](https://www.youtube.com/watch?v=ifKgXvHistc)
+
+[![Watch Designing Agent Autonomy on YouTube](https://i.ytimg.com/vi/ifKgXvHistc/hqdefault.jpg)](https://www.youtube.com/watch?v=ifKgXvHistc)
+
 This repository demonstrates an open-ended conversational shopping experience over a bounded, fixture-backed mattress model. A shopper can describe needs in natural language, refine priorities across turns, compare products, ask catalog or review questions, and recover from combinations that have no valid match.
 
 The prototype is a **shopping agent with trusted commerce tools**. Language models interpret shopper language, make a bounded shopping selection, and write customer-facing responses. Deterministic application code defines which products may safely be recommended, represents commerce evidence, calculates score signals and near-match tradeoffs, validates the selection contract, chooses presentation structure, and validates grounded claims. The deterministic layer defines what the agent may safely recommend; the shopping agent decides which safe options are most useful to show.

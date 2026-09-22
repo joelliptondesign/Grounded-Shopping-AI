@@ -69,7 +69,7 @@ The calibration command runs exactly five representative v2 journeys. The final 
 
 ## Current v2 evidence
 
-The latest current-definition deterministic run is [2026-08-26_235725](../artifacts/evals/shopping-agent-core/v2/2026-08-26_235725_report.md). It uses `catalog_v2+reviews_v2`, includes all 26 cases, passes every critical invariant, and passes 25/26 cases overall. The one major failure is an expected-winner mismatch in the compare-then-pick journey after the 48-product catalog expansion; no integrity boundary failed.
+The latest current-definition deterministic run is [2026-08-29_224939](../artifacts/evals/shopping-agent-core/v2/2026-08-29_224939_report.md). It uses `catalog_v2+reviews_v2`, includes all 26 cases, passes every critical invariant, and passes 25/26 cases overall. The one major failure is an expected-winner mismatch in the compare-then-pick journey after the 48-product catalog expansion; no integrity boundary failed.
 
 The latest immutable full live run is [2026-08-26_191216](../artifacts/evals/shopping-agent-core/v2/2026-08-26_191216_report.md). It predates the seven cold-start journeys and therefore covers the earlier 19-case v2 definition. System Integrity passed 19/19 with every critical invariant intact. Shopping Experience averaged 2.06/3 across 17 judged journeys (four scored 3, ten scored 2, and three scored 1). The semantic regression layer passed 12/19; seven major mismatches were recorded, including a broken compare-then-pick journey and several priority/state extraction mismatches.
 

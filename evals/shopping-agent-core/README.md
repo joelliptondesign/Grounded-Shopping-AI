@@ -69,7 +69,7 @@ Run filenames use immutable UTC identities such as `2026-08-26_154719_run.json` 
 
 Core reports preserve deterministic regression details. The five-case calibration report shows System Integrity and Shopping Experience separately, followed by exact chronological customer conversations, structured UI content, criterion rationales, and blank human-review fields. Pass rates describe these small regression sets only; they are not production benchmarks.
 
-The latest current-definition deterministic run is [2026-08-26_235725](../../artifacts/evals/shopping-agent-core/v2/2026-08-26_235725_report.md): 25/26 cases passed, all critical invariants passed, and the one major failure was an expected-winner mismatch in the compare-then-pick journey after the catalog expanded. Earlier 19-case reports remain immutable evidence for the pre-cold-start v2 definition.
+The latest current-definition deterministic run is [2026-08-29_224939](../../artifacts/evals/shopping-agent-core/v2/2026-08-29_224939_report.md): 25/26 cases passed, all critical invariants passed, and the one major failure was an expected-winner mismatch in the compare-then-pick journey after the catalog expanded. Earlier 19-case reports remain immutable evidence for the pre-cold-start v2 definition.
 
 ## Qualitative scoring
 
