@@ -128,7 +128,7 @@ This project demonstrates engineering capabilities relevant to AI engineering an
 
 ## Explore the project
 
-- [Run the application and inspect the technical overview](README.md)
+- [Run the application and see how it works](docs/TECHNICAL_OVERVIEW.md)
 - [Read the product-level architecture](docs/ARCHITECTURE.md)
 - [Explore the interface and Live mode](frontend/README.md)
 - [Review the evaluation approach](docs/EVALUATION.md)
