@@ -35,3 +35,5 @@ Pre-extraction Fix Pass 2 installs deterministic rule-and-rationale generation a
 ## Maintenance
 
 Keep this overview short. Update capabilities, constraints, known gaps, and current installation status when they change. Put detailed behavior in its owning guide, decisions in the decision index, and execution evidence in test/evaluation records. Do not append a session-by-session log.
+
+Current Groundwork version: **0.1.0-rc.3**, the third release candidate for version 0.1.0. This reviewed update adds the optional structured example to the project-owned decision template; runtime and schema contracts are unchanged. See the [update evidence](work/GROUNDWORK-RC3-UPDATE.md) for verification and limits.

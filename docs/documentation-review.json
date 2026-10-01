@@ -1,69 +1,38 @@
 {
   "version": 3,
-  "base": "748e556f042568447b8ee0764c2b1dce2c957721",
+  "base": "475e2af88accc75f9334e60441756506488b0607",
   "groups": [
-    {
-      "documents": [
-        "docs/TECHNICAL_OVERVIEW.md"
-      ],
-      "status": "reviewed",
-      "disposition": "no-impact",
-      "reason": "The existing ignore changes remain byte-identical to the start of this pass. Python setup, Node requirements and offline commands are unchanged; the linked workflow owns the new installation layout.",
-      "evidence": [
-        ".gitignore"
-      ],
-      "reviewer": "Codex",
-      "fingerprint": "496ade914ad3717edf41ba8c7f55937d5d36af85ec609bf1ce2d5d1bbf9b021e"
-    },
     {
       "documents": [
         "docs/workflow/README.md"
       ],
       "status": "reviewed",
       "disposition": "updated",
-      "reason": "Reviewed the cumulative workflow changes and canonical adoption: commands now forward to pinned core, configuration and offline runner remain project-owned, schema links point to the installed copy, and old modules are historical evidence.",
+      "reason": "Updated current installed version; reviewed optional template instructions against unchanged schema, authority and project-owned guidance boundaries.",
       "evidence": [
-        "AGENTS.md",
-        "docs/workflow/README.md",
-        "scripts/check-docs.mjs",
-        "scripts/check-docs.test.mjs"
+        ".groundwork/installation.json",
+        "docs/decisions/TEMPLATE.md",
+        "docs/workflow/README.md"
       ],
       "reviewer": "Codex",
-      "fingerprint": "13590e22c812c0ea1d0ed58c808fb59c0cba3d1d0b3e0596b46689092ccc8cc2"
-    },
-    {
-      "documents": [
-        "frontend/README.md"
-      ],
-      "status": "reviewed",
-      "disposition": "updated",
-      "reason": "The cumulative change generates accepted DR-0001 scrolling rules and rationale. This phase leaves both frontend guidance files and application code unchanged; the generated-guidance check confirms freshness.",
-      "evidence": [
-        "frontend/CLAUDE.md",
-        "frontend/README.md"
-      ],
-      "reviewer": "Codex",
-      "fingerprint": "b45f5dc1bfb688fe9776f13b0e696773c215b3160111858c98886c003c160257"
+      "fingerprint": "f18e8532381fe6a70b521b796a6cf0fd8f9a7ca4a5be5814ce1f79d0a363be2c"
     }
   ],
   "projectContext": {
     "status": "reviewed",
     "changed": true,
-    "reason": "Project Context reflects verified canonical adoption; the final report wording now separates verification evidence from Git publication status. Product capabilities are unchanged.",
+    "reason": "Current context records the installed third candidate and scoped verification. Publication preparation changes no product capability or runtime boundary; the receipt covers only the exact files being committed.",
     "reviewer": "Codex",
-    "fingerprint": "1aa1bc1588d68cecf55862fea940cea43a4d8930aa2460f3398ce6197f6816d9"
+    "fingerprint": "875c7e46984281371e29f49d162d15a8c8f4bb11d3141ce44cc1483b0cc6d2fd"
   },
   "decisionImpact": {
     "status": "reviewed",
-    "disposition": "create",
-    "reason": "Final publication wording implements the authorized adoption without changing recorded decisions. The linked records retain the actual direction, rationale and implementation boundaries.",
+    "disposition": "existing",
+    "reason": "Authorized publication of the reviewed third-candidate update under the existing pinned-core adoption decision. Templates preserve human acceptance, project ownership and existing lifecycle; no new product decision is introduced.",
     "reviewer": "Codex",
     "records": [
-      "docs/decisions/DR-0001-scrolling-conflict.md",
-      "docs/decisions/DR-0003-decision-impact-review.md",
-      "docs/decisions/DR-0004-generated-guidance-and-receipt-v3.md",
       "docs/decisions/DR-0005-canonical-groundwork.md"
     ],
-    "fingerprint": "d86d4228d77c8b4b7777554f2ca835c65d94b0e6bd50718f6c0a0446d9d22772"
+    "fingerprint": "472567ca2d003d5d352e87eda4faad69eea276144506679cb38583d7e8f089dd"
   }
 }

@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
-  "version": "0.1.0-rc.2",
-  "releaseDigest": "6676a8e4d0075344a00083fe89a5dfab48c18a17d43f0ba65b32af948dff76ea",
-  "sourceRevision": "473c132201a1078c638e5cabb11e1c8b896c69df",
+  "version": "0.1.0-rc.3",
+  "releaseDigest": "310d354e851f43b253224980eaf05c6147f4f3c0ffa677d7be2559199753ad58",
+  "sourceRevision": "c0f9d2ba64ffcf3e3f24b1998860ee10155dbd8c",
   "schemaVersions": {
     "config": 1,
     "receipt": 3,
