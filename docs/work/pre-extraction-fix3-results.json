@@ -1,0 +1,493 @@
+{
+  "source_head": "748e556f042568447b8ee0764c2b1dce2c957721",
+  "source_modules": {
+    "scripts/groundwork/build-validators.mjs": "7f8074d68648ad30f3e0623aa71cae597c0542ece27eba8daf483f8fe7d8d954",
+    "scripts/groundwork/migration.mjs": "f1a5299bfe184cc96ec5d0d3dd2da77886492a9a2775a198e7177cb9beddd423",
+    "scripts/groundwork/runtime.mjs": "2488658d447bf1a1218c27540c8b0f32f67d264f4634108122170d68a49eb902",
+    "scripts/groundwork/guidance.mjs": "7d892cab093788fb2482761314d3c3878d90c4151f58214633e7247c1e3f73e2"
+  },
+  "scope": "Isolated current-guidance copies with temporary Git baselines. V2 shape fixtures use the temporary base, not original product commits. No real decision superseded. Faults injected only in disposable copies.",
+  "temporary_root": "/var/folders/pl/zcgmjwkx6x786k5fv04_8s0r0000gn/T/groundwork-fix3-36ikdw55",
+  "scenarios": [
+    {
+      "scenario": "rationale-update-review",
+      "checks": [
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 1,
+          "milliseconds": 79.99,
+          "output": "Documentation impact failed: Stale generated guidance: AGENTS.md, CLAUDE.md, frontend/CLAUDE.md, frontend/README.md. Read authoritative records, then run node scripts/sync-guidance.mjs --write to repair.\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 0,
+          "milliseconds": 65.61,
+          "output": "Updated guidance: AGENTS.md, CLAUDE.md, frontend/CLAUDE.md, frontend/README.md"
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 95.29,
+          "output": "Draft saved: 0 retained reviewed groups; 2 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 92.46,
+          "output": "Draft saved: 0 retained reviewed groups; 2 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 99.27,
+          "output": "Documentation impact passed: 5 changed files; 2 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 0,
+          "milliseconds": 62.52,
+          "output": "Generated guidance current; no files changed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 92.78,
+          "output": "Draft saved: 2 retained reviewed groups; 0 pending groups; Project Context reviewed; decision impact reviewed. Review pending items before setting status to reviewed."
+        }
+      ]
+    },
+    {
+      "scenario": "explicit-successor",
+      "checks": [
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--check"
+          ],
+          "exit": 0,
+          "milliseconds": 65.07,
+          "output": "Generated guidance current; no files changed."
+        },
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 1,
+          "milliseconds": 58.34,
+          "output": "Active topic requires an accepted, nonsuperseded decision: conversation-scrolling\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 0,
+          "milliseconds": 66.03,
+          "output": "Updated guidance: AGENTS.md, CLAUDE.md, frontend/CLAUDE.md, frontend/README.md"
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 98.13,
+          "output": "Draft saved: 0 retained reviewed groups; 2 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 92.46,
+          "output": "Draft saved: 0 retained reviewed groups; 2 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 104.34,
+          "output": "Documentation impact passed: 7 changed files; 2 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        }
+      ]
+    },
+    {
+      "scenario": "missing-rationale-repair",
+      "checks": [
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 1,
+          "milliseconds": 60.73,
+          "output": "decision schema: /rationale must NOT have fewer than 1 characters {\"limit\":1}; /rationale must match pattern \"^(?=.*\\S)[^\\r\\n<>]+$\" {\"pattern\":\"^(?=.*\\\\S)[^\\\\r\\\\n<>]+$\"}\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 0,
+          "milliseconds": 64.99,
+          "output": "Updated guidance: AGENTS.md, CLAUDE.md, frontend/CLAUDE.md, frontend/README.md"
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 98.71,
+          "output": "Draft saved: 0 retained reviewed groups; 2 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 92.14,
+          "output": "Draft saved: 0 retained reviewed groups; 2 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 100.93,
+          "output": "Documentation impact passed: 6 changed files; 2 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        }
+      ]
+    },
+    {
+      "scenario": "migration-shopping",
+      "checks": [
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 110.45,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 99.89,
+          "output": "Documentation impact passed: 1 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 1,
+          "milliseconds": 75.02,
+          "output": "Documentation impact failed: Review format v3 required. Use --migrate for known v2 receipts; unknown versions are preserved.\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--migrate"
+          ],
+          "exit": 0,
+          "milliseconds": 65.15,
+          "output": "Migrated v2 to v3; assessments pending. Original: docs/history/groundwork-migrations/300eeec03989db99d0dd84df8c28fd7878f6468d58a5b6fa3d81cabc86b1456b.json. Run --draft --base 001cdd26ee476fd70f81c8fe283727723dce7758, then review."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 1,
+          "milliseconds": 99.86,
+          "output": "Documentation impact failed: Project Context assessment missing or pending\nProject Context assessment stale; reconsider the short impact answer for the current change\nDecision impact assessment missing, pending, or incomplete\nDecision impact assessment stale; run --draft and reassess the current change and linked records\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 94.89,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 101.24,
+          "output": "Documentation impact passed: 2 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--migrate"
+          ],
+          "exit": 0,
+          "milliseconds": 58.61,
+          "output": "Receipt already v3; unchanged."
+        }
+      ]
+    },
+    {
+      "scenario": "migration-portfolio",
+      "checks": [
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 99.24,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 97.01,
+          "output": "Documentation impact passed: 1 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 1,
+          "milliseconds": 79.49,
+          "output": "Documentation impact failed: Review format v3 required. Use --migrate for known v2 receipts; unknown versions are preserved.\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--migrate"
+          ],
+          "exit": 0,
+          "milliseconds": 67.9,
+          "output": "Migrated v2 to v3; assessments pending. Original: docs/history/groundwork-migrations/a3a9a8d88d4e2248d093a9925aef480f553fef154f0ab2aaa60048ac08a57ef6.json. Run --draft --base 001cdd26ee476fd70f81c8fe283727723dce7758, then review."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 1,
+          "milliseconds": 98.4,
+          "output": "Documentation impact failed: Project Context assessment missing or pending\nProject Context assessment stale; reconsider the short impact answer for the current change\nDecision impact assessment missing, pending, or incomplete\nDecision impact assessment stale; run --draft and reassess the current change and linked records\nDecision disposition requires at least one linked record\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 90.77,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 97.81,
+          "output": "Documentation impact passed: 2 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--migrate"
+          ],
+          "exit": 0,
+          "milliseconds": 57.79,
+          "output": "Receipt already v3; unchanged."
+        }
+      ]
+    },
+    {
+      "scenario": "partial-write-recovery",
+      "checks": [
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 1,
+          "milliseconds": 60.74,
+          "output": "Injected write failure; files already written: AGENTS.md\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--check"
+          ],
+          "exit": 1,
+          "milliseconds": 60.05,
+          "output": "Stale generated guidance: CLAUDE.md, frontend/CLAUDE.md, frontend/README.md. Read authoritative records, then run node scripts/sync-guidance.mjs --write to repair.\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 0,
+          "milliseconds": 66.6,
+          "output": "Updated guidance: CLAUDE.md, frontend/CLAUDE.md, frontend/README.md"
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 98.44,
+          "output": "Draft saved: 0 retained reviewed groups; 2 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 92.27,
+          "output": "Draft saved: 0 retained reviewed groups; 2 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 100.24,
+          "output": "Documentation impact passed: 5 changed files; 2 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        }
+      ]
+    },
+    {
+      "scenario": "migration-concurrent-edit",
+      "checks": [
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 102.03,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 97.99,
+          "output": "Documentation impact passed: 1 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--migrate"
+          ],
+          "exit": 1,
+          "milliseconds": 66.21,
+          "output": "Documentation impact failed: Receipt changed during migration; current receipt preserved\nOnly this operation/checkpoint is blocked. Continue investigation or independent authorized work; resolve unclear authority before dependent implementation."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--migrate"
+          ],
+          "exit": 0,
+          "milliseconds": 65.14,
+          "output": "Migrated v2 to v3; assessments pending. Original: docs/history/groundwork-migrations/18c46ad9b6a696d7895e70d0706885118d1c3ccc6408cafea5541c0f606b6cf7.json. Run --draft --base 001cdd26ee476fd70f81c8fe283727723dce7758, then review."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 91.36,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 100.63,
+          "output": "Documentation impact passed: 2 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        }
+      ]
+    },
+    {
+      "scenario": "multiple-topics",
+      "checks": [
+        {
+          "args": [
+            "scripts/sync-guidance.mjs",
+            "--write"
+          ],
+          "exit": 0,
+          "milliseconds": 65.6,
+          "output": "Updated guidance: AGENTS.md"
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 100.14,
+          "output": "Draft saved: 0 retained reviewed groups; 1 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs",
+            "--draft"
+          ],
+          "exit": 0,
+          "milliseconds": 92.84,
+          "output": "Draft saved: 0 retained reviewed groups; 1 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [
+            "scripts/check-docs.mjs"
+          ],
+          "exit": 0,
+          "milliseconds": 103.38,
+          "output": "Documentation impact passed: 3 changed files; 1 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        }
+      ]
+    }
+  ],
+  "commands": 50,
+  "milliseconds": {
+    "min": 57.79,
+    "median": 92.46,
+    "max": 110.45
+  }
+}

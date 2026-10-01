@@ -1,10 +1,26 @@
 # DR-0001 Keep the submitted user message at the top
 
 Type: Agent Decision Record
-Status: Accepted
 Date: October 1, 2026 (original conflict recorded September 30)
 Decider: J.L. (Joel Lipton)
 Scope: frontend conversation scrolling in Demo and Live
+
+<!-- groundwork:decision-summary:start -->
+```json
+{
+  "version": 1,
+  "id": "DR-0001",
+  "title": "Conversation scrolling",
+  "status": "accepted",
+  "summary": [
+    "When a typed message or suggested-reply pill is submitted, position the new user message at the top of the chat viewport.",
+    "Use native smooth scrolling for that initial move; use immediate positioning for reduced-motion preferences.",
+    "Keep the viewport steady while the response grows. Respect manual scrolling; the next user submission starts a new position."
+  ],
+  "rationale": "Keep the question and the beginning of the response visible so the user can read naturally, rather than being pulled to the end."
+}
+```
+<!-- groundwork:decision-summary:end -->
 
 ## Context
 

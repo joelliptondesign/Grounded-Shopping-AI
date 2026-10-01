@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "base": "748e556f042568447b8ee0764c2b1dce2c957721",
+  "groups": [
+    {
+      "documents": [
+        "docs/TECHNICAL_OVERVIEW.md"
+      ],
+      "status": "reviewed",
+      "disposition": "no-impact",
+      "reason": "The pre-existing local ignore exclusions are preserved and do not change the documented application setup or execution paths.",
+      "evidence": [
+        ".gitignore"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "921a1ccb8bbcab907a0f1750aa1bb2ce0e3e7c9ba10689f604f4bbc18ec96d73"
+    },
+    {
+      "documents": [
+        "docs/workflow/README.md"
+      ],
+      "status": "reviewed",
+      "disposition": "updated",
+      "reason": "Working guidance documents the decision-impact extension and links an architecture guide that explains the installed flow, approval boundary, receipt sections and stale-review loop without changing policy.",
+      "evidence": [
+        "AGENTS.md",
+        "docs/workflow/README.md",
+        "scripts/check-docs.mjs",
+        "scripts/check-docs.test.mjs"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "5c049d38c635f72f482394c00c09be1bf449cf65620f0db9cacc463145e64195"
+    }
+  ],
+  "projectContext": {
+    "status": "reviewed",
+    "changed": true,
+    "reason": "The cumulative change updates Project Context for both verified decision-impact passes. The added explanatory diagrams introduce no additional capability or state change.",
+    "reviewer": "Codex",
+    "fingerprint": "81ba8bcc62a2d73b80bdf9c65eb766811f37bfe80a18c89263765a0aeebf3b80"
+  },
+  "decisionImpact": {
+    "status": "reviewed",
+    "disposition": "create",
+    "reason": "The cumulative change creates DR-0003 for the approved review extension. Architecture diagrams explain that existing decision and introduce no additional policy, authority or workflow decision.",
+    "reviewer": "Codex",
+    "records": [
+      "docs/decisions/DR-0003-decision-impact-review.md"
+    ],
+    "fingerprint": "a28bd43fe073401671f0ad9283ad28d8e027700944fc495f314a0b5c5fe8ad36"
+  }
+}

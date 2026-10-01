@@ -1,56 +1,35 @@
 {
-  "version": 2,
-  "base": "d45eae69474c8dcf4958df3ec15b8796a6968c14",
+  "version": 3,
+  "base": "748e556f042568447b8ee0764c2b1dce2c957721",
   "groups": [
     {
       "documents": [
         "docs/TECHNICAL_OVERVIEW.md"
       ],
       "status": "reviewed",
-      "disposition": "updated",
-      "reason": "Reviewed isolated offline verification setup and failure-status guidance against the publishable snapshot; the pre-existing local ignore edit is excluded.",
+      "disposition": "no-impact",
+      "reason": "The existing ignore changes remain byte-identical to the start of this pass. Python setup, Node requirements and offline commands are unchanged; the linked workflow owns the new installation layout.",
       "evidence": [
-        "scripts/verify-offline.py",
-        "docs/TECHNICAL_OVERVIEW.md"
+        ".gitignore"
       ],
       "reviewer": "Codex",
-      "fingerprint": "c01f0ecee2231961401c4796ec2801f321a29d3e96c2e8c723a3c830215f3639"
+      "fingerprint": "496ade914ad3717edf41ba8c7f55937d5d36af85ec609bf1ce2d5d1bbf9b021e"
     },
     {
       "documents": [
         "docs/workflow/README.md"
       ],
       "status": "reviewed",
-      "disposition": "no-impact",
-      "reason": "Reviewed shared agent and source guidance against J.L. approval in existing DR-0001. The workflow remains valid: resolve intent, document the accepted decision and verify behavior; previous installation text is retained.",
+      "disposition": "updated",
+      "reason": "Reviewed the cumulative workflow changes and canonical adoption: commands now forward to pinned core, configuration and offline runner remain project-owned, schema links point to the installed copy, and old modules are historical evidence.",
       "evidence": [
         "AGENTS.md",
-        "CLAUDE.md",
-        "docs/documentation-map.json",
         "docs/workflow/README.md",
         "scripts/check-docs.mjs",
-        "scripts/check-docs.test.mjs",
-        "scripts/groundwork-tests/test_offline.py",
-        "scripts/verify-offline.py"
+        "scripts/check-docs.test.mjs"
       ],
       "reviewer": "Codex",
-      "fingerprint": "0ade7d92ba02033563aecfde4f6fa411f48e6a8948d19c4f68bfc93c8cfa1c7f"
-    },
-    {
-      "documents": [
-        "docs/EVALUATION.md"
-      ],
-      "status": "reviewed",
-      "disposition": "updated",
-      "reason": "Documented why the fixed winner was obsolete, replacement continuity criteria, five counterexample tests, current results and unmeasured qualitative/live quality; historical reports remain unchanged.",
-      "evidence": [
-        "evals/runner.py",
-        "evals/shopping-agent-core/README.md",
-        "evals/shopping-agent-core/v2/multi_turn.json",
-        "tests/test_eval_reference_continuity.py"
-      ],
-      "reviewer": "Codex",
-      "fingerprint": "930b18fb5cda5917ddec86c9d3f13fa9b44102b6082c64f4ae60ce83be75d0bf"
+      "fingerprint": "13590e22c812c0ea1d0ed58c808fb59c0cba3d1d0b3e0596b46689092ccc8cc2"
     },
     {
       "documents": [
@@ -58,20 +37,33 @@
       ],
       "status": "reviewed",
       "disposition": "updated",
-      "reason": "Updated approved user-message scrolling, reserved space, native movement and manual control; Demo browser checks cover typed and pill turns, short replies, wheel interruption and reset.",
+      "reason": "The cumulative change generates accepted DR-0001 scrolling rules and rationale. This phase leaves both frontend guidance files and application code unchanged; the generated-guidance check confirms freshness.",
       "evidence": [
-        "frontend/README.md",
-        "frontend/Rufus Shopping Agent.dc.html"
+        "frontend/CLAUDE.md",
+        "frontend/README.md"
       ],
       "reviewer": "Codex",
-      "fingerprint": "c85127a7d0d0c8c3a43973555b442e1790fd58161d4c997c70bfbf5bade090b3"
+      "fingerprint": "b45f5dc1bfb688fe9776f13b0e696773c215b3160111858c98886c003c160257"
     }
   ],
   "projectContext": {
     "status": "reviewed",
     "changed": true,
-    "reason": "Reviewed published context for Groundwork, corrected comparison criteria and J.L.-approved scrolling. Verified snapshot excludes the prior local ignore edit; capabilities and documented verification remain accurate.",
+    "reason": "Project Context reflects verified canonical adoption; the final report wording now separates verification evidence from Git publication status. Product capabilities are unchanged.",
     "reviewer": "Codex",
-    "fingerprint": "a4bf3c6b5104439be75ebbf5e0caa9aa44a40393bba6e2eb438cebe2f0cb5293"
+    "fingerprint": "1aa1bc1588d68cecf55862fea940cea43a4d8930aa2460f3398ce6197f6816d9"
+  },
+  "decisionImpact": {
+    "status": "reviewed",
+    "disposition": "create",
+    "reason": "Final publication wording implements the authorized adoption without changing recorded decisions. The linked records retain the actual direction, rationale and implementation boundaries.",
+    "reviewer": "Codex",
+    "records": [
+      "docs/decisions/DR-0001-scrolling-conflict.md",
+      "docs/decisions/DR-0003-decision-impact-review.md",
+      "docs/decisions/DR-0004-generated-guidance-and-receipt-v3.md",
+      "docs/decisions/DR-0005-canonical-groundwork.md"
+    ],
+    "fingerprint": "d86d4228d77c8b4b7777554f2ca835c65d94b0e6bd50718f6c0a0446d9d22772"
   }
 }

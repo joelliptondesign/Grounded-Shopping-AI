@@ -1,0 +1,70 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^DR-[0-9]{4}$"
+    },
+    "title": {
+      "type": "string",
+      "pattern": "^(?=.*\\S)[^\\r\\n<>]+$"
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "accepted",
+        "rejected",
+        "superseded",
+        "unresolved"
+      ]
+    },
+    "summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^(?=.*\\S)[^\\r\\n<>]+$"
+      }
+    },
+    "supersededBy": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+    },
+    "rationale": {
+      "type": "string",
+      "pattern": "^(?=.*\\S)[^\\r\\n<>]+$",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "version",
+    "id",
+    "title",
+    "status",
+    "summary",
+    "rationale"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "decision-summary-v1",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "superseded"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "supersededBy"
+        ]
+      }
+    }
+  ]
+}

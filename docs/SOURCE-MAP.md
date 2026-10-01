@@ -19,7 +19,7 @@ September 30, 2026 · Editing and retrieval guide, not a generated inventory.
 | Local setup and dependencies | requirements.txt; requirements-dev.txt; pyproject.toml | docs/TECHNICAL_OVERVIEW.md |
 | Hosting configuration | vercel.json and deployment-related files | docs/DEPLOYMENT.md; do not infer deployment authorization |
 | Legacy interfaces | streamlit_app.py; app.py | docs/TECHNICAL_OVERVIEW.md; verify consumers before changes |
-| Groundwork and maintenance | AGENTS.md; CLAUDE.md; docs/workflow/; docs/decisions/ | This map and docs/PROJECT-STATE.md |
+| Groundwork and maintenance | .groundwork/core/ (managed); .groundwork/config.json (project-owned); AGENTS.md; CLAUDE.md; docs/workflow/; docs/decisions/ | This map and docs/PROJECT-STATE.md |
 
 ## Reading order and conflicting sources
 
@@ -27,7 +27,7 @@ Start at Project Context and retrieve only the relevant owner documents. GOVERNA
 
 frontend/docs/PRODUCT_BRIEF.md and the accompanying implementation, visual-reference, and scenario documents originate in the earlier design work. In particular, the product brief’s “do not integrate” direction predates the integrated Demo/Live implementation. Preserve useful design intent, but use frontend/README.md and api/README.md for current integration behavior. Do not silently ratify every historical instruction.
 
-The user-message scrolling contract is explicitly approved by J.L. in [ADR / DR-0001](decisions/DR-0001-scrolling-conflict.md), superseding the prior follow-to-bottom rule. If another consequential conflict appears, record it and clarify intent instead of declaring current code or an old document automatically correct.
+For current scrolling behavior and its approval, follow [DR-0001](decisions/DR-0001-scrolling-conflict.md). If another consequential conflict appears, record it and clarify intent rather than treating code or historical prose as automatic authority.
 
 Exclude .kilo/worktrees, caches, virtual environments, environment files, telemetry/logs, and historical evaluation runs from routine context scans. Retrieve a specific historical result only when needed as evidence. This is retrieval guidance, not an instruction to delete or reclassify files.
 

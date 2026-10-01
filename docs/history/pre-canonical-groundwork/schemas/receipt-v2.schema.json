@@ -1,0 +1,294 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 2
+    },
+    "base": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$"
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "pending",
+              "reviewed"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "reviewer": {
+            "type": "string"
+          },
+          "fingerprint": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "documents": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+            },
+            "minItems": 1
+          },
+          "evidence": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+            }
+          },
+          "disposition": {
+            "enum": [
+              "updated",
+              "no-impact",
+              null
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "reason",
+          "reviewer",
+          "fingerprint",
+          "documents",
+          "evidence",
+          "disposition"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "reviewed"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 20
+                },
+                "reviewer": {
+                  "type": "string",
+                  "pattern": "\\S"
+                },
+                "fingerprint": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "disposition": {
+                  "enum": [
+                    "updated",
+                    "no-impact"
+                  ]
+                },
+                "evidence": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+                  },
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "projectContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "reviewed"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "fingerprint": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "reason",
+        "reviewer",
+        "fingerprint",
+        "changed"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "reviewed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 20
+              },
+              "reviewer": {
+                "type": "string",
+                "pattern": "\\S"
+              },
+              "fingerprint": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "changed": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "decisionImpact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "reviewed"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "fingerprint": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "disposition": {
+          "enum": [
+            "none",
+            "existing",
+            "update",
+            "create",
+            null
+          ]
+        },
+        "records": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "reason",
+        "reviewer",
+        "fingerprint",
+        "disposition",
+        "records"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "reviewed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 20
+              },
+              "reviewer": {
+                "type": "string",
+                "pattern": "\\S"
+              },
+              "fingerprint": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "disposition": {
+                "enum": [
+                  "none",
+                  "existing",
+                  "update",
+                  "create"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "base",
+    "groups",
+    "projectContext"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Groundwork review receipt v3 (proposed)",
+  "$id": "receipt-v2"
+}

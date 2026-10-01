@@ -1,0 +1,42 @@
+{
+  "formatVersion": 1,
+  "version": "0.1.0-rc.2",
+  "releaseDigest": "6676a8e4d0075344a00083fe89a5dfab48c18a17d43f0ba65b32af948dff76ea",
+  "sourceRevision": "473c132201a1078c638e5cabb11e1c8b896c69df",
+  "schemaVersions": {
+    "config": 1,
+    "receipt": 3,
+    "decisionSummary": 1,
+    "guidanceMap": 1,
+    "installation": 1
+  },
+  "files": {
+    ".groundwork/core/DECISIONS.md": "84a605ff167a0623da87cb832468c462750cffc9fde61a56b7253019f781fb0f",
+    ".groundwork/core/WORKFLOW.md": "f28c4d8f628478fd202353d53783a59dec1beb4078956838097be0b00a940bbe",
+    ".groundwork/core/check-docs.mjs": "76dc2d1c722982bd845e66bba28ae37f41da0df4c7315cf69977c41223fb3f78",
+    ".groundwork/core/groundwork/.gitignore": "4d56952b0fb13bf8f9b6c13a6d4c34a075bac3af447636a1df4335d7576e2f97",
+    ".groundwork/core/groundwork/AJV-LICENSE": "9b6a90e9be78799534e4030d71b6817271fb99aa10e261f9f9f6dec1cff4177a",
+    ".groundwork/core/groundwork/README.md": "30ee126dc5841a84afae8c67a40d15c9ade819efcf46dba82e1bf12c8405294e",
+    ".groundwork/core/groundwork/build-validators.mjs": "716b6a1b3365a5a901297fcdae2245dec1be4e5b07e909daa48aa260d3fabb76",
+    ".groundwork/core/groundwork/config.mjs": "9a2fd61b72590f6a9fca8f1a9bed5efad969c84247d821b9a3468c01d61d3761",
+    ".groundwork/core/groundwork/guidance.mjs": "3cc9c5f9159ed355b2eaad99289b8402a21080dadb458c6f826979431fce0788",
+    ".groundwork/core/groundwork/migration.mjs": "f480877ca83ce65271e06a772672012a2ab4b617abf293d19c8ee305852bd86f",
+    ".groundwork/core/groundwork/package-lock.json": "dd6c027fe64a7609f9c846978009c6c792f01d95e759e84ad7baa4137150e98f",
+    ".groundwork/core/groundwork/package.json": "a30355975b1831bcfa4987ec855c1a8933bf25e97992ddc244500c5a1deaf595",
+    ".groundwork/core/groundwork/runtime.mjs": "fd9cab99ac10daed08f54b8afb80689f9bd1830cac70aca2c6148b27049f82d5",
+    ".groundwork/core/groundwork/schemas/config-v1.schema.json": "13613816fcda3c5172b962fd2fe815ee677db8c0a84bca7cdc266daa09e92dbe",
+    ".groundwork/core/groundwork/schemas/decision-summary-v1.schema.json": "a2ad44e24ac9ee12821a6221e70ab1e569206ed041f9766968140a3a7dba0e6c",
+    ".groundwork/core/groundwork/schemas/guidance-map-v1.schema.json": "3b3056e06a66291ad56f249d90a49b4d9f92c428a1de37af3f6795f150111d4f",
+    ".groundwork/core/groundwork/schemas/installation-v1.schema.json": "ada7f6aa8f00c5a8e533aa480f6105520dabe4839426f6a6b5311792f7d59e37",
+    ".groundwork/core/groundwork/schemas/receipt-v2.schema.json": "4f08cc673540f5b2c1ffebe2fea28d75276659dbc0b3e7b8e37966ddc7ca8f96",
+    ".groundwork/core/groundwork/schemas/receipt-v3.schema.json": "2a03943d79218d60ba1c3ad253c7a0e8cc51d88befe863990f97b2ab55897b26",
+    ".groundwork/core/groundwork/validators.cjs": "d599376f54dd2a5c6869654d4bb24a38346a27f8a78f71a2b182721e1dcae6d0",
+    ".groundwork/core/sync-guidance.mjs": "8a6100e21223661ab1a9a742134e3d873062426ed7b874a78145a2e463096f46",
+    "scripts/check-docs.mjs": "5f8e7aa830a3c4d046d3fc78c899ca1df53d58cd4d859191f2ff54a9aed1b2cf",
+    "scripts/sync-guidance.mjs": "d69e511e0a78d80cfe3ce1951e7a8f9f8ed42150cdf1646c786b8cc2a187c758"
+  },
+  "blocks": {
+    "AGENTS.md": "d59d6ca3228fceafbcf845660747292376dd6d8fe49be1474c818e52ab23b454",
+    "CLAUDE.md": "d59d6ca3228fceafbcf845660747292376dd6d8fe49be1474c818e52ab23b454"
+  }
+}

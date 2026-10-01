@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "topics": [
+    {
+      "key": "conversation-scrolling",
+      "record": "docs/decisions/DR-0001-scrolling-conflict.md",
+      "targets": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "frontend/CLAUDE.md",
+        "frontend/README.md"
+      ]
+    }
+  ]
+}

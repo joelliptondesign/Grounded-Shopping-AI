@@ -1,0 +1,242 @@
+{
+  "source_head": "748e556f042568447b8ee0764c2b1dce2c957721",
+  "source_checker_sha256": "86b2e3b10e32fe188cfb294d8a7cf3aae10039faff817751fc443870b1bde6e2",
+  "scope": "Isolated review-lifecycle trials using current working guidance and real authored frontend; no browser or model evaluation. Temporary commits only in disposable copies.",
+  "temporary_root": "/var/folders/pl/zcgmjwkx6x786k5fv04_8s0r0000gn/T/groundwork-decision-trials-rugvjhuz",
+  "results": [
+    {
+      "case": "routine",
+      "disposition": "none",
+      "records": [],
+      "reason": "Placeholder wording only; no durable behavior, authority or consequential tradeoff changes.",
+      "checker_ms": [
+        92.3,
+        96.55,
+        91.7,
+        81.45,
+        87.43,
+        80.25
+      ],
+      "checks": [
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 1 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 1,
+          "output": "Documentation impact failed: Pending group: frontend/README.md\nIncomplete disposition, explanation, evidence, or reviewer: frontend/README.md\nProject Context assessment missing or pending\nDecision impact assessment missing, pending, or incomplete\nDecision disposition requires at least one linked record"
+        },
+        {
+          "args": [],
+          "exit": 0,
+          "output": "Documentation impact passed: 1 changed files; 1 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 1 retained reviewed groups; 0 pending groups; Project Context reviewed; decision impact reviewed. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 1,
+          "output": "Documentation impact failed: Stale group: frontend/README.md. Relevant source, evidence, document, rules, or checker changed.\nProject Context assessment stale; reconsider the short impact answer for the current change\nDecision impact assessment stale; run --draft and reassess the current change and linked records"
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 1 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        }
+      ]
+    },
+    {
+      "case": "existing",
+      "disposition": "existing",
+      "records": [
+        "docs/decisions/DR-0001-scrolling-conflict.md"
+      ],
+      "reason": "Restore reduced-motion handling already accepted in DR-0001; no new interaction decision.",
+      "checker_ms": [
+        83.73,
+        90.63,
+        81.16,
+        89.23,
+        80.09
+      ],
+      "checks": [
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 1 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 1,
+          "output": "Documentation impact failed: Pending group: frontend/README.md\nIncomplete disposition, explanation, evidence, or reviewer: frontend/README.md\nProject Context assessment missing or pending\nDecision impact assessment missing, pending, or incomplete\nDecision disposition requires at least one linked record"
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 1 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 0,
+          "output": "Documentation impact passed: 1 changed files; 1 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 1 retained reviewed groups; 0 pending groups; Project Context reviewed; decision impact reviewed. Review pending items before setting status to reviewed."
+        }
+      ]
+    },
+    {
+      "case": "update",
+      "disposition": "update",
+      "records": [
+        "docs/decisions/DR-0001-scrolling-conflict.md"
+      ],
+      "reason": "Append an explicitly pending verification follow-up without changing the accepted scrolling rationale.",
+      "checker_ms": [
+        88.99,
+        90.6,
+        80.51,
+        86.65,
+        81.95
+      ],
+      "checks": [
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 1,
+          "output": "Documentation impact failed: Project Context assessment missing or pending\nDecision impact assessment missing, pending, or incomplete\nDecision disposition requires at least one linked record"
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 0,
+          "output": "Documentation impact passed: 1 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context reviewed; decision impact reviewed. Review pending items before setting status to reviewed."
+        }
+      ]
+    },
+    {
+      "case": "create",
+      "disposition": "create",
+      "records": [
+        "docs/decisions/DR-0004-trial-scroll-follow.md"
+      ],
+      "reason": "Record a proposed optional scrolling mode for an owner decision; do not implement before acceptance.",
+      "checker_ms": [
+        90.49,
+        89.35,
+        81.85,
+        88.89,
+        80.87
+      ],
+      "checks": [
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 1,
+          "output": "Documentation impact failed: Project Context assessment missing or pending\nDecision impact assessment missing, pending, or incomplete\nDecision disposition requires at least one linked record"
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 0,
+          "output": "Documentation impact passed: 1 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context reviewed; decision impact reviewed. Review pending items before setting status to reviewed."
+        }
+      ]
+    },
+    {
+      "case": "incorrect-none",
+      "disposition": "none",
+      "records": [],
+      "reason": "No meaningful decision is involved in this change. Deliberately incorrect assessment for a negative control.",
+      "checker_ms": [
+        91.5,
+        91.7,
+        90.64,
+        84.89
+      ],
+      "checks": [
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context pending; decision impact pending. Review pending items before setting status to reviewed."
+        },
+        {
+          "args": [],
+          "exit": 1,
+          "output": "Documentation impact failed: Project Context assessment missing or pending\nDecision impact assessment missing, pending, or incomplete\nDecision disposition requires at least one linked record"
+        },
+        {
+          "args": [],
+          "exit": 0,
+          "output": "Documentation impact passed: 1 changed files; 0 review groups; Project Context and decision impact assessed. Semantic accuracy and human acceptance are not certified."
+        },
+        {
+          "args": [
+            "--draft"
+          ],
+          "exit": 0,
+          "output": "Draft saved: 0 retained reviewed groups; 0 pending groups; Project Context reviewed; decision impact reviewed. Review pending items before setting status to reviewed."
+        }
+      ]
+    }
+  ]
+}

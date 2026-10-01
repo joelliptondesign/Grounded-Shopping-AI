@@ -1,0 +1,13 @@
+{
+  "name": "groundwork-schema-build",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build-validators.mjs"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1",
+    "esbuild": "0.25.10"
+  },
+  "version": "0.0.0"
+}

@@ -2,6 +2,14 @@
 
 ## Scrolling
 
-Approved by J.L., October 1, 2026. [Agent Decision Record](../docs/decisions/DR-0001-scrolling-conflict.md).
+<!-- groundwork:generated:conversation-scrolling:start -->
+**Conversation scrolling** · Accepted
 
-On a typed message or suggested-reply pill, use native smooth scrolling to place the new right-aligned user message at the top of the chat viewport. Keep that position while the assistant response appears below it. Do not follow the response to its bottom or reposition to an assistant introduction/card. Users can scroll manually without being pulled back by subsequent content. The next user submission starts a new position. Provide enough space for short turns to reach the top; respect reduced motion.
+- When a typed message or suggested-reply pill is submitted, position the new user message at the top of the chat viewport.
+- Use native smooth scrolling for that initial move; use immediate positioning for reduced-motion preferences.
+- Keep the viewport steady while the response grows. Respect manual scrolling; the next user submission starts a new position.
+
+**Why:** Keep the question and the beginning of the response visible so the user can read naturally, rather than being pulled to the end.
+
+[Full decision: DR-0001](../docs/decisions/DR-0001-scrolling-conflict.md)
+<!-- groundwork:generated:conversation-scrolling:end -->

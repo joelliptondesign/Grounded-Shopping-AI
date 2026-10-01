@@ -122,7 +122,14 @@
         "scripts/verify-offline.py",
         "scripts/groundwork-tests/",
         "docs/documentation-",
-        "docs/workflow/"
+        "docs/workflow/",
+        "scripts/groundwork/",
+        "scripts/sync-guidance",
+        "docs/guidance-map.json",
+        ".groundwork/",
+        "CLAUDE.md",
+        "scripts/sync-guidance",
+        "docs/decisions/"
       ],
       "docs": [
         "docs/workflow/README.md"
@@ -136,7 +143,11 @@
         "README-PORTFOLIO.md",
         "GOVERNANCE.md"
       ],
-      "docs": []
+      "docs": [],
+      "excludePrefixes": [
+        "docs/history/",
+        "docs/history/groundwork-migrations/"
+      ]
     },
     {
       "id": "historical",
@@ -154,6 +165,49 @@
       "docs": [
         "docs/EVALUATION.md"
       ]
+    },
+    {
+      "id": "migration-history",
+      "prefixes": [
+        "docs/history/"
+      ],
+      "docs": [],
+      "historical": true
+    },
+    {
+      "id": "groundwork-managed",
+      "prefixes": [
+        ".groundwork/",
+        "scripts/check-docs.mjs",
+        "scripts/sync-guidance.mjs",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "docs": []
+    },
+    {
+      "id": "groundwork-project-docs",
+      "prefixes": [
+        "docs/PROJECT-STATE.md",
+        "docs/documentation-map.json",
+        "docs/documentation-review.json",
+        "docs/decisions/",
+        "docs/SOURCE-MAP.md",
+        "AGENTS.md",
+        "docs/workflow/README.md",
+        "docs/decisions/README.md",
+        "docs/decisions/TEMPLATE.md"
+      ],
+      "docs": []
+    },
+    {
+      "id": "groundwork-migration-history",
+      "prefixes": [
+        "docs/history/groundwork-migrations/"
+      ],
+      "docs": [],
+      "historical": true
     }
-  ]
+  ],
+  "guidanceMap": "docs/guidance-map.json"
 }

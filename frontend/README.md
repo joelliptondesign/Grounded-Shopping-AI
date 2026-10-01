@@ -173,4 +173,16 @@ consulted for a live response.
 
 ## Conversation scrolling
 
-[ADR / DR-0001](../docs/decisions/DR-0001-scrolling-conflict.md), approved by J.L. on October 1, defines the behavior: each typed message or suggested-reply pill places the right-aligned user message at the top using native smooth scrolling. The response unfolds beneath it without further automatic movement. A reserved area makes this possible even for short replies and shrinks as content grows; resize observations update that space without moving the reader. Manual scrolling is respected, and reduced-motion preferences disable the initial animation. Demo and Live share this presentation logic. Product-card “see more” does not create a new user message or start a new scroll position.
+<!-- groundwork:generated:conversation-scrolling:start -->
+**Conversation scrolling** · Accepted
+
+- When a typed message or suggested-reply pill is submitted, position the new user message at the top of the chat viewport.
+- Use native smooth scrolling for that initial move; use immediate positioning for reduced-motion preferences.
+- Keep the viewport steady while the response grows. Respect manual scrolling; the next user submission starts a new position.
+
+**Why:** Keep the question and the beginning of the response visible so the user can read naturally, rather than being pulled to the end.
+
+[Full decision: DR-0001](../docs/decisions/DR-0001-scrolling-conflict.md)
+<!-- groundwork:generated:conversation-scrolling:end -->
+
+Implementation detail and verification limits are maintained in the [full scrolling record](../docs/decisions/DR-0001-scrolling-conflict.md).

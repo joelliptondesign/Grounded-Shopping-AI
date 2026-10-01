@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "receiptPath": "docs/documentation-review.json",
+  "contextPath": "docs/PROJECT-STATE.md",
+  "mapPath": "docs/documentation-map.json",
+  "decisionsDirectory": "docs/decisions",
+  "migrationBackupDirectory": "docs/history/groundwork-migrations",
+  "decisionGuidance": [
+    "AGENTS.md",
+    "docs/workflow/README.md",
+    "docs/decisions/README.md",
+    "docs/decisions/TEMPLATE.md"
+  ],
+  "historicalPrefixes": [
+    "docs/history/",
+    "docs/archive/",
+    "docs/baseline/",
+    "artifacts/"
+  ],
+  "guidanceMap": "docs/guidance-map.json"
+}

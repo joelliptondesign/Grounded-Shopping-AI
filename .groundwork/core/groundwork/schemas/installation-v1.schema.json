@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "installation-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "version",
+    "releaseDigest",
+    "sourceRevision",
+    "schemaVersions",
+    "files",
+    "blocks"
+  ],
+  "properties": {
+    "formatVersion": {
+      "const": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-rc\\.\\d+)?$"
+    },
+    "releaseDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "sourceRevision": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        }
+      ]
+    },
+    "schemaVersions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "config",
+        "receipt",
+        "decisionSummary",
+        "guidanceMap",
+        "installation"
+      ],
+      "properties": {
+        "config": {
+          "const": 1
+        },
+        "receipt": {
+          "const": 3
+        },
+        "decisionSummary": {
+          "const": 1
+        },
+        "guidanceMap": {
+          "const": 1
+        },
+        "installation": {
+          "const": 1
+        }
+      }
+    },
+    "files": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    },
+    "blocks": {
+      "type": "object",
+      "required": [
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "AGENTS.md": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "CLAUDE.md": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

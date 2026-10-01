@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "record": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+          },
+          "targets": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "key",
+          "record",
+          "targets"
+        ]
+      }
+    }
+  },
+  "required": [
+    "version",
+    "topics"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "guidance-map-v1"
+}
