@@ -17,14 +17,14 @@ uvicorn api.server:app --reload --port 8000
 open http://localhost:8000/
 ```
 
-Demo mode alone needs no backend — any static server will do.
+Demo mode alone needs no backend — any static server will do. The two pair-specific comparison verdicts calculate price differences from the Demo PRICE fixture rather than separate hard-coded amounts (Polar/Zenith: $10; AeroFlex/Therma: $50).
 
 ## Shopping mode
 
 The three-dot menu in the header switches between two modes. `mode` defaults to
 `"demo"`.
 
-**Demo** is the original fixture-backed experience, unchanged: `classify()`,
+**Demo** retains the original fixture-backed flows: `classify()`,
 `route()`, `readiness()`, `resolveRefs()`, the recommendation / comparison /
 service / haul-away flows, and their scripted progress timing.
 
@@ -154,7 +154,7 @@ position so a product always shows the same image.
 The renderer itself is unmodified: every `sc-if`/`sc-for` block for user
 messages, assistant text, progress, dots, recommendation cards, comparison
 tables, service tables, suggested replies and feedback is byte-identical to the
-design source. The only markup addition anywhere is the mode menu.
+design source. The integration added the mode menu; the October 1 scrolling update also adds a reserved-space element and explicit scroll/thread markers.
 
 ## Conversation state
 
@@ -170,3 +170,7 @@ the tail of a turn land in a fresh conversation.
 Backend products are registered into `BY_ID` under their real `sku_id`. Demo
 fixture ids are never overwritten (`FIXTURE_IDS`), and the Demo catalog is never
 consulted for a live response.
+
+## Conversation scrolling
+
+[ADR / DR-0001](../docs/decisions/DR-0001-scrolling-conflict.md), approved by J.L. on October 1, defines the behavior: each typed message or suggested-reply pill places the right-aligned user message at the top using native smooth scrolling. The response unfolds beneath it without further automatic movement. A reserved area makes this possible even for short replies and shrinks as content grows; resize observations update that space without moving the reader. Manual scrolling is respected, and reduced-motion preferences disable the initial animation. Demo and Live share this presentation logic. Product-card “see more” does not create a new user message or start a new scroll position.

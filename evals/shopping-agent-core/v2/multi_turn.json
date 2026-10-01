@@ -47,13 +47,14 @@
     },
     {
       "case_id": "v2_compare_and_pick_001", "category": "comparison_context",
+      "notes": "Legacy product names deliberately exercise reference repair against current displayed cards. Assert comparison and selection continuity, not an obsolete catalog winner. Shopping quality remains separately judged.",
       "dimensions": ["understanding", "presentation", "conversation_quality"], "severity_if_failed": "major",
       "invariants": ["generated_language_cannot_replace_selection"],
-      "tags": ["gold_23", "gold_24", "comparison", "ordinal"],
+      "tags": ["gold_23", "gold_24", "comparison", "ordinal", "stale_reference_recovery"],
       "turns": [
         {"user": "I need a cool king mattress.", "fixture_update": {"hard_constraints": {"size": "king"}, "directions": {"cooling": "higher"}, "priorities": {"cooling": "critical"}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "state": {"hard_constraints": {"size": "king"}}}},
-        {"user": "Compare the first two.", "fixture_update": {"intent": "compare", "turn_context": {"product_names": ["Night Drift Hybrid", "CalmWave Hybrid"]}}, "expected": {"intent": "compare", "modality": "comparison_table", "state": {"directions": {"cooling": "higher"}}}},
-        {"user": "Which one would you pick for me?", "fixture_update": {"intent": "recommend", "turn_context": {"product_names": ["Night Drift Hybrid", "CalmWave Hybrid"]}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "winner": "S04", "state": {"priorities": {"cooling": "critical"}}}, "qualitative": {"criteria": ["uses_comparison_context", "brief_rationale"]}}
+        {"user": "Compare the first two.", "fixture_update": {"intent": "compare", "turn_context": {"product_names": ["Night Drift Hybrid", "CalmWave Hybrid"]}}, "expected": {"intent": "compare", "modality": "comparison_table", "compare_first_two": true, "state": {"directions": {"cooling": "higher"}}}},
+        {"user": "Which one would you pick for me?", "fixture_update": {"intent": "recommend", "turn_context": {"product_names": ["Night Drift Hybrid", "CalmWave Hybrid"]}}, "expected": {"intent": "recommend", "modality": "recommendation_cards", "decision": "ALLOW", "choose_from_previous_comparison": true, "state": {"priorities": {"cooling": "critical"}}}, "qualitative": {"criteria": ["uses_comparison_context", "brief_rationale"]}}
       ]
     },
     {

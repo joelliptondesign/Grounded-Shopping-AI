@@ -1,0 +1,77 @@
+{
+  "version": 2,
+  "base": "d45eae69474c8dcf4958df3ec15b8796a6968c14",
+  "groups": [
+    {
+      "documents": [
+        "docs/TECHNICAL_OVERVIEW.md"
+      ],
+      "status": "reviewed",
+      "disposition": "updated",
+      "reason": "Reviewed isolated offline verification setup and failure-status guidance against the publishable snapshot; the pre-existing local ignore edit is excluded.",
+      "evidence": [
+        "scripts/verify-offline.py",
+        "docs/TECHNICAL_OVERVIEW.md"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "c01f0ecee2231961401c4796ec2801f321a29d3e96c2e8c723a3c830215f3639"
+    },
+    {
+      "documents": [
+        "docs/workflow/README.md"
+      ],
+      "status": "reviewed",
+      "disposition": "no-impact",
+      "reason": "Reviewed shared agent and source guidance against J.L. approval in existing DR-0001. The workflow remains valid: resolve intent, document the accepted decision and verify behavior; previous installation text is retained.",
+      "evidence": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "docs/documentation-map.json",
+        "docs/workflow/README.md",
+        "scripts/check-docs.mjs",
+        "scripts/check-docs.test.mjs",
+        "scripts/groundwork-tests/test_offline.py",
+        "scripts/verify-offline.py"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "0ade7d92ba02033563aecfde4f6fa411f48e6a8948d19c4f68bfc93c8cfa1c7f"
+    },
+    {
+      "documents": [
+        "docs/EVALUATION.md"
+      ],
+      "status": "reviewed",
+      "disposition": "updated",
+      "reason": "Documented why the fixed winner was obsolete, replacement continuity criteria, five counterexample tests, current results and unmeasured qualitative/live quality; historical reports remain unchanged.",
+      "evidence": [
+        "evals/runner.py",
+        "evals/shopping-agent-core/README.md",
+        "evals/shopping-agent-core/v2/multi_turn.json",
+        "tests/test_eval_reference_continuity.py"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "930b18fb5cda5917ddec86c9d3f13fa9b44102b6082c64f4ae60ce83be75d0bf"
+    },
+    {
+      "documents": [
+        "frontend/README.md"
+      ],
+      "status": "reviewed",
+      "disposition": "updated",
+      "reason": "Updated approved user-message scrolling, reserved space, native movement and manual control; Demo browser checks cover typed and pill turns, short replies, wheel interruption and reset.",
+      "evidence": [
+        "frontend/README.md",
+        "frontend/Rufus Shopping Agent.dc.html"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "c85127a7d0d0c8c3a43973555b442e1790fd58161d4c997c70bfbf5bade090b3"
+    }
+  ],
+  "projectContext": {
+    "status": "reviewed",
+    "changed": true,
+    "reason": "Reviewed published context for Groundwork, corrected comparison criteria and J.L.-approved scrolling. Verified snapshot excludes the prior local ignore edit; capabilities and documented verification remain accurate.",
+    "reviewer": "Codex",
+    "fingerprint": "a4bf3c6b5104439be75ebbf5e0caa9aa44a40393bba6e2eb438cebe2f0cb5293"
+  }
+}

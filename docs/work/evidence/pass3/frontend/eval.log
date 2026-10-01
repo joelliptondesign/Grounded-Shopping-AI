@@ -1,0 +1,102 @@
+fatal: not a git repository (or any of the parent directories): .git
+Validated 26 cases against eval schema 1.0.
+# Evaluation Run Report
+
+- Suite: `Shopping Agent Core`
+- Version: `v2` (schema `1.0`)
+- Run: `2026-09-30T22:40:33.295682+00:00`
+- Mode: `deterministic`
+- Cases: 26 (25 passed, 1 failed)
+- Critical / major / minor failures: 0 / 1 / 0
+- Qualitative cases awaiting a score: 11
+
+## Evaluated configuration
+
+- Model routing: `{'structured_understanding': {'model': 'gpt-5.6-luna', 'reasoning_effort': 'none'}, 'conversational_reasoning': {'model': 'gpt-5.6-luna', 'reasoning_effort': 'low'}, 'fast_grounded_generation': {'model': 'gpt-5.6-luna', 'reasoning_effort': 'none'}}`
+- Prompt hashes: `{'baseline_delivery.md': '508946a756c8', 'conversational_shopping_voice.md': '7d93097d73e9', 'conversational_turn.md': '70463936bb0b', 'grounded_retry.md': 'f557e457e20d', 'off_topic_redirect.md': '456f50f52417', 'preference_extraction.md': 'ce501c6a395f', 'recommendation_explanation.md': '24b59ceffa1a', 'shopping_experience_judge.md': '2d9d69928082', 'shopping_selection.md': '049a94715435'}`
+- Fixture version: `catalog_v2+reviews_v2`
+- Code commit: `unavailable`
+
+## Critical invariants
+
+- PASS — generated_language_cannot_replace_selection
+- PASS — generated_language_cannot_replace_winner
+- PASS — never_invent_product_facts
+- PASS — never_invent_review_evidence
+- PASS — never_present_unknown_service_as_known
+- PASS — never_recommend_ineligible_product
+- PASS — never_silently_relax_hard_requirement
+- PASS — never_treat_missing_evidence_as_false
+- PASS — preserve_state_after_extraction_failure
+
+## By dimension
+
+| Dimension | Passed | Failed |
+|---|---:|---:|
+| Conversation Quality | 18 | 1 |
+| Decision Correctness | 12 | 0 |
+| Grounding | 5 | 0 |
+| Presentation | 6 | 1 |
+| Robustness And Recovery | 3 | 0 |
+| Understanding | 18 | 1 |
+
+## By scenario category
+
+| Category | Passed | Failed |
+|---|---:|---:|
+| `clarification` | 1 | 0 |
+| `cold_start` | 6 | 0 |
+| `comparison_context` | 0 | 1 |
+| `context_and_reranking` | 1 | 0 |
+| `directional_preferences` | 2 | 0 |
+| `failure_safety` | 1 | 0 |
+| `grounded_answers` | 3 | 0 |
+| `natural_updates` | 1 | 0 |
+| `near_matches` | 1 | 0 |
+| `non_negotiables` | 2 | 0 |
+| `preference_semantics` | 2 | 0 |
+| `progressive_elicitation` | 1 | 0 |
+| `reference_resolution` | 1 | 0 |
+| `state_updates` | 2 | 0 |
+| `target_preferences` | 1 | 0 |
+
+## Automated metrics
+
+| Metric | Passed | Total | Rate |
+|---|---:|---:|---:|
+| Intent Accuracy | 41 | 41 | 100.0% |
+| Field State Accuracy | 319 | 319 | 100.0% |
+| Candidate Set Accuracy | 2 | 2 | 100.0% |
+| Expected Winner Accuracy | 2 | 3 | 66.7% |
+| Grounding Validator Accuracy | 0 | 0 | n/a |
+| Modality Selection Accuracy | 41 | 41 | 100.0% |
+| Recovery Transition Accuracy | 1 | 1 | 100.0% |
+
+## Conversation quality
+
+No manual scores are recorded, so no conversation-quality average is reported.
+
+## Failure details
+
+### v2_compare_and_pick_001 (major)
+
+- `turn_3.winner` — expected `S04`, actual `S22`
+
+## Qualitative scoring
+
+These outputs are prepared for manual 0–3 scoring; no unreviewed score is included in metrics.
+
+- `v2_priority_change_explanation_001`
+- `v2_compare_and_pick_001`
+- `v2_flexible_budget_001`
+- `v2_flexible_budget_range_001`
+- `v2_near_match_tradeoffs_001`
+- `v2_fuzzy_complaint_001`
+- `v2_review_catalog_distinction_001`
+- `v2_cold_start_no_signal_001`
+- `v2_cold_start_size_budget_001`
+- `v2_cold_start_explicit_browse_001`
+- `v2_cold_start_product_reaction_001`
+
+Raw results: artifacts/evals/shopping-agent-core/v2/2026-09-30_224033_run.json
+Report: artifacts/evals/shopping-agent-core/v2/2026-09-30_224033_report.md

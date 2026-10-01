@@ -481,6 +481,33 @@ def run_presentation(case: Dict[str, Any]) -> CaseResult:
     return result
 
 
+def check_reference_continuity(result, expected, actual, previous_presentation, label):
+    """Judge reference behavior against what was shown, not a frozen catalog winner."""
+    previous = previous_presentation or {}
+    prior_ids = [p.get("sku_id") for p in previous.get("products", [])]
+    shown_ids = [p.get("sku_id") for p in actual["presentation"].get("products", [])]
+    if expected.get("compare_first_two"):
+        result.check(f"{label}.prior_cards_available", True,
+                     previous.get("modality") == "recommendation_cards"
+                     and len(prior_ids) >= 2 and all(prior_ids[:2])
+                     and len(set(prior_ids[:2])) == 2)
+        result.check(f"{label}.compared_first_two", prior_ids[:2], shown_ids)
+    if expected.get("choose_from_previous_comparison"):
+        selection = actual.get("shopping_selection") or {}
+        chosen = selection.get("selected_product_ids") or []
+        primary = selection.get("primary_product_id")
+        valid_scope = (previous.get("modality") == "comparison_table"
+                       and len(prior_ids) >= 2 and all(prior_ids)
+                       and len(set(prior_ids)) == len(prior_ids))
+        result.check(f"{label}.comparison_scope_available", True, bool(valid_scope))
+        result.check(f"{label}.selected_from_comparison", True,
+                     bool(chosen) and len(set(chosen)) == len(chosen)
+                     and all(p in prior_ids for p in chosen))
+        result.check(f"{label}.primary_from_comparison", True,
+                     bool(primary) and primary in chosen and primary in prior_ids)
+        result.check(f"{label}.rendered_selection", chosen, shown_ids)
+
+
 def run_multi_turn(case: Dict[str, Any], live_client: Optional[Any]) -> CaseResult:
     result = make_result(case)
     state = deepcopy(case.get("initial_state") or new_preference_state())
@@ -499,6 +526,11 @@ def run_multi_turn(case: Dict[str, Any], live_client: Optional[Any]) -> CaseResu
         expected = turn["expected"]
         result.check(f"turn_{index}.intent", expected["intent"], actual["intent"])
         result.check(f"turn_{index}.modality", expected["modality"], actual["modality"])
+        check_reference_continuity(
+            result, expected, actual,
+            outputs[-1]["presentation_contract"] if outputs else None,
+            f"turn_{index}",
+        )
         gold_state = gold_state_after_turn(gold_state, turn, expected)
         if SUITE_VERSION == "v2":
             compare_expected(

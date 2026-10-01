@@ -91,7 +91,7 @@
       </div>
     </sc-if>
 
-    <div data-scroll="1" style="flex:1;overflow-y:auto;overflow-x:hidden;background:#ffffff;position:relative;">
+    <div data-scroll="1" ref="{{ scrollRef }}" onWheel="{{ onManualScroll }}" onTouchStart="{{ onManualScroll }}" onPointerDown="{{ onManualScroll }}" style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overflow-anchor:none;background:#ffffff;position:relative;">
 
       <sc-if value="{{ isCold }}" hint-placeholder-val="{{ true }}">
         <div style="height:100%;min-height:520px;display:flex;flex-direction:column;justify-content:center;padding:0 20px;animation:fadein .4s ease both;">
@@ -99,7 +99,7 @@
         </div>
       </sc-if>
 
-      <div style="display:flex;flex-direction:column;gap:22px;padding:{{ listPad }};">
+      <div data-thread="1" style="display:flex;flex-direction:column;gap:22px;padding:{{ listPad }};">
         <sc-for list="{{ blocks }}" as="block" hint-placeholder-count="0">
           <div data-blk="1" data-kind="{{ block.kind }}" style="animation:rise .3s cubic-bezier(.2,.8,.3,1) both;">
 
@@ -247,6 +247,7 @@
           </div>
         </sc-for>
       </div>
+      <div data-turn-space="1" aria-hidden="true" style="height:var(--turn-space, 0px);pointer-events:none;"></div>
     </div>
 
     <div style="flex:none;background:#ffffff;border-radius:20px 20px 0 0;box-shadow:0 -2px 10px rgba(15,17,17,.06);padding:9px 14px 11px;position:relative;z-index:2;">
@@ -611,11 +612,11 @@ const CMP_ROWS = ["Cooling", "Motion isolation", "Price", "Queen size", "Feel", 
 const VERDICTS = {
   "polar|zenith": [
     { t: "Polar Motion Elite still has the edge for you.", b: true },
-    { t: " Cooling is essentially a tie, but Polar has better motion isolation and costs $16 less." }
+    { t: " Cooling is essentially a tie, but Polar has better motion isolation and costs $" + (PRICE.zenith - PRICE.polar) + " less." }
   ],
   "aeroflex|therma": [
     { t: "ThermaQuiet 6 is the safer pick of these two.", b: true },
-    { t: " AeroFlex saves you $86, but you'd give up most of the motion isolation you said mattered." }
+    { t: " AeroFlex saves you $" + (PRICE.therma - PRICE.aeroflex) + ", but you'd give up most of the motion isolation you said mattered." }
   ]
 };
 
@@ -806,7 +807,6 @@ class Component extends DCLogic {
     if (this.state.busy) return;
     if (this.state.mode === "live") { this.runLiveMore(role, block); return; }
     const m = MORE[role] || MORE_DEFAULT;
-    this.pinned = null;
     this.setState({ busy: true });
     this.push({ kind: "dots" });
     setTimeout(() => {
@@ -860,65 +860,48 @@ class Component extends DCLogic {
   }
 
   reveal() {
-    const doc = this.doc
-      || (this.ta.current && this.ta.current.ownerDocument)
-      || (this.el && this.el.ownerDocument);
-    if (!doc) return;
-    this.doc = doc;
-    if (!this.el || !this.el.isConnected) {
-      this.el = [].slice.call(doc.querySelectorAll("div"))
-        .find(n => (n.ownerDocument.defaultView || window).getComputedStyle(n).overflowY === "auto");
-    }
-    const el = this.el;
+    const doc = this.doc || (this.ta.current && this.ta.current.ownerDocument);
+    const el = this.scroll.current || (doc && doc.querySelector('[data-scroll="1"]'));
     if (!el) return;
-    {
-      const wrap = el.lastElementChild;
-      const last = wrap && wrap.lastElementChild;
-      if (!last) return;
-      const maxScroll = Math.max(0, el.scrollHeight - el.clientHeight);
-      if (this.pinned && !this.pinned.isConnected) this.pinned = null; // stale node, fall through
-      if (this.pinned) {
-        // A list or comparison was shown this turn: hold the pin instead of running to the bottom.
-        this.glide(el, Math.max(0, Math.min(this.pinned.offsetTop - 14, maxScroll)));
-        return;
-      }
-      const lk = last.getAttribute("data-kind");
-      if (lk === "progress" || lk === "dots") {
-        // Keep the whole thinking timeline above the fold as it grows.
-        const bottom = last.offsetTop + last.offsetHeight + 12 - el.clientHeight;
-        this.glide(el, Math.max(0, Math.min(bottom, maxScroll)));
-        return;
-      }
-      if (lk === "recs" || lk === "compare") {
-        // Don't run to the bottom. Pin the assistant message that introduces the
-        // list or comparison to the top, so it starts just below it.
-        const kids = [].slice.call(wrap.children);
-        let anchor = last;
-        for (let i = kids.length - 2; i >= 0; i--) {
-          if (kids[i].getAttribute("data-kind") === "text") anchor = kids[i];
-          else break;
-        }
-        this.pinned = anchor;
-        this.glide(el, Math.max(0, Math.min(anchor.offsetTop - 14, maxScroll)));
-        return;
-      }
-      this.glide(el, maxScroll);
+    this.el = el;
+    const wrap = el.querySelector('[data-thread="1"]');
+    if (!wrap) return;
+    if (!this.scrollObserver) {
+      const win = el.ownerDocument.defaultView || window;
+      this.scrollObserver = new win.ResizeObserver(() => this.reveal());
+      this.scrollEnd = () => { this.autoScrolling = false; };
+      el.addEventListener('scrollend', this.scrollEnd);
+      this.scrollObserver.observe(el);
+      this.scrollObserver.observe(wrap);
     }
+    const users = wrap.querySelectorAll('[data-kind="user"]');
+    const user = users[users.length - 1];
+    if (!user) {
+      el.style.setProperty('--turn-space', '0px');
+      return;
+    }
+    // Reserve only the space needed to put the newest user message at the top.
+    // As its response grows it consumes this space, without moving the viewport.
+    const top = Math.max(0, user.offsetTop - 14);
+    const space = Math.max(0, Math.ceil(top + el.clientHeight - (wrap.offsetTop + wrap.offsetHeight)));
+    el.style.setProperty('--turn-space', space + 'px');
+    if (this.scrollPending) {
+      this.scrollPending = false;
+      const win = el.ownerDocument.defaultView || window;
+      this.autoScrolling = true;
+      el.scrollTo({ top, behavior: win.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+    // Subsequent blocks only update the reserved space. The reader owns scrolling.
   }
 
-  glide(el, to) {
-    const win = el.ownerDocument.defaultView || window;
-    if (this._glide) clearInterval(this._glide);
-    const from = el.scrollTop, dist = to - from;
-    if (Math.abs(dist) < 2) return;
-    const dur = Math.min(950, 460 + Math.abs(dist) * 0.32); // a touch slower than native smooth
-    const t0 = win.performance.now();
-    this._glide = setInterval(() => {
-      const p = Math.min(1, (win.performance.now() - t0) / dur);
-      el.scrollTop = from + dist * (1 - Math.pow(1 - p, 3));
-      if (p >= 1) { clearInterval(this._glide); this._glide = null; }
-    }, 16);
-  }
+  onManualScroll = () => {
+    // Explicitly interrupt an in-flight native animation when the reader takes over.
+    if (this.autoScrolling && this.el) {
+      this.autoScrolling = false;
+      this.el.scrollTo({ top: this.el.scrollTop, behavior: 'instant' });
+    }
+    this.scrollPending = false;
+  };
 
   send = (e) => {
     if (e && e.target && e.target.ownerDocument) this.doc = e.target.ownerDocument;
@@ -952,7 +935,8 @@ class Component extends DCLogic {
   componentWillUnmount() {
     this.closeMenu();
     cancelScheduledTurns();
-    if (this._glide) clearInterval(this._glide);
+    if (this.scrollObserver) this.scrollObserver.disconnect();
+    if (this.el && this.scrollEnd) this.el.removeEventListener('scrollend', this.scrollEnd);
   }
 
   /* --- mode --- */
@@ -970,8 +954,8 @@ class Component extends DCLogic {
     this.liveEpoch += 1;
     this.liveHint = null;
     this.endLiveSession();
-    if (this._glide) { clearInterval(this._glide); this._glide = null; }
-    this.pinned = null;
+    this.scrollPending = false;
+    if (this.el) { this.el.style.setProperty('--turn-space', '0px'); this.el.scrollTo({ top: 0, behavior: 'instant' }); }
     this.pending = null;
     this.ctx = newContext();
     this.resetTA();
@@ -1033,7 +1017,6 @@ class Component extends DCLogic {
     const epoch = this.liveEpoch;
     const shown = ((block && block.items) || []).map(it => it.id);
     const started = Date.now();
-    this.pinned = null;
     this.setState({ busy: true });
     this.push({ kind: "dots" });
     Promise.resolve()
@@ -1353,7 +1336,7 @@ class Component extends DCLogic {
       busy: true,
       blocks: s.blocks.filter(b => b.kind !== "suggest")
     }));
-    this.pinned = null;
+    this.scrollPending = true;
     this.push({ kind: "user", text });
     this.setState(s => ({ turn: s.turn + 1 }));
     if (this.state.mode === "live") {
@@ -1577,7 +1560,7 @@ class Component extends DCLogic {
     const advance = i => {
       if (i < list.length) {
         this.patchLast(b => Object.assign({}, b, { active: i }));
-        setTimeout(() => this.reveal(), 60); // keep the growing timeline pinned in view
+        setTimeout(() => this.reveal(), 60); // maintain turn space as the timeline grows
         setTimeout(() => advance(i + 1), interval);
       } else {
         setTimeout(() => { this.dropLast(); done(); }, 450);
@@ -1760,12 +1743,13 @@ class Component extends DCLogic {
           onPick: () => this.selectMode(m.id)
         };
       }),
-      listPad: this.state.blocks.length === 0 ? "0" : "6px 20px 26px",
+      listPad: this.state.blocks.length === 0 ? "0" : "14px 20px 26px",
       draft: this.state.draft,
       hasDraft: has,
       noDraft: !has,
       sendBg: has ? "#0f6fc5" : "#ffffff",
       scrollRef: this.scroll,
+      onManualScroll: this.onManualScroll,
       noop: () => {},
       taRef: this.ta,
       onDraft: e => {

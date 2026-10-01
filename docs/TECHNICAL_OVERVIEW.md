@@ -74,3 +74,14 @@ For live evaluations, scenario selection, and reading results, see the [evaluati
 | Hosting | [Deployment guide](DEPLOYMENT.md) |
 
 The repository also retains a legacy Streamlit debug interface. After installing the development dependencies above, start it with `streamlit run streamlit_app.py`.
+
+## Groundwork local checks
+
+The application remains Python-based. Repository documentation review additionally requires Git and Node.js 22 or newer, with no Node packages to install. See [Groundwork workflow](workflow/README.md) for the grouped review process and isolated offline runner:
+
+```sh
+node scripts/check-docs.mjs --report
+.venv/bin/python scripts/verify-offline.py
+```
+
+The runner writes evidence to a temporary source copy rather than the repository and does not make live model calls. Its overall status is nonzero whenever either requested suite fails. The documentation checker is separate; it is not installed as a commit hook or remote CI gate. Existing local environment/ignore configuration is preserved.

@@ -1,0 +1,13 @@
+diff --git a/docs/EVALUATION.md b/docs/EVALUATION.md
+index 80548df..9b1b48d 100644
+--- a/docs/EVALUATION.md
++++ b/docs/EVALUATION.md
+@@ -46,6 +46,8 @@ Reports show separate sections:
+ 
+ A high CX score never erases an integrity failure. A harmless representation mismatch does not automatically lower CX.
+ 
++The isolated Groundwork trial adds an unverified-fact regression: a supplied product claim must not escape when verification is false.
++
+ ## Workflow
+ 
+ 1. Validate the dataset and run deterministic tests.

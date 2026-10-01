@@ -1,0 +1,13 @@
+diff --git a/engine/customer_copy.py b/engine/customer_copy.py
+index fff2435..bff7f1b 100644
+--- a/engine/customer_copy.py
++++ b/engine/customer_copy.py
+@@ -37,7 +37,7 @@ OFF_TOPIC_CONTEXT_FALLBACKS = (
+ # Backward-compatible representatives for callers that display or inspect constants.
+ OFF_TOPIC = OFF_TOPIC_FALLBACKS[0]
+ OFF_TOPIC_WITH_CONTEXT = OFF_TOPIC_CONTEXT_FALLBACKS[0]
+-UNKNOWN_FACT = "I don't have reliable information about that for this mattress."
++UNKNOWN_FACT = "I don’t have verified information about that for this mattress."
+ ROUTING_FAILURE = (
+     "I'm not sure which part of the mattress search you want to tackle next. "
+     "Tell me what you're weighing, and we'll pick it up from there."

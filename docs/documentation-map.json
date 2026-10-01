@@ -1,0 +1,159 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "id": "engine",
+      "prefixes": [
+        "engine/"
+      ],
+      "docs": [
+        "GOVERNANCE.md",
+        "docs/ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "prompts",
+      "prefixes": [
+        "prompts/"
+      ],
+      "docs": [
+        "GOVERNANCE.md",
+        "docs/EVALUATION.md"
+      ]
+    },
+    {
+      "id": "api",
+      "prefixes": [
+        "api/"
+      ],
+      "docs": [
+        "api/README.md"
+      ]
+    },
+    {
+      "id": "frontend",
+      "prefixes": [
+        "frontend/"
+      ],
+      "docs": [
+        "frontend/README.md"
+      ]
+    },
+    {
+      "id": "fixtures",
+      "prefixes": [
+        "fixtures/"
+      ],
+      "docs": [
+        "GOVERNANCE.md",
+        "docs/EVALUATION.md"
+      ]
+    },
+    {
+      "id": "evaluation",
+      "prefixes": [
+        "evals/",
+        "tests/"
+      ],
+      "docs": [
+        "docs/EVALUATION.md"
+      ]
+    },
+    {
+      "id": "benchmarks",
+      "prefixes": [
+        "bench/",
+        "scripts/model_bakeoff.py"
+      ],
+      "docs": [
+        "docs/MODEL_BAKEOFF.md"
+      ]
+    },
+    {
+      "id": "fixture-review",
+      "prefixes": [
+        "scripts/review_",
+        "scripts/phase4f_smoke.py"
+      ],
+      "docs": [
+        "docs/EVALUATION.md"
+      ]
+    },
+    {
+      "id": "legacy",
+      "prefixes": [
+        "streamlit_app.py",
+        "app.py"
+      ],
+      "docs": [
+        "docs/TECHNICAL_OVERVIEW.md"
+      ]
+    },
+    {
+      "id": "setup",
+      "prefixes": [
+        "requirements",
+        "pyproject.toml",
+        ".gitignore",
+        ".env.example"
+      ],
+      "docs": [
+        "docs/TECHNICAL_OVERVIEW.md"
+      ]
+    },
+    {
+      "id": "deployment",
+      "prefixes": [
+        "vercel.json",
+        ".vercelignore",
+        ".github/",
+        ".githooks/"
+      ],
+      "docs": [
+        "docs/DEPLOYMENT.md"
+      ]
+    },
+    {
+      "id": "groundwork",
+      "prefixes": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "scripts/check-docs",
+        "scripts/verify-offline.py",
+        "scripts/groundwork-tests/",
+        "docs/documentation-",
+        "docs/workflow/"
+      ],
+      "docs": [
+        "docs/workflow/README.md"
+      ]
+    },
+    {
+      "id": "guidance",
+      "prefixes": [
+        "docs/",
+        "README.md",
+        "README-PORTFOLIO.md",
+        "GOVERNANCE.md"
+      ],
+      "docs": []
+    },
+    {
+      "id": "historical",
+      "prefixes": [
+        "artifacts/"
+      ],
+      "docs": [],
+      "historical": true
+    },
+    {
+      "id": "artifact-index",
+      "prefixes": [
+        "artifacts/evals/INDEX.md"
+      ],
+      "docs": [
+        "docs/EVALUATION.md"
+      ]
+    }
+  ]
+}

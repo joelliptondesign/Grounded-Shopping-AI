@@ -1,0 +1,23 @@
+..........................................................................................................................................................................2026-10-01 10:42:22.804 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+.2026-10-01 10:42:22.868 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+..2026-10-01 10:42:23.426 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+.2026-10-01 10:42:23.438 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-01 10:42:23.450 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-01 10:42:23.463 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-01 10:42:23.477 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-01 10:42:23.489 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+........................
+----------------------------------------------------------------------
+Ran 198 tests in 0.795s
+
+OK
+2026-10-01T17:42:22.745835+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_1
+2026-10-01T17:42:22.746221+00:00 | EXPLANATION_GROUNDING_FAILED_ATTEMPT_1
+2026-10-01T17:42:22.746246+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_2
+2026-10-01T17:42:22.746298+00:00 | EXPLANATION_GROUNDING_FAILED_ATTEMPT_2
+2026-10-01T17:42:22.746787+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_1
+2026-10-01T17:42:22.746873+00:00 | EXPLANATION_VALIDATED_ATTEMPT_1
+2026-10-01T17:42:22.747135+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_1
+2026-10-01T17:42:22.747168+00:00 | EXPLANATION_GROUNDING_FAILED_ATTEMPT_1
+2026-10-01T17:42:22.747173+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_2
+2026-10-01T17:42:22.747216+00:00 | EXPLANATION_VALIDATED_ATTEMPT_2

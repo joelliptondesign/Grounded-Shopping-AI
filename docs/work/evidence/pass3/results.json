@@ -1,0 +1,42 @@
+[
+  {
+    "scenario": "frontend",
+    "review_targets": [
+      "frontend/README.md"
+    ],
+    "disposition": "no-impact",
+    "unrelated_review_preserved": true,
+    "relevant_edit_invalidated": true,
+    "unit_exit": 0,
+    "evaluation_exit": 1,
+    "known_failure": "v2_compare_and_pick_001: S04 vs S22",
+    "context_rewrite": false
+  },
+  {
+    "scenario": "engine",
+    "review_targets": [
+      "GOVERNANCE.md",
+      "docs/ARCHITECTURE.md"
+    ],
+    "disposition": "no-impact",
+    "unrelated_review_preserved": true,
+    "relevant_edit_invalidated": true,
+    "unit_exit": 1,
+    "evaluation_exit": 1,
+    "known_failure": "v2_compare_and_pick_001: S04 vs S22",
+    "context_rewrite": false
+  },
+  {
+    "scenario": "evaluation",
+    "review_targets": [
+      "docs/EVALUATION.md"
+    ],
+    "disposition": "updated",
+    "unrelated_review_preserved": true,
+    "relevant_edit_invalidated": true,
+    "unit_exit": 0,
+    "evaluation_exit": 1,
+    "known_failure": "v2_compare_and_pick_001: S04 vs S22",
+    "context_rewrite": false
+  }
+]

@@ -1,0 +1,39 @@
+....................................................................F............F...................................................................................2026-09-30 15:41:23.044 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+.2026-09-30 15:41:23.120 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+..2026-09-30 15:41:23.684 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+.2026-09-30 15:41:23.697 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-09-30 15:41:23.709 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-09-30 15:41:23.721 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-09-30 15:41:23.735 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-09-30 15:41:23.748 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+........................
+======================================================================
+FAIL: test_missing_product_attribute_is_not_inferred_false (test_intent_routing.IntentRoutingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/pl/zcgmjwkx6x786k5fv04_8s0r0000gn/T/groundwork-offline-7elle4vm/source/tests/test_intent_routing.py", line 142, in test_missing_product_attribute_is_not_inferred_false
+    self.assertIn("don't have reliable information", turn["response_text"])
+AssertionError: "don't have reliable information" not found in 'I don’t have verified information about that for this mattress.'
+
+======================================================================
+FAIL: test_unrepresented_service_attribute_is_not_treated_as_haul_away (test_intent_routing.IntentRoutingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/pl/zcgmjwkx6x786k5fv04_8s0r0000gn/T/groundwork-offline-7elle4vm/source/tests/test_intent_routing.py", line 207, in test_unrepresented_service_attribute_is_not_treated_as_haul_away
+    self.assertIn("don't have reliable information", turn["response_text"])
+AssertionError: "don't have reliable information" not found in 'I don’t have verified information about that for this mattress.'
+
+----------------------------------------------------------------------
+Ran 193 tests in 0.809s
+
+FAILED (failures=2)
+2026-09-30T22:41:22.982654+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_1
+2026-09-30T22:41:22.983082+00:00 | EXPLANATION_GROUNDING_FAILED_ATTEMPT_1
+2026-09-30T22:41:22.983108+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_2
+2026-09-30T22:41:22.983158+00:00 | EXPLANATION_GROUNDING_FAILED_ATTEMPT_2
+2026-09-30T22:41:22.983625+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_1
+2026-09-30T22:41:22.983701+00:00 | EXPLANATION_VALIDATED_ATTEMPT_1
+2026-09-30T22:41:22.983991+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_1
+2026-09-30T22:41:22.984025+00:00 | EXPLANATION_GROUNDING_FAILED_ATTEMPT_1
+2026-09-30T22:41:22.984030+00:00 | EXPLANATION_PROMPT_SENT_ATTEMPT_2
+2026-09-30T22:41:22.984072+00:00 | EXPLANATION_VALIDATED_ATTEMPT_2
