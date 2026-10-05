@@ -1,38 +1,34 @@
 {
   "version": 3,
-  "base": "475e2af88accc75f9334e60441756506488b0607",
+  "base": "01accfb343e31fcdfa177b8e54c6baaad6e12270",
   "groups": [
     {
       "documents": [
-        "docs/workflow/README.md"
+        "docs/TECHNICAL_OVERVIEW.md"
       ],
       "status": "reviewed",
-      "disposition": "updated",
-      "reason": "Updated current installed version; reviewed optional template instructions against unchanged schema, authority and project-owned guidance boundaries.",
+      "disposition": "no-impact",
+      "reason": "The pre-existing gitignore additions only ignore local Vercel metadata and environment files. Existing setup guidance already keeps environment values private; this documentation task preserves those unrelated changes.",
       "evidence": [
-        ".groundwork/installation.json",
-        "docs/decisions/TEMPLATE.md",
-        "docs/workflow/README.md"
+        ".gitignore"
       ],
       "reviewer": "Codex",
-      "fingerprint": "f18e8532381fe6a70b521b796a6cf0fd8f9a7ca4a5be5814ce1f79d0a363be2c"
+      "fingerprint": "b92b56af4070d6306898b7b3b1903e56d2d1e98f9a552a54bf5897c8fa6fc01b"
     }
   ],
   "projectContext": {
     "status": "reviewed",
-    "changed": true,
-    "reason": "Current context records the installed third candidate and scoped verification. Publication preparation changes no product capability or runtime boundary; the receipt covers only the exact files being committed.",
+    "changed": false,
+    "reason": "The approved companion, architecture explanations, and navigation describe existing behavior. Capabilities and project status are unchanged; the pre-existing gitignore edits remain outside this documentation commit.",
     "reviewer": "Codex",
-    "fingerprint": "875c7e46984281371e29f49d162d15a8c8f4bb11d3141ce44cc1483b0cc6d2fd"
+    "fingerprint": "10e5397c0e770a1e32e13382d8e861e136c463746254ee46eb2aac16bf55dc57"
   },
   "decisionImpact": {
     "status": "reviewed",
-    "disposition": "existing",
-    "reason": "Authorized publication of the reviewed third-candidate update under the existing pinned-core adoption decision. Templates preserve human acceptance, project ownership and existing lifecycle; no new product decision is introduced.",
+    "disposition": "none",
+    "reason": "User approved publishing explanatory documentation. Moving the companion and linking existing architecture introduces no product behavior, authority, architecture, or evaluation changes requiring a decision record.",
     "reviewer": "Codex",
-    "records": [
-      "docs/decisions/DR-0005-canonical-groundwork.md"
-    ],
-    "fingerprint": "472567ca2d003d5d352e87eda4faad69eea276144506679cb38583d7e8f089dd"
+    "records": [],
+    "fingerprint": "753383a227ef0aa20ab2f3e5344e6773adc451dab8a06155b0ef45271f76a4e8"
   }
 }

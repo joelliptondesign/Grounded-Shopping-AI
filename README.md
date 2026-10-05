@@ -58,4 +58,4 @@ A controlled catalog of 48 mattresses and corresponding review records supports 
 
 I translate customer needs into interaction decisions, working AI behavior, and measurable evaluations. This project connects my product design practice with hands-on engineering across conversational systems, recommendations, model integration, and testing.
 
-[Full case study](README-PORTFOLIO.md) · [How it works and local setup](docs/TECHNICAL_OVERVIEW.md) · [Evaluation approach](docs/EVALUATION.md) · [Recorded results](artifacts/evals/INDEX.md)
+[Full case study](README-PORTFOLIO.md) · [How the agent works](docs/ARCHITECTURE.md) · [Python and LLM flow](docs/AGENT-FLOW.md) · [Local setup](docs/TECHNICAL_OVERVIEW.md) · [Evaluation approach](docs/EVALUATION.md) · [Recorded results](artifacts/evals/INDEX.md)

@@ -1,6 +1,10 @@
-# Architecture Guide
+# How the Shopping Agent Works
 
-This guide explains how the shopping experience works from a product and design perspective. It assumes no programming background. File names are included only as signposts for readers who want to connect a behavior to its implementation.
+The shopping agent combines AI language understanding with application-managed memory, product selection rules, and evidence checks. This guide explains that flow for product managers, designers, and anyone curious about the experience. No programming background is required.
+
+Start with the small diagrams in [the conversation flow](#what-happens-after-a-shopper-sends-a-message). Each introduces a standard industry term and explains it in everyday language. The later sections cover recommendation decisions, response delivery, and prototype limits. For installation, see the [technical overview](TECHNICAL_OVERVIEW.md).
+
+For the overall flow and how each step maps to Python files and model calls, see the [Shopping Agent Flow companion](AGENT-FLOW.md).
 
 ## The product in one sentence
 
@@ -13,7 +17,7 @@ It is a prototype, not a live store. The 48 mattresses, prices, service details,
 The shopper interface is a mobile shopping-assistant surface with two modes that share one visual system:
 
 - **Demo** replays a scripted, fixture-backed conversation entirely in the browser. It needs no backend and is the reliable presentation path.
-- **Live** sends each turn to the engine described below, so the products, ordering, facts, comparisons and reasoning are all real.
+- **Live** sends each turn to the engine described below. It makes actual model calls and computes responses against the synthetic catalog and review fixtures. It does not access a live store.
 
 Switching modes clears the conversation. The two never share state.
 
@@ -26,63 +30,105 @@ The experience combines two kinds of decision-making:
 - The shopping agent interprets the shopper, makes bounded judgments, chooses useful products from a safe set, and writes natural responses.
 - Trusted application rules decide what is eligible, which facts are known, what can appear in the interface, and whether generated language is safe to deliver.
 
-In plain language: **the agent can exercise taste and judgment, but it cannot make up products, facts, or exceptions.**
-
-```mermaid
-flowchart LR
-    A[Shopper speaks naturally] --> B[Understand the request]
-    B --> C[Remember needs and context]
-    C --> D[Find products that meet non-negotiables]
-    D --> E[Choose useful options from that safe set]
-    E --> F[Build cards, tables, details, or a reply]
-    F --> G[Check every important claim]
-    G --> H[Show the response]
-```
+The AI interprets language and makes bounded selections. Application code stores the conversation state, enforces requirements, and checks outputs. These checks reduce unsupported behavior; they do not guarantee perfect understanding or recommendation quality.
 
 ## What happens after a shopper sends a message
 
-### 1. Understand the message
+These diagrams describe the Live conversation flow. They separate product responsibilities for clarity; each box is not a separate model call. Intent classification, preference extraction, and reference resolution normally happen together in the first structured model call. A recognized answer to a structured question can be handled directly by application code.
 
-The first model call turns ordinary language into a structured update. It identifies:
+### 1. Intent classification identifies what the customer wants
 
-- what the shopper is trying to do: get recommendations, compare, ask about a product, ask about a service, or go off topic;
-- non-negotiable requirements, such as a required size or latex exclusion;
-- preferences, such as an approximate budget or desired firmness;
-- directions, such as “cooler” or “less motion transfer,” without inventing a numeric target;
-- how important each preference is;
-- references such as “the second one,” “that mattress,” or “which of those two?”;
-- whether one focused clarification is genuinely needed.
+**Context assembly** means collecting the information needed to understand the new message. **Intent classification** identifies the customer's goal: recommendations, a comparison, a product question, a service question, or an unrelated request.
 
-The model does not decide eligibility or freely answer from its general knowledge. Its job here is to translate the conversation into a constrained, inspectable description of what the shopper means.
+```mermaid
+flowchart TD
+    A["Customer sends a message<br/>Could be about anything"]
+    B["Context assembly<br/>Add saved preferences, recent chat,<br/>products shown, and pending questions"]
+    C["Intent classification<br/>Identify the customer goal"]
+    A --> B --> C
+    C --> D["Recommendation<br/>or preference change"]
+    C --> E["Comparison"]
+    C --> F["Product or service question"]
+    C --> G["Off-topic request"]
+```
 
-### 2. Update the session's shopper profile
+For example, “Show me something cooler” asks for recommendations, while “Does this one contain latex?” asks for a product fact. A question about the weather is off-topic. Sleep needs and reactions to mattresses remain relevant shopping context.
 
-The assistant keeps a small structured profile for the current conversation session. New messages update only the fields the shopper changed. For example, “Actually, queen instead of king” changes the size while keeping the saved budget and cooling preference.
+The first call also performs **preference extraction**: translating language into supported fields such as size, budget, cooling, firmness, and their importance. **Reference resolution** connects “this one” or “the second one” to actual products from the conversation. The model returns this interpretation as structured data that application code can inspect.
 
-This is session memory, not a customer profile. It disappears when the session ends and is not stored in a database. In the shopper interface, each conversation's profile lives in the API server's memory for as long as that conversation does; restarting the server ends them all.
+### 2. Dialogue state tracking keeps the conversation memory current
 
-The assistant also keeps two short context windows:
+**Dialogue state** is the application's working memory: the shopper's preferences, products under discussion, and any question or proposal awaiting an answer. **Dialogue state tracking**, also called conversation state management, keeps that memory current as the conversation changes.
 
-- the last eight conversation messages, which help with tone and linguistic context;
-- the last four presentations, which record what the shopper actually saw, including product order and the active topic.
+```mermaid
+flowchart TD
+    A["Message + existing context"]
+    B["Preference extraction<br/>What needs or priorities changed?"]
+    C["Reference resolution<br/>Which products do they mean?"]
+    D["Validation<br/>Check structured output and product references"]
+    E["Dialogue state tracking<br/>Apply valid updates and preserve<br/>unchanged preferences"]
+    A --> B
+    A --> C
+    B --> D
+    C --> D
+    D --> E
+```
 
-The presentation history is what makes “compare the first two” dependable: “first” and “two” are checked against the actual cards or table, not guessed from prose.
+The preference profile is a JSON-shaped object, stored as a Python dictionary on the server and sent to the model as JSON. The AI proposes changes; application code merges them into the saved object. A simplified example:
 
-### 3. Route the request
+```json
+{
+  "hard_constraints": { "size": "queen" },
+  "soft_preferences": { "budget_target": 1500 },
+  "directions": { "cooling": "higher" },
+  "priorities": { "cooling": "high" }
+}
+```
 
-Different shopper goals take different paths:
+If the customer says “Actually, make it a king,” size changes to `king`; budget and cooling stay as they were. In a preference update, `null` means “no change,” not “delete the existing preference.” An explicit boolean reversal, such as “latex is fine after all,” can set that restriction to `false`. A factual question may produce no preference changes at all.
 
-| Shopper goal | What the product does |
+| Session memory | Purpose | Current scope |
+|---|---|---|
+| Structured preferences | Retain size, budget, supported needs, and priorities | Accumulate through the session independently of the recent-message window |
+| Recent conversation | Interpret follow-ups and preserve conversational context | Last 8 messages, usually 4 customer–assistant exchanges |
+| Presentation history | Identify products by what the shopper actually saw | Last 4 presentation records, including product identities, order, and topic |
+| Pending interaction and prior decision | Understand answers such as “yes” and retain decision context | Current outstanding question or recovery proposal and previous decision result |
+
+This is how an early budget remains available after the message that established it leaves the recent-message window. Arbitrary personal details that do not map to supported preference fields are not guaranteed to remain available. The model is not retrained during the conversation; the application supplies saved context on each turn.
+
+Memory is temporary. The Live API has no customer-profile database. Sessions expire after four hours of inactivity, disappear on server restart, and may be evicted when its 64-session capacity is reached. Switching Demo/Live mode clears the interface conversation.
+
+If preference extraction fails, the application preserves the last valid state. Invalid product references can trigger a retry or clarification instead of a guessed selection. A valid output format alone does not prove the AI interpreted the customer correctly.
+
+### 3. Dialogue management chooses the next action
+
+**Intent classification** identifies the request. **Dialogue management** uses that request and the current state to choose what happens next. **Routing** directs the request to the appropriate product behavior.
+
+```mermaid
+flowchart TD
+    A["Intent + current dialogue state"]
+    B["Dialogue management<br/>Choose the next action"]
+    A --> B
+    B --> C["Recommend or refine products"]
+    B --> D["Compare products"]
+    B --> E["Answer from available evidence"]
+    B --> F["Ask for clarification<br/>or offer a recovery choice"]
+    B --> G["Redirect an off-topic request"]
+```
+
+| Shopper goal or situation | What the product does |
 |---|---|
-| Get or refine recommendations | Check requirements, score eligible products, and ask the shopping agent to choose a useful safe set |
-| Compare products | Resolve exact product identities and build a comparison from represented facts |
-| Ask a product question | Look up the requested catalog fact or review topic |
+| Get or refine recommendations | Filter requirements, score eligible products, and select useful options |
+| Compare products | Resolve product identities and compare represented facts |
+| Ask a product question | Use the requested catalog fact or review evidence |
 | Ask about haul-away | Use the represented California service field |
-| Ask for something unrelated | Briefly steer back to mattress shopping while preserving the shopping context |
+| Refer ambiguously to a product | Ask a focused clarification when the reference cannot be resolved |
+| Request products when none meet the requirements | Offer verified recovery choices without silently relaxing requirements |
+| Ask for something unrelated | Briefly steer back to mattress shopping while preserving context |
 
-Only recommendation requests rerun the full filtering and scoring path. A simple factual question does not silently reshuffle the shopper's shortlist.
+A recommendation intent does not automatically mean “show products now.” The agent may need a clarification or a recovery step. A simple factual question does not rerun the full recommendation pipeline or silently reshuffle the shortlist. The next three sections describe the recommendation path.
 
-### 4. Protect non-negotiables
+### 4. Eligibility filtering protects non-negotiables
 
 Before products can be recommended, application rules remove anything that fails a true requirement. The supported requirements are:
 
@@ -102,7 +148,7 @@ The wording matters:
 
 Unknown information stays unknown. If latex status is missing while latex exclusion is required, that product cannot proceed. If an optional cooling value is missing, it is not treated as zero; the product is scored using the optional dimensions that are actually represented.
 
-### 5. Create decision-support signals
+### 5. Preference scoring provides decision support
 
 Eligible products receive repeatable scores for represented price, firmness, support, cooling, and motion isolation. The shopper's stated priorities change the relative importance of those dimensions.
 
@@ -110,7 +156,7 @@ These scores help narrow a 48-product fixture, expose tradeoffs, support testing
 
 Ordinary preference misses become transparent tradeoffs, such as “$149 above your preferred budget” or “Doesn't include California haul-away.” They do not become hidden failures.
 
-### 6. Let the shopping agent choose within the safe set
+### 6. Product selection chooses among eligible options
 
 A separate structured model step receives the eligible products, represented facts, relevant review evidence, shopper state, recent context, and the deterministic score signals. It returns one of two presentation intentions:
 
@@ -121,7 +167,7 @@ The result contains product IDs, order, an optional primary product, and short r
 
 This split is important for the experience: the interface can express confidence honestly without turning every search into either a questionnaire or a forced “best” product.
 
-### 7. Build the interface before writing the final prose
+### 7. Presentation selection chooses the response format
 
 The application chooses a renderer-independent presentation contract. That contract fixes the structure and authoritative product order before conversational wording is accepted.
 
@@ -136,7 +182,18 @@ The application chooses a renderer-independent presentation contract. That contr
 
 The shopper interface renders every one of these through one visual system, including structured elicitation, whose options appear as selectable pills and resume through the deterministic resolver. The legacy Streamlit surface renders the same contracts with basic controls and uses the typed-text fallback for elicitation.
 
-### 8. Validate customer-facing language
+### 8. Grounding and response generation produce the answer
+
+**Grounding** connects the response to represented product facts, review evidence, and the current decision. **Response generation** turns that information into customer-facing language. **Response validation** checks the generated claims before delivery.
+
+```mermaid
+flowchart TD
+    A["Grounding<br/>Assemble relevant evidence<br/>and decision results"]
+    B["Response generation<br/>Write the customer-facing explanation"]
+    C["Response validation<br/>Check claims against the evidence"]
+    D["Deliver validated wording<br/>or factual fallback copy"]
+    A --> B --> C --> D
+```
 
 The response model receives a narrow evidence packet rather than the full catalog. Generated wording is held in a buffer until the complete response passes grounding checks.
 
@@ -152,6 +209,21 @@ The checks reject, among other things:
 If the first response fails, the model receives one stricter retry. If the retry fails or the model is unavailable, the shopper receives deterministic fallback copy assembled from represented facts. Unsafe partial prose is never shown and then retracted.
 
 Structured UI can become renderable as soon as its contract is ready, which happens before the wording exists. The shopper interface uses that: it shows validated cards or a comparison table while the response is still being written, keeps a loading state visible so the turn does not look finished, and adds the approved prose when it passes validation. What is delivered early is a finished, validated artifact — never partial or unchecked wording. Turn timing records interpretation, decision, presentation, first generated token, first visible response, and completion so the latency tradeoff remains inspectable.
+
+### 9. Session updates prepare the next turn
+
+```mermaid
+flowchart TD
+    A["Save updated preferences<br/>before final prose is generated"]
+    B["Record the response and<br/>any products presented"]
+    C["Customer sends the next message"]
+    D["Context assembly<br/>Reuse the saved state and recent history"]
+    A --> B --> C --> D
+```
+
+Session updates happen at different points during a turn. Preferences are saved before final prose generation, presentation records capture the products shown, and messages are recorded as the turn completes. This diagram groups those memory responsibilities; it is not an extra model call after the response.
+
+For example, after a comparison, “Which would you pick for me?” uses both the saved preferences and the most recent compared product identities. The shopper can continue without repeating their needs or naming the products again.
 
 ## Clarification, cold starts, and recovery
 
