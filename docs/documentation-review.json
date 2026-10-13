@@ -1,34 +1,106 @@
 {
   "version": 3,
-  "base": "01accfb343e31fcdfa177b8e54c6baaad6e12270",
+  "base": "d56e0ea42b1aeecbfb60fc30c7257c6b4edd6b27",
   "groups": [
     {
       "documents": [
         "docs/TECHNICAL_OVERVIEW.md"
       ],
       "status": "reviewed",
-      "disposition": "no-impact",
-      "reason": "The pre-existing gitignore additions only ignore local Vercel metadata and environment files. Existing setup guidance already keeps environment values private; this documentation task preserves those unrelated changes.",
+      "disposition": "updated",
+      "reason": "Explorer owner guide describes concise pattern copy, optional provenance and Phase 6 core acceptance/limits. Startup remains accurate. Rechecked current owner-document changes and explorer phase evidence; renderer/explorer tests and isolated unit/evaluation checks pass. Historical browser findings remain historical.",
       "evidence": [
-        ".gitignore"
+        "explorer/server.mjs",
+        "explorer/snapshot.mjs",
+        "explorer/package.json",
+        "docs/explorer/manifest.json",
+        "explorer/README.md",
+        "docs/TECHNICAL_OVERVIEW.md",
+        "docs/explorer/PHASE-4-REPORT.md",
+        "explorer/client.js"
       ],
       "reviewer": "Codex",
-      "fingerprint": "b92b56af4070d6306898b7b3b1903e56d2d1e98f9a552a54bf5897c8fa6fc01b"
+      "fingerprint": "97205842943cadafcd040011743c1f6f831cf3a84c47078ae9457db52d918b8c"
+    },
+    {
+      "documents": [
+        "docs/workflow/README.md"
+      ],
+      "status": "reviewed",
+      "disposition": "updated",
+      "reason": "Owner workflow now documents the adopted closeout invocation, scoped publication and unchanged checker commands.",
+      "evidence": [
+        "docs/documentation-map.json",
+        "docs/decisions/DR-0006-repository-explorer.md"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "06586532880656e2174e569237ef1a42eeef3f01684573a83d82940edc18b8c0"
+    },
+    {
+      "documents": [
+        "docs/EVALUATION.md"
+      ],
+      "status": "reviewed",
+      "disposition": "updated",
+      "reason": "Evaluation guidance links bounded Phase 6 browser/Demo acceptance and offline results, distinct from Live model evaluation. Rechecked current owner-document changes and explorer phase evidence; renderer/explorer tests and isolated unit/evaluation checks pass. Historical browser findings remain historical.",
+      "evidence": [
+        "docs/EVALUATION.md",
+        "tests/frontend/renderer.test.cjs"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "b8389ea18f6697fe7df286922a5222ebaaee5d1175f3869e17fff1f2a5d08eb3"
+    },
+    {
+      "documents": [
+        "frontend/README.md"
+      ],
+      "status": "reviewed",
+      "disposition": "updated",
+      "reason": "Frontend owner guidance documents the origin-checked repeatable preview readiness ping; normal shopper behavior and vendor files are preserved. Rechecked current owner-document changes and explorer phase evidence; renderer/explorer tests and isolated unit/evaluation checks pass. Historical browser findings remain historical.",
+      "evidence": [
+        "frontend/README.md",
+        "frontend/renderer.js",
+        "frontend/preview-contract.js"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "ca74a9d16d6ba3a2435b4c0467c3def793dac58128a2c407fdc1edff6b488ebc"
+    },
+    {
+      "documents": [
+        "explorer/README.md"
+      ],
+      "status": "reviewed",
+      "disposition": "updated",
+      "reason": "Explorer owner guide describes concise pattern copy, optional provenance and Phase 6 core acceptance/limits. Startup remains accurate. Rechecked current owner-document changes and explorer phase evidence; renderer/explorer tests and isolated unit/evaluation checks pass. Historical browser findings remain historical.",
+      "evidence": [
+        "explorer/server.mjs",
+        "explorer/snapshot.mjs",
+        "explorer/package.json",
+        "docs/explorer/manifest.json",
+        "explorer/README.md",
+        "docs/TECHNICAL_OVERVIEW.md",
+        "docs/explorer/PHASE-4-REPORT.md",
+        "explorer/client.js"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "8a5f527c38693d0ae541f17dcdf412fd3231983961b621da25265b2f5f5b2335"
     }
   ],
   "projectContext": {
     "status": "reviewed",
-    "changed": false,
-    "reason": "The approved companion, architecture explanations, and navigation describe existing behavior. Capabilities and project status are unchanged; the pre-existing gitignore edits remain outside this documentation commit.",
+    "changed": true,
+    "reason": "Current context records rc.4 adoption and explicit user closeout authorization; earlier product and explorer findings are preserved, not revalidated here.",
     "reviewer": "Codex",
-    "fingerprint": "10e5397c0e770a1e32e13382d8e861e136c463746254ee46eb2aac16bf55dc57"
+    "fingerprint": "6b3fdee5c5b9c8e918d54fd5a4a3edc529b621a9b696010cfa946013be107798"
   },
   "decisionImpact": {
     "status": "reviewed",
-    "disposition": "none",
-    "reason": "User approved publishing explanatory documentation. Moving the companion and linking existing architecture introduces no product behavior, authority, architecture, or evaluation changes requiring a decision record.",
+    "disposition": "create",
+    "reason": "Preserves prior explorer decision coverage. Joel explicitly authorized adopting canonical closeout in this conversation; no product decision or explorer implementation changed.",
     "reviewer": "Codex",
-    "records": [],
-    "fingerprint": "753383a227ef0aa20ab2f3e5344e6773adc451dab8a06155b0ef45271f76a4e8"
+    "records": [
+      "docs/decisions/DR-0006-repository-explorer.md"
+    ],
+    "fingerprint": "bdb78df68bc88669126bec04cda880e29edb15495bdb0324073629bd94838f1a"
   }
 }

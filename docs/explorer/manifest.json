@@ -1,0 +1,612 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Project overview",
+      "section": "Overview",
+      "source": "docs/PROJECT-STATE.md",
+      "classification": "current"
+    },
+    {
+      "id": "readme",
+      "title": "Project introduction",
+      "section": "Project",
+      "source": "README.md",
+      "classification": "current"
+    },
+    {
+      "id": "sources",
+      "title": "Source map",
+      "section": "Project",
+      "source": "docs/SOURCE-MAP.md",
+      "classification": "current"
+    },
+    {
+      "id": "setup",
+      "title": "Getting started",
+      "section": "Getting started",
+      "source": "docs/TECHNICAL_OVERVIEW.md",
+      "classification": "current"
+    },
+    {
+      "id": "architecture",
+      "title": "How it works",
+      "section": "Architecture",
+      "source": "docs/ARCHITECTURE.md",
+      "classification": "current"
+    },
+    {
+      "id": "flow",
+      "title": "Conversation flow",
+      "section": "Architecture",
+      "source": "docs/AGENT-FLOW.md",
+      "classification": "current"
+    },
+    {
+      "id": "frontend",
+      "title": "Frontend",
+      "section": "Frontend and API",
+      "source": "frontend/README.md",
+      "classification": "current"
+    },
+    {
+      "id": "api",
+      "title": "Live API",
+      "section": "Frontend and API",
+      "source": "api/README.md",
+      "classification": "current"
+    },
+    {
+      "id": "governance",
+      "title": "Product governance",
+      "section": "Governance",
+      "source": "GOVERNANCE.md",
+      "classification": "current"
+    },
+    {
+      "id": "evaluation",
+      "title": "Evaluation overview",
+      "section": "Evaluation",
+      "source": "docs/EVALUATION.md",
+      "classification": "current"
+    },
+    {
+      "id": "integrity",
+      "title": "System integrity",
+      "section": "Evaluation",
+      "source": "docs/evaluation/SYSTEM_INTEGRITY.md",
+      "classification": "current"
+    },
+    {
+      "id": "experience",
+      "title": "Shopping experience",
+      "section": "Evaluation",
+      "source": "docs/evaluation/SHOPPING_EXPERIENCE.md",
+      "classification": "current"
+    },
+    {
+      "id": "workflow",
+      "title": "Working process",
+      "section": "Working process",
+      "source": "docs/workflow/README.md",
+      "classification": "current"
+    },
+    {
+      "id": "workflow-architecture",
+      "title": "Workflow architecture",
+      "section": "Working process",
+      "source": "docs/workflow/ARCHITECTURE.md",
+      "classification": "current"
+    },
+    {
+      "id": "decisions",
+      "title": "Decision index",
+      "section": "Working process",
+      "source": "docs/decisions/README.md",
+      "classification": "current"
+    },
+    {
+      "id": "dr-0001",
+      "title": "DR-0001 Keep the submitted user message at the top",
+      "section": "Decisions",
+      "source": "docs/decisions/DR-0001-scrolling-conflict.md",
+      "classification": "current"
+    },
+    {
+      "id": "dr-0002",
+      "title": "DR-0002: Evaluate comparison continuity against displayed products",
+      "section": "Decisions",
+      "source": "docs/decisions/DR-0002-comparison-evaluation.md",
+      "classification": "current"
+    },
+    {
+      "id": "dr-0003",
+      "title": "DR-0003 Assess decision impact in the existing review",
+      "section": "Decisions",
+      "source": "docs/decisions/DR-0003-decision-impact-review.md",
+      "classification": "current"
+    },
+    {
+      "id": "dr-0004",
+      "title": "DR-0004 Generated guidance and explicit receipt schema",
+      "section": "Decisions",
+      "source": "docs/decisions/DR-0004-generated-guidance-and-receipt-v3.md",
+      "classification": "current"
+    },
+    {
+      "id": "dr-0005",
+      "title": "DR-0005 Canonical Groundwork adoption",
+      "section": "Decisions",
+      "source": "docs/decisions/DR-0005-canonical-groundwork.md",
+      "classification": "current"
+    },
+    {
+      "id": "dr-0006",
+      "title": "DR-0006 Repository explorer source and preview boundaries",
+      "section": "Decisions",
+      "source": "docs/decisions/DR-0006-repository-explorer.md",
+      "classification": "current"
+    }
+  ],
+  "systemNodes": [
+    {
+      "id": "receive",
+      "label": "Receive message and load session",
+      "group": "live",
+      "documentation": {
+        "path": "docs/AGENT-FLOW.md",
+        "anchor": "1-the-application-receives-the-message-and-loads-memory"
+      },
+      "implementation": [
+        {
+          "path": "api/server.py",
+          "symbol": "def _run_turn("
+        },
+        {
+          "path": "api/sessions.py",
+          "symbol": "class Session:"
+        }
+      ],
+      "relatedPages": [
+        "api",
+        "flow"
+      ]
+    },
+    {
+      "id": "interpret",
+      "label": "Interpret shopper needs",
+      "group": "live",
+      "documentation": {
+        "path": "docs/AGENT-FLOW.md",
+        "anchor": "2-llm-call-one-interprets-the-message"
+      },
+      "implementation": [
+        {
+          "path": "engine/preference_extraction.py",
+          "symbol": "def extract_preference_update("
+        }
+      ],
+      "relatedPages": [
+        "flow"
+      ]
+    },
+    {
+      "id": "route",
+      "label": "Merge state and route",
+      "group": "live",
+      "documentation": {
+        "path": "docs/AGENT-FLOW.md",
+        "anchor": "3-python-updates-memory-and-decides-what-to-run"
+      },
+      "implementation": [
+        {
+          "path": "engine/conversation.py",
+          "symbol": "def process_conversation_turn("
+        },
+        {
+          "path": "engine/response_strategy.py"
+        },
+        {
+          "path": "engine/elicitation.py"
+        }
+      ],
+      "relatedPages": [
+        "flow",
+        "architecture"
+      ]
+    },
+    {
+      "id": "eligibility",
+      "label": "Eligibility, scoring and recovery",
+      "group": "live",
+      "documentation": {
+        "path": "docs/ARCHITECTURE.md",
+        "anchor": "4-eligibility-filtering-protects-non-negotiables"
+      },
+      "implementation": [
+        {
+          "path": "engine/decision.py",
+          "symbol": "def evaluate_decision("
+        },
+        {
+          "path": "engine/recovery.py"
+        }
+      ],
+      "relatedPages": [
+        "governance",
+        "architecture"
+      ]
+    },
+    {
+      "id": "select",
+      "label": "Bounded product selection",
+      "group": "live",
+      "documentation": {
+        "path": "docs/AGENT-FLOW.md",
+        "anchor": "4-llm-call-two-selects-products-when-needed"
+      },
+      "implementation": [
+        {
+          "path": "engine/shopping_selection.py",
+          "symbol": "def select_shopping_products("
+        }
+      ],
+      "relatedPages": [
+        "flow",
+        "governance"
+      ]
+    },
+    {
+      "id": "presentation",
+      "label": "Choose presentation",
+      "group": "live",
+      "documentation": {
+        "path": "docs/AGENT-FLOW.md",
+        "anchor": "5-python-chooses-the-presentation-and-grounds-the-response"
+      },
+      "implementation": [
+        {
+          "path": "engine/presentation.py",
+          "symbol": "def build_turn_presentation("
+        }
+      ],
+      "relatedPages": [
+        "flow"
+      ]
+    },
+    {
+      "id": "wording",
+      "label": "Generate and validate wording",
+      "group": "live",
+      "documentation": {
+        "path": "docs/AGENT-FLOW.md",
+        "anchor": "6-llm-call-three-writes-the-explanation"
+      },
+      "implementation": [
+        {
+          "path": "engine/conversational_response.py",
+          "symbol": "def generate_turn_response("
+        },
+        {
+          "path": "engine/grounding.py",
+          "symbol": "def validate_recommendation_text("
+        }
+      ],
+      "relatedPages": [
+        "flow",
+        "integrity"
+      ]
+    },
+    {
+      "id": "deliver",
+      "label": "Adapt and deliver",
+      "group": "live",
+      "documentation": {
+        "path": "docs/AGENT-FLOW.md",
+        "anchor": "7-python-delivers-the-response-and-retains-context"
+      },
+      "implementation": [
+        {
+          "path": "api/blocks.py",
+          "symbol": "def turn_to_blocks("
+        },
+        {
+          "path": "api/turn_stream.py",
+          "symbol": "def split_turn_payload("
+        },
+        {
+          "path": "api/server.py",
+          "symbol": "def _run_turn("
+        }
+      ],
+      "relatedPages": [
+        "api",
+        "flow"
+      ]
+    },
+    {
+      "id": "render",
+      "label": "Render shopper interface",
+      "group": "live",
+      "documentation": {
+        "path": "frontend/README.md",
+        "anchor": "shared-renderer-and-preview-preparation"
+      },
+      "implementation": [
+        {
+          "path": "frontend/Rufus Shopping Agent.dc.html",
+          "symbol": "  renderVals() {"
+        },
+        {
+          "path": "frontend/renderer.js"
+        }
+      ],
+      "relatedPages": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "catalog",
+      "label": "Synthetic catalog",
+      "group": "evidence",
+      "documentation": {
+        "path": "docs/ARCHITECTURE.md",
+        "anchor": "catalog-facts-and-review-evidence-stay-separate"
+      },
+      "implementation": [
+        {
+          "path": "engine/data.py",
+          "symbol": "SKU_CATALOG ="
+        }
+      ],
+      "relatedPages": [
+        "architecture",
+        "governance"
+      ]
+    },
+    {
+      "id": "reviews",
+      "label": "Synthetic review evidence",
+      "group": "evidence",
+      "documentation": {
+        "path": "docs/ARCHITECTURE.md",
+        "anchor": "catalog-facts-and-review-evidence-stay-separate"
+      },
+      "implementation": [
+        {
+          "path": "engine/review_data.py",
+          "symbol": "def review_slice("
+        }
+      ],
+      "relatedPages": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "demo",
+      "label": "Demo interactions",
+      "group": "demo",
+      "documentation": {
+        "path": "frontend/README.md",
+        "anchor": "shopping-mode"
+      },
+      "implementation": [
+        {
+          "path": "frontend/Rufus Shopping Agent.dc.html",
+          "symbol": "  submit(text) {"
+        }
+      ],
+      "relatedPages": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "decorative",
+      "label": "Product card assets",
+      "group": "presentation",
+      "documentation": {
+        "path": "frontend/README.md",
+        "anchor": "presentation-fixtures"
+      },
+      "implementation": [
+        {
+          "path": "frontend/Rufus Shopping Agent.dc.html",
+          "symbol": "registerProducts("
+        }
+      ],
+      "relatedPages": [
+        "frontend",
+        "governance"
+      ]
+    }
+  ],
+  "systemEdges": [
+    {
+      "from": "receive",
+      "to": "interpret",
+      "label": "Load context",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "interpret",
+      "to": "route",
+      "label": "Structured interpretation",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "route",
+      "to": "eligibility",
+      "label": "Recommendation",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "eligibility",
+      "to": "select",
+      "label": "Eligible candidates",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "select",
+      "to": "presentation",
+      "label": "Validated selection or fallback",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "route",
+      "to": "presentation",
+      "label": "Questions / comparisons bypass selection",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "eligibility",
+      "to": "presentation",
+      "label": "Clarification / recovery",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "presentation",
+      "to": "wording",
+      "label": "Fixed presentation and evidence",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "wording",
+      "to": "deliver",
+      "label": "Approved wording or factual fallback",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "deliver",
+      "to": "render",
+      "label": "Blocks and staged delivery",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "catalog",
+      "to": "eligibility",
+      "label": "Represented product facts",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "catalog",
+      "to": "route",
+      "label": "Factual evidence",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "reviews",
+      "to": "select",
+      "label": "Relevant review evidence",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "reviews",
+      "to": "wording",
+      "label": "Grounded review claims",
+      "source": {
+        "path": "docs/AGENT-FLOW.md"
+      }
+    },
+    {
+      "from": "decorative",
+      "to": "render",
+      "label": "Decorative fields only; separate from engine evidence",
+      "source": {
+        "path": "frontend/README.md"
+      }
+    }
+  ],
+  "galleryEntries": [
+    {
+      "id": "recommendations",
+      "label": "Recommendations",
+      "renderer": {
+        "path": "frontend/Rufus Shopping Agent.dc.html"
+      },
+      "contract": {
+        "path": "frontend/preview-contract.js"
+      },
+      "adapter": {
+        "path": "frontend/renderer.js"
+      },
+      "data": {
+        "path": "docs/explorer/examples.json"
+      },
+      "exampleIds": [
+        "three-options",
+        "one-option",
+        "long-explanation",
+        "missing-product"
+      ]
+    },
+    {
+      "id": "comparison",
+      "label": "Comparison",
+      "renderer": {
+        "path": "frontend/Rufus Shopping Agent.dc.html"
+      },
+      "contract": {
+        "path": "frontend/preview-contract.js"
+      },
+      "adapter": {
+        "path": "frontend/renderer.js"
+      },
+      "data": {
+        "path": "docs/explorer/examples.json"
+      },
+      "exampleIds": [
+        "ordinary-comparison",
+        "unknown-value",
+        "long-names"
+      ]
+    },
+    {
+      "id": "replies",
+      "label": "Suggested replies",
+      "renderer": {
+        "path": "frontend/Rufus Shopping Agent.dc.html"
+      },
+      "contract": {
+        "path": "frontend/preview-contract.js"
+      },
+      "adapter": {
+        "path": "frontend/renderer.js"
+      },
+      "data": {
+        "path": "docs/explorer/examples.json"
+      },
+      "exampleIds": [
+        "three-replies",
+        "long-reply",
+        "no-replies"
+      ]
+    }
+  ]
+}

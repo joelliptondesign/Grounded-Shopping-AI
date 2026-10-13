@@ -12,3 +12,5 @@ telemetry/*.jsonl
 # Vercel local project metadata and build output
 .vercel/
 .vercel_build_output/
+.vercel
+.env*

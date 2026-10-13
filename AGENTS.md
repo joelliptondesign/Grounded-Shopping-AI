@@ -50,3 +50,7 @@ Missing metadata blocks the affected generator, migration or completion check, n
 <!-- groundwork:entry:start -->
 Read [.groundwork/core/WORKFLOW.md](.groundwork/core/WORKFLOW.md) and the project's current context and owner guides before consequential work. Project-specific instructions outside this block remain authoritative within their scope. Missing metadata blocks the affected check, not all work.
 <!-- groundwork:entry:end -->
+
+## Daily closeout
+
+Joel has adopted the [Groundwork closeout procedure](.groundwork/core/WORKFLOW.md#user-triggered-daily-closeout) in this project. On his explicit voice/typed closeout request or `/closeout`, follow that procedure, including scoped commit and normal push to the existing agreed upstream. Preserve unrelated changes; do not deploy or merge.

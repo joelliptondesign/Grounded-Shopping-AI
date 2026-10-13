@@ -1,0 +1,417 @@
+{
+  "provenance": "Authored synthetic preview fixtures, October 7, 2026. Product facts and decorative fields are illustrative, not engine catalog or model evidence.",
+  "examples": [
+    {
+      "id": "three-options",
+      "label": "Three options",
+      "products": [
+        {
+          "id": "preview-a",
+          "name": "Synthetic cooling mattress",
+          "short": "Synthetic cooling mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        },
+        {
+          "id": "preview-b",
+          "name": "Synthetic support mattress",
+          "short": "Synthetic support mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        },
+        {
+          "id": "preview-c",
+          "name": "Synthetic balanced mattress",
+          "short": "Synthetic balanced mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        }
+      ],
+      "blocks": [
+        {
+          "kind": "recs",
+          "more": false,
+          "items": [
+            {
+              "id": "preview-a",
+              "role": "Preview option",
+              "why": "Synthetic cooling explanation."
+            },
+            {
+              "id": "preview-b",
+              "role": "Preview option",
+              "why": "Synthetic support explanation."
+            },
+            {
+              "id": "preview-c",
+              "role": "Preview option",
+              "why": "Synthetic balanced explanation."
+            }
+          ]
+        },
+        {
+          "kind": "feedback"
+        }
+      ],
+      "description": "Compare how three recommendation cards share the available space."
+    },
+    {
+      "id": "one-option",
+      "label": "One option",
+      "products": [
+        {
+          "id": "preview-a",
+          "name": "Synthetic cooling mattress",
+          "short": "Synthetic cooling mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        }
+      ],
+      "blocks": [
+        {
+          "kind": "recs",
+          "more": false,
+          "items": [
+            {
+              "id": "preview-a",
+              "role": "Preview option",
+              "why": "A single synthetic option with explicit view data."
+            }
+          ]
+        },
+        {
+          "kind": "feedback"
+        }
+      ],
+      "description": "Inspect a single recommendation card and its actions."
+    },
+    {
+      "id": "long-explanation",
+      "label": "Longer explanation",
+      "products": [
+        {
+          "id": "preview-a",
+          "name": "Synthetic cooling mattress",
+          "short": "Synthetic cooling mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        }
+      ],
+      "blocks": [
+        {
+          "kind": "recs",
+          "more": false,
+          "items": [
+            {
+              "id": "preview-a",
+              "role": "Preview option",
+              "why": "This synthetic explanation checks how a longer rationale wraps inside the existing product card. It describes an example tradeoff and keeps every commercial field explicit; it is not a model-generated recommendation."
+            }
+          ]
+        },
+        {
+          "kind": "feedback"
+        }
+      ],
+      "description": "Check how a longer recommendation explanation wraps below the card."
+    },
+    {
+      "id": "ordinary-comparison",
+      "label": "Ordinary rows",
+      "products": [
+        {
+          "id": "preview-a",
+          "name": "Synthetic cooling mattress",
+          "short": "Synthetic cooling mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        },
+        {
+          "id": "preview-b",
+          "name": "Synthetic support mattress",
+          "short": "Synthetic support mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        }
+      ],
+      "blocks": [
+        {
+          "kind": "compare",
+          "pair": [
+            "preview-a",
+            "preview-b"
+          ],
+          "names": [
+            "Synthetic cooling mattress",
+            "Synthetic support mattress"
+          ],
+          "rows": [
+            {
+              "label": "Cooling",
+              "a": "8/10",
+              "b": "7/10"
+            },
+            {
+              "label": "Price",
+              "a": "$1,200",
+              "b": "$1,300"
+            }
+          ]
+        },
+        {
+          "kind": "feedback"
+        }
+      ],
+      "description": "Compare two products using the same rows and values."
+    },
+    {
+      "id": "unknown-value",
+      "label": "Unknown value",
+      "products": [
+        {
+          "id": "preview-a",
+          "name": "Synthetic cooling mattress",
+          "short": "Synthetic cooling mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        },
+        {
+          "id": "preview-b",
+          "name": "Synthetic support mattress",
+          "short": "Synthetic support mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        }
+      ],
+      "blocks": [
+        {
+          "kind": "compare",
+          "pair": [
+            "preview-a",
+            "preview-b"
+          ],
+          "names": [
+            "Synthetic cooling mattress",
+            "Synthetic support mattress"
+          ],
+          "rows": [
+            {
+              "label": "Latex status",
+              "a": "Unknown",
+              "b": "Represented as latex-free"
+            }
+          ]
+        },
+        {
+          "kind": "feedback"
+        }
+      ],
+      "description": "See how the comparison handles an unavailable attribute."
+    },
+    {
+      "id": "long-names",
+      "label": "Long product names",
+      "products": [
+        {
+          "id": "preview-a",
+          "name": "Synthetic cooling mattress",
+          "short": "Synthetic cooling mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        },
+        {
+          "id": "preview-b",
+          "name": "Synthetic support mattress",
+          "short": "Synthetic support mattress",
+          "photo": "/preview/products/polar.png",
+          "rating": 4.5,
+          "reviews": 100,
+          "dollars": "1,200",
+          "cents": "00",
+          "list": "",
+          "days": 1,
+          "service": false,
+          "prime": true,
+          "delivery": "Synthetic delivery date",
+          "art": {}
+        }
+      ],
+      "blocks": [
+        {
+          "kind": "compare",
+          "pair": [
+            "preview-a",
+            "preview-b"
+          ],
+          "names": [
+            "Synthetic cooling mattress with an intentionally long descriptive name",
+            "Synthetic support mattress with another long descriptive name"
+          ],
+          "rows": [
+            {
+              "label": "Example attribute",
+              "a": "Represented value",
+              "b": "Represented value"
+            }
+          ]
+        },
+        {
+          "kind": "feedback"
+        }
+      ],
+      "description": "Check the table layout when both product names are long."
+    },
+    {
+      "id": "three-replies",
+      "label": "Three replies",
+      "products": [],
+      "blocks": [
+        {
+          "kind": "suggest",
+          "items": [
+            "Compare these options",
+            "Show something firmer",
+            "Explain the tradeoffs"
+          ]
+        }
+      ],
+      "description": "Try the suggested replies that help a shopper continue."
+    },
+    {
+      "id": "long-reply",
+      "label": "Long reply",
+      "products": [],
+      "blocks": [
+        {
+          "kind": "suggest",
+          "items": [
+            "Explain how these synthetic options differ for someone who values cooling and support"
+          ]
+        }
+      ],
+      "description": "Check how a longer suggested reply wraps."
+    },
+    {
+      "id": "no-replies",
+      "label": "No replies",
+      "products": [],
+      "blocks": [
+        {
+          "kind": "suggest",
+          "items": []
+        }
+      ],
+      "description": "See the conversation surface without suggested replies."
+    },
+    {
+      "id": "missing-product",
+      "label": "Missing product reference",
+      "expectedError": "Unknown product: preview-missing",
+      "products": [],
+      "blocks": [
+        {
+          "kind": "recs",
+          "more": false,
+          "items": [
+            {
+              "id": "preview-missing",
+              "role": "Invalid example",
+              "why": "Checks readable contract failure."
+            }
+          ]
+        }
+      ],
+      "description": "See the error state when a card references a missing product."
+    }
+  ]
+}

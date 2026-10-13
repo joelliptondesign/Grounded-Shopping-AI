@@ -85,3 +85,7 @@ node scripts/check-docs.mjs --report
 ```
 
 The runner writes evidence to a temporary source copy rather than the repository and does not make live model calls. Its overall status is nonzero whenever either requested suite fails. The documentation checker is separate; it is not installed as a commit hook or remote CI gate. Existing local environment/ignore configuration is preserved.
+
+## Local documentation explorer
+
+The optional repository explorer runs separately from the shopping app, with no model credentials or Python backend. From the repository root, use `npm ci --prefix explorer --ignore-scripts --no-audit --no-fund`, then `npm start --prefix explorer`, and open [localhost:8766](http://localhost:8766). Requires Node.js 22 or newer. [Explorer setup, source boundaries and checks](../explorer/README.md).

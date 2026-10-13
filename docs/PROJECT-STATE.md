@@ -1,6 +1,6 @@
 # Grounded Shopping AI project context
 
-Updated October 1, 2026 · Post-installation fixes · Baseline application revision d45eae6.
+Updated October 7, 2026 · Local explorer pilot through Phase 6 · Prior application baseline revision d45eae6.
 
 ## Purpose and current product
 
@@ -36,4 +36,12 @@ Pre-extraction Fix Pass 2 installs deterministic rule-and-rationale generation a
 
 Keep this overview short. Update capabilities, constraints, known gaps, and current installation status when they change. Put detailed behavior in its owning guide, decisions in the decision index, and execution evidence in test/evaluation records. Do not append a session-by-session log.
 
-Current Groundwork version: **0.1.0-rc.3**, the third release candidate for version 0.1.0. This reviewed update adds the optional structured example to the project-owned decision template; runtime and schema contracts are unchanged. See the [update evidence](work/GROUNDWORK-RC3-UPDATE.md) for verification and limits.
+Current Groundwork version: **0.1.0-rc.4**, the fourth candidate for version 0.1.0. It adds daily closeout instructions; checker code and schema contracts are unchanged. Earlier update evidence remains historical.
+
+## Repository explorer pilot
+
+October 7: Phase 1 specification and Phase 2 renderer preparation are complete locally. Authored block preparation is shared with an explicit, same-origin framed preview adapter for synthetic examples; normal Demo/Live rendering remains shared. A verification harness covers cards, comparisons and replies. Phase 3 adds a local documentation shell with curated navigation/search, rendered diagrams, source panels and hash-based snapshot refresh. Phase 4 adds a source-linked system map with selectable parts, relationships, separate Demo and Live views, and distinct engine evidence and decorative fixtures. Phase 5 adds ten named synthetic gallery states through the existing renderer, with controlled preview actions, clear/reset and source/input inspection. Preview runtime packages and font are served locally after installation. Phase 6 verifies the core explorer journeys and refines the copy for repository exploration. Its report preserves remaining browser/accessibility limits; Groundwork extraction remains deferred. [Specification](explorer/PHASE-1-SPEC.md) · [Phase 2 verification and limits](explorer/PHASE-2-REPORT.md) · [Explorer setup](../explorer/README.md) · [Phase 3 verification](explorer/PHASE-3-REPORT.md) · [Phase 6 acceptance](explorer/PHASE-6-REPORT.md). Groundwork extraction and publication remain deferred.
+
+## Daily closeout · October 12, 2026
+
+Groundwork **0.1.0-rc.4** is installed locally. Say “let’s close out for the day” or `/closeout` by voice or typing. Follow [.groundwork closeout](../.groundwork/core/WORKFLOW.md#user-triggered-daily-closeout): maintain context, run relevant checks, review task-owned changes, commit and push to the existing agreed upstream, and deliver a chat SITREP. Joel explicitly authorized adopting this procedure in this project on October 12. No deployment, merge, force-push, native slash command or automatic hook is included.

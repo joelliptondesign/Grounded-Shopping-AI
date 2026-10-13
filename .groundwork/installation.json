@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
-  "version": "0.1.0-rc.3",
-  "releaseDigest": "310d354e851f43b253224980eaf05c6147f4f3c0ffa677d7be2559199753ad58",
-  "sourceRevision": "c0f9d2ba64ffcf3e3f24b1998860ee10155dbd8c",
+  "version": "0.1.0-rc.4",
+  "releaseDigest": "2452df3a67773988594ae954a2c80f160d1ff8f3a8f3a1de180522ce57e1f313",
+  "sourceRevision": "20975b34ad7a3534797f1b357bfc621cc94c6526",
   "schemaVersions": {
     "config": 1,
     "receipt": 3,
@@ -12,7 +12,7 @@
   },
   "files": {
     ".groundwork/core/DECISIONS.md": "84a605ff167a0623da87cb832468c462750cffc9fde61a56b7253019f781fb0f",
-    ".groundwork/core/WORKFLOW.md": "f28c4d8f628478fd202353d53783a59dec1beb4078956838097be0b00a940bbe",
+    ".groundwork/core/WORKFLOW.md": "96e42942cc07a16484f98d3aa91d1e388aa25567da46eb8e6e69257abbc9c630",
     ".groundwork/core/check-docs.mjs": "76dc2d1c722982bd845e66bba28ae37f41da0df4c7315cf69977c41223fb3f78",
     ".groundwork/core/groundwork/.gitignore": "4d56952b0fb13bf8f9b6c13a6d4c34a075bac3af447636a1df4335d7576e2f97",
     ".groundwork/core/groundwork/AJV-LICENSE": "9b6a90e9be78799534e4030d71b6817271fb99aa10e261f9f9f6dec1cff4177a",

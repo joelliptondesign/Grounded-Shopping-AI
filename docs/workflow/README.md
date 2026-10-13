@@ -115,3 +115,7 @@ The bundled validator requires no runtime npm install. Schema maintainers use th
 ## Canonical installation
 
 Groundwork 0.1.0-rc.3 is pinned by `.groundwork/installation.json`. Shared implementation lives in `.groundwork/core/`; the scripts entry points are wrappers. Configuration, this project-specific workflow, decision records and offline runner remain project-owned. Follow the [shared workflow](../../.groundwork/core/WORKFLOW.md) and [decision criteria](../../.groundwork/core/DECISIONS.md). Changes to shared core belong upstream, followed by a reviewed update; do not edit managed copies. The superseded script modules are preserved under `docs/history/pre-canonical-groundwork/` as historical evidence, not active tooling. Local regression fixtures now load the installed core.
+
+## Daily closeout
+
+Groundwork 0.1.0-rc.4 adds the explicitly adopted daily closeout procedure in `.groundwork/core/WORKFLOW.md`. Invoke by voice or typing “let’s close out for the day” or `/closeout`. Use the existing review/check commands at completion; reviewed task-owned changes may be committed and pushed to the agreed upstream. Report failures honestly and preserve unrelated work. No hook or deployment is added.

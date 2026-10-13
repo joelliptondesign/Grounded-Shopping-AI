@@ -4,6 +4,7 @@ Keep significant choices and unresolved conflicts durable without recording ever
 
 | Record | Status | Decider |
 | --- | --- | --- |
+| [DR-0006 Repository explorer](DR-0006-repository-explorer.md) | Phases 2–6 scoped and implemented locally | Joel Lipton (scope), Codex (implementation) |
 | [ADR / DR-0001 User-message scrolling](DR-0001-scrolling-conflict.md) | See authoritative record | J.L. |
 | [DR-0002 Comparison evaluation](DR-0002-comparison-evaluation.md) | Implemented within authorized fixes | Codex |
 | [DR-0003 Decision impact in the existing review](DR-0003-decision-impact-review.md) | Accepted approach; two-pass implementation verified | J.L. (approach), Codex (implementation) |

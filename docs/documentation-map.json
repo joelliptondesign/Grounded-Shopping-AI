@@ -207,6 +207,17 @@
       ],
       "docs": [],
       "historical": true
+    },
+    {
+      "id": "repository-explorer",
+      "prefixes": [
+        "explorer/",
+        "docs/explorer/manifest.json"
+      ],
+      "docs": [
+        "explorer/README.md",
+        "docs/TECHNICAL_OVERVIEW.md"
+      ]
     }
   ],
   "guidanceMap": "docs/guidance-map.json"

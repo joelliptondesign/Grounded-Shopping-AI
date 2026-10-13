@@ -151,10 +151,10 @@ price, as in the demo fixtures.
 Seven product photographs cover 48 SKUs, assigned deterministically by catalog
 position so a product always shows the same image.
 
-The renderer itself is unmodified: every `sc-if`/`sc-for` block for user
+The renderer template retains the existing pattern markup: every `sc-if`/`sc-for` block for user
 messages, assistant text, progress, dots, recommendation cards, comparison
 tables, service tables, suggested replies and feedback is byte-identical to the
-design source. The integration added the mode menu; the October 1 scrolling update also adds a reserved-space element and explicit scroll/thread markers.
+design source. The integration added the mode menu; the October 1 scrolling update also adds a reserved-space element and explicit scroll/thread markers. Phase 2 preview preparation additionally marks the input read-only in preview mode and disables pointer interaction with image editors there.
 
 ## Conversation state
 
@@ -186,3 +186,13 @@ consulted for a live response.
 <!-- groundwork:generated:conversation-scrolling:end -->
 
 Implementation detail and verification limits are maintained in the [full scrolling record](../docs/decisions/DR-0001-scrolling-conflict.md).
+
+## Shared renderer and preview preparation
+
+`renderer.js` is authored block-to-view preparation shared by the normal app and preview mode. Conversation routing, timers, state and backend calls stay in the HTML component. `preview-contract.js` validates explicit synthetic examples; it never fills missing card, comparison or reply inputs from Demo defaults. Vendored `support.js` and `image-slot.js` are unchanged.
+
+A frame loaded with `?preview=1` accepts `rufus-preview:load` messages only from its same-origin parent. Payload: `{example: {id, products: [], blocks: []}}` plus the message type. Products are complete frontend view records (including explicit decorative fields), not engine catalog evidence. The frame emits `rufus-preview:event` with ready, loaded, error or controlled action details. A same-origin parent can send `rufus-preview:ping` to repeat readiness without loading inputs or calling the API. Examples replace state immediately; reset clears timers, product records, cart, feedback, draft and scroll reservation. Replies, see-more, cart and feedback report actions without running conversations. Menu/mode switching and free-text submission are disabled; direct shopping API entry points are guarded. This is a local development seam, not a security sandbox for hostile pages.
+
+Run `node --test tests/frontend/renderer.test.cjs`. The baseline view fixture was captured from revision d56e0ea before extraction; callbacks are tested separately. For manual checks, serve the repository locally and open `tests/frontend/preview-harness.html`. This is a verification harness, not the explorer shell or full gallery. The existing runtime still loads CDN dependencies; preview mode makes no model calls but is not fully offline.
+
+[Phase 2 evidence and limits](../docs/explorer/PHASE-2-REPORT.md).

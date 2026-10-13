@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Renderer verification harness</title>
+<style>body{font:16px system-ui;margin:20px}button{padding:8px;margin:4px}iframe{width:450px;height:950px;border:1px solid #ccc}pre{white-space:pre-wrap}</style>
+<h1>Renderer verification harness</h1><p>Synthetic examples, existing renderer. No shopping API calls.</p>
+<button data-example="cards">Cards</button><button data-example="comparison">Comparison</button><button data-example="replies">Replies</button><button data-example="empty">Reset</button><button data-example="invalid">Invalid data</button>
+<pre id="status">Waiting for preview</pre><iframe title="Actual shopper renderer" src="../../frontend/Rufus%20Shopping%20Agent.dc.html?preview=1"></iframe>
+<script>
+const frame=document.querySelector('iframe'), status=document.querySelector('#status');
+const product=id=>({id,name:id==='example-a'?'Synthetic cooling mattress':'Synthetic support mattress',short:id,photo:'./products/polar.png',rating:4.5,reviews:100,dollars:'1,200',cents:'00',list:'',days:1,service:false,prime:true,delivery:'Preview delivery date',art:{}});
+const examples={cards:{id:'cards',products:[product('example-a')],blocks:[{kind:'recs',more:false,items:[{id:'example-a',role:'Preview choice',why:'Synthetic example explanation.'}]},{kind:'feedback'}]},comparison:{id:'comparison',products:[product('example-a'),product('example-b')],blocks:[{kind:'compare',pair:['example-a','example-b'],names:['Synthetic cooling mattress','Synthetic support mattress'],rows:[{label:'Cooling',a:'8/10',b:'Unknown'},{label:'Price',a:'$1,200',b:'$1,300'}]}]},replies:{id:'replies',products:[],blocks:[{kind:'suggest',items:['Compare these options','A longer synthetic reply for checking wrapping']}]},empty:{id:'empty',products:[],blocks:[{kind:'suggest',items:[]}]},invalid:{id:'invalid',products:[],blocks:[{kind:'recs'}]}};
+function load(id){frame.contentWindow.postMessage({type:'rufus-preview:load',example:examples[id]},location.origin)}
+document.querySelectorAll('button').forEach(b=>b.onclick=()=>load(b.dataset.example));
+window.addEventListener('message',e=>{if(e.source!==frame.contentWindow||e.origin!==location.origin||e.data?.type!=='rufus-preview:event')return;status.textContent=JSON.stringify(e.data,null,2);if(e.data.action==='ready')load('cards')});
+</script></html>

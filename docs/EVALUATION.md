@@ -78,3 +78,13 @@ The historical deterministic run is [2026-08-29_224939](../artifacts/evals/shopp
 The latest immutable full live run is [2026-08-26_191216](../artifacts/evals/shopping-agent-core/v2/2026-08-26_191216_report.md). It predates the seven cold-start journeys and therefore covers the earlier 19-case v2 definition. System Integrity passed 19/19 with every critical invariant intact. Shopping Experience averaged 2.06/3 across 17 judged journeys (four scored 3, ten scored 2, and three scored 1). The semantic regression layer passed 12/19; seven major mismatches were recorded, including a broken compare-then-pick journey and several priority/state extraction mismatches.
 
 That live run also exposed one invalid deterministic expectation: the fuzzy-preference journey required an exact clarification string despite receiving semantically correct behavior and a 3/3 Sol score. The v2 definition now marks that wording as non-exact; the immutable run remains unchanged and transparently includes the original false failure. The current 26-case definition has not yet received a full live rerun.
+
+## Renderer preparation checks
+
+The October 7 explorer pilot adds `node --test tests/frontend/renderer.test.cjs` and a manual `tests/frontend/preview-harness.html`. These check shared view preparation and preview isolation, separately from engine deterministic evaluation or Live model quality. See [Phase 2 evidence and limits](explorer/PHASE-2-REPORT.md). The harness uses synthetic examples and does not establish successful Live turns.
+
+The separate documentation shell uses `npm test --prefix explorer` and `npm run build --prefix explorer`. These verify source/manifest handling, Markdown rendering and snapshot freshness, not shopping behavior or model quality. [Phase 3 checks and browser limits](explorer/PHASE-3-REPORT.md) and [Phase 4 system reference checks](explorer/PHASE-4-REPORT.md).
+
+[Phase 5 gallery checks](explorer/PHASE-5-REPORT.md) verify synthetic example contracts, renderer reuse, controlled clicks and zero attempted shopping session calls in the bounded browser checks. This does not evaluate Live model behavior.
+
+[Phase 6 pilot acceptance](explorer/PHASE-6-REPORT.md) combines explorer interaction checks and a preserved Demo journey with isolated offline tests. It does not rerun Live model evaluation.
