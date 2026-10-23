@@ -1,6 +1,6 @@
 /* Shared design values for the Explorer and source reader. */
 :root{
- --brand-start:#8854e9;--brand-end:#4775ed;--shadow-drawer:#20233708;--shadow-sidebar:#20233718;--ink:#202337;--muted:#6b7085;--paper:#fff;--line:#e7e8f0;--accent:#6350d8;--soft:#eeedff;--blue-soft:#edf2ff;--blue-line:#d6dfff;--surface:#f6f7fb;--connector:#b7b0ce;
+ --brand-start:#8854e9;--brand-end:#4775ed;--shadow-drawer:#20233708;--shadow-sidebar:#20233718;--ink:#202337;--muted:#6b7085;--paper:#fff;--line:#e7e8f0;--accent:#6350d8;--soft:#eeedff;--blue-soft:#edf2ff;--blue-line:#d6dfff;--success-surface:#defbe6;--success-ink:#0e6027;--success-border:#24a148;--surface:#f6f7fb;--connector:#b7b0ce;
  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-7:28px;--space-8:32px;--space-10:40px;
  --text-xs:11px;--text-sm:12px;--text-detail:13px;--text-body:14px;--text-node:16px;--text-section:17px;--text-title:30px;
  --content-max:720px;--shell-max:1120px;--sidebar-width:280px;--drawer-width:360px;--page-gutter:32px;--toolbar-height:36px;--node-width:350px;--radius:8px;

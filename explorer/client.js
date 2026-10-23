@@ -6,6 +6,10 @@ let snapshot, currentPage, downloadText='', downloadName='source.txt', diagramSe
 const text=(tag,value,className)=>{const node=document.createElement(tag);node.textContent=value;if(className)node.className=className;return node;};
 const route=(page,anchor)=>'#'+new URLSearchParams(anchor?{page,anchor}:{page});
 function notice(message=''){ $('#notice').textContent=message; }
+let toastTimer;
+function dismissToast(){clearTimeout(toastTimer);$('#toast').hidden=true;}
+function toast(message){dismissToast();$('#toast-message').textContent=message;$('#toast').hidden=false;toastTimer=setTimeout(dismissToast,5000);}
+$('#dismiss-toast').onclick=dismissToast;
 function closeMenu(){ $('#sidebar').classList.remove('open');$('#menu').setAttribute('aria-expanded','false'); }
 function metadata(){
  const m=snapshot.metadata;
@@ -45,9 +49,9 @@ async function diagrams(serial){
  }
 }
 function documentPage(page,anchor){
- currentPage=page;$('#source-button').disabled=false;
+ currentPage=page;
  const source=snapshot.sources[page.source];
- $('#breadcrumb').textContent=page.id==='overview'?'Overview':`Documentation / ${page.section}`;
+
  $('#page-meta').replaceChildren(text('span',source.classification,'badge '+source.classification),text('span','Maintained documentation'),text('span',page.source));
  $('#content').innerHTML=source.html;
  document.title=page.title+' · Grounded Shopping AI';
@@ -74,13 +78,12 @@ function closeSystemDrawer(){
  if(matchMedia('(prefers-reduced-motion: reduce)').matches)finish();else systemDrawerTimer=setTimeout(finish,parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--motion-duration'))+parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--motion-settle-buffer')));
 }
 function systemPage(params){
- clearTimeout(systemDrawerTimer);++renderSerial;currentPage=null;$('#source-button').disabled=true;selectedNavigation(null,'system');$('#breadcrumb').textContent='System';document.title='System · Grounded Shopping AI';$('#outline').replaceChildren();
+ clearTimeout(systemDrawerTimer);++renderSerial;currentPage=null;selectedNavigation(null,'system');document.title='System · Grounded Shopping AI';$('#outline').replaceChildren();
  $('#page-meta').replaceChildren(text('span','Architecture','badge'));
  const scroll=window.scrollY,previous=$('.system-canvas')?.dataset.view,focusedNode=document.activeElement?.dataset.node;
- const content=$('#content');content.replaceChildren();const header=text('header','','page-header');header.append(text('h1','System','page-title'),text('p','Follow the shopping flow. Select a step to understand its role and the code that implements it.','page-intro'));content.append(header);
- const view=params.get('view')==='demo'?'demo':'live',tabs=text('nav','','system-tabs');tabs.setAttribute('aria-label','System views');
+ const content=$('#content');content.replaceChildren();const header=text('header','','page-header page-header--borderless');const heading=text('div','','page-header-copy');header.append(heading);heading.append(text('h1','System','page-title'));content.append(header);
+ const view=params.get('view')==='demo'?'demo':'live';heading.append(text('p',view==='live'?'Follow the recommendation path and its alternate routes for questions, comparisons and recovery. Select a step to understand its role and relevant code.':'How scripted messages become responses in the browser. Open the prototype to try the interactive experience.','page-intro'));const tabs=text('nav','','system-tabs');tabs.setAttribute('aria-label','System views');
  for(const [id,label] of [['live','Live flow'],['demo','Demo flow']]){const a=text('a',label);a.href=systemRoute(null,id);if(view===id)a.setAttribute('aria-current','page');tabs.append(a);}const prototype=text('a','Open prototype ↗','prototype-link');prototype.href='http://127.0.0.1:8000/';prototype.target='_blank';prototype.rel='noopener';tabs.append(prototype);content.append(tabs);
- content.append(text('p',view==='live'?'Recommendations follow the main path. Questions, comparisons and recovery can take the alternate routes shown below.':'Demo runs scripted interactions in the browser, separately from the Live engine.','system-boundary'));
  if(view==='demo'){
   const explanation=text('div','','system-canvas demo-flow');explanation.dataset.view=view;
   explanation.append(text('p','Demo mode is the scripted shopping experience. It uses browser rules and prepared responses rather than calling the Live engine. Use Open prototype to try the conversation; this page explains how Demo works.'));
@@ -99,11 +102,16 @@ function systemPage(params){
  const main=nodes.filter(n=>n.group===(view==='demo'?'demo':'live'));
  const flow=text('nav','','system-flow clickable-map');flow.setAttribute('aria-label','Shopping flow');
  function nodeLink(n){const a=text('a',n.label,'system-node architecture-node');a.href=systemRoute(n.id,view);a.dataset.node=n.id;if(selected?.id===n.id)a.setAttribute('aria-current','true');a.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();a.click();}});return a;}
- const scale=diagramScale();systemScale[view]??=scale.initial;
+ const scale=diagramScale();if(systemScale[view]===undefined){let stored;try{stored=localStorage.getItem('shopping-explorer.diagram-size');}catch{}const value=stored===null||stored===undefined?NaN:Number(stored);systemScale[view]=Number.isFinite(value)?Math.max(scale.min,Math.min(scale.max,value)):scale.initial;}
  const tools=text('div','','diagram-tools diagram-tools--compact'),buttons=text('div','','diagram-buttons'),output=text('output',systemScale[view]+'px');output.setAttribute('aria-live','polite');
  tools.append(text('span','Diagram size'));const minus=text('button','−'),plus=text('button','+'),reset=text('button','Reset','diagram-reset');minus.setAttribute('aria-label','Smaller diagram');plus.setAttribute('aria-label','Larger diagram');
- const updateScale=()=>{canvas.style.setProperty('--node-font',systemScale[view]+'px');canvas.style.setProperty('--architecture-node-width',scale.width*systemScale[view]/scale.initial+'px');output.textContent=systemScale[view]+'px';minus.disabled=systemScale[view]<=scale.min;plus.disabled=systemScale[view]>=scale.max;if(flow.querySelector('svg'))requestAnimationFrame(drawConnections);};
- for(const button of [minus,plus,reset])button.type='button';minus.onclick=()=>{systemScale[view]=Math.max(scale.min,systemScale[view]-1);updateScale();};plus.onclick=()=>{systemScale[view]=Math.min(scale.max,systemScale[view]+1);updateScale();};reset.onclick=()=>{systemScale[view]=scale.initial;updateScale();};buttons.append(minus,output,plus,reset);tools.append(buttons);canvas.append(tools);updateScale();
+ const updateScale=()=>{try{localStorage.setItem('shopping-explorer.diagram-size',String(systemScale[view]));}catch{}canvas.style.setProperty('--node-font',systemScale[view]+'px');canvas.style.setProperty('--architecture-node-width',scale.width*systemScale[view]/scale.initial+'px');output.textContent=systemScale[view]+'px';minus.disabled=systemScale[view]<=scale.min;plus.disabled=systemScale[view]>=scale.max;if(flow.querySelector('svg'))requestAnimationFrame(drawConnections);};
+ for(const button of [minus,plus,reset])button.type='button';minus.onclick=()=>{systemScale[view]=Math.max(scale.min,systemScale[view]-1);updateScale();};plus.onclick=()=>{systemScale[view]=Math.min(scale.max,systemScale[view]+1);updateScale();};reset.onclick=()=>{systemScale[view]=scale.initial;updateScale();};buttons.append(minus,output,plus,reset);tools.append(buttons);
+ const appearance=text('div','','appearance-control'),trigger=text('button','Aa','appearance-trigger'),panel=text('div','','appearance-panel');trigger.type='button';trigger.title='Diagram text size';trigger.setAttribute('aria-label','Diagram text size');trigger.setAttribute('aria-expanded','false');panel.id='diagram-appearance';panel.setAttribute('popover','auto');panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Diagram text size');trigger.setAttribute('aria-controls',panel.id);panel.append(tools);appearance.append(trigger,panel);header.classList.add('page-header--with-action');header.append(appearance);
+ trigger.onclick=()=>{if(panel.matches(':popover-open'))panel.hidePopover();else{const rect=trigger.getBoundingClientRect();panel.style.top=(rect.bottom+8)+'px';panel.style.left=Math.max(8,Math.min(rect.right-240,innerWidth-248))+'px';panel.showPopover();(minus.disabled?plus:minus).focus({preventScroll:true});}};
+ panel.addEventListener('toggle',()=>{trigger.setAttribute('aria-expanded',String(panel.matches(':popover-open')));});
+ panel.addEventListener('keydown',event=>{if(event.key==='Escape'){event.stopPropagation();panel.hidePopover();trigger.focus({preventScroll:true});}});
+ updateScale();
  main.forEach((n,i)=>{
   const stage=view==='demo'?(i===0?'Browser Demo':null):({receive:'Message and routing',eligibility:'Recommendation selection',presentation:'Response and display'})[n.id];
   if(stage){const divider=text('header','','flow-stage');divider.append(text('h2',stage));flow.append(divider);}
@@ -115,7 +123,7 @@ function systemPage(params){
   flow.append(step);
  });canvas.append(flow);
  content.append(canvas);
- canvas.addEventListener('click',e=>{if(!e.target.closest('.diagram-tools,a,button,input,select,summary'))closeSystemDrawer();});
+ canvas.addEventListener('click',e=>{if(!e.target.closest('.appearance-control,.diagram-tools,a,button,input,select,summary'))closeSystemDrawer();});
  if(selected){
   const detail=text('aside','','system-drawer');detail.setAttribute('aria-label','Selected system part');detail.setAttribute('tabindex','-1');
   const close=text('button','Close ×','drawer-close');close.type='button';close.setAttribute('aria-label','Close step details');close.onclick=()=>{closeSystemDrawer();document.querySelector(`.system-node[data-node="${selected.id}"]`)?.focus();};detail.append(close,text('h2',selected.label));
@@ -174,7 +182,7 @@ function loadGalleryExample(){
  galleryFrame.contentWindow.postMessage({type:'rufus-preview:load',example:galleryExample},location.origin);
 }
 function galleryPage(params){
- ++renderSerial;currentPage=null;$('#source-button').disabled=true;selectedNavigation(null,'gallery');$('#breadcrumb').textContent='UI Gallery';document.title='UI Gallery · Grounded Shopping AI';$('#outline').replaceChildren();
+ ++renderSerial;currentPage=null;selectedNavigation(null,'gallery');document.title='UI Gallery · Grounded Shopping AI';$('#outline').replaceChildren();
  $('#page-meta').replaceChildren(text('span','Component patterns','badge'));
  const content=$('#content');
  const entries=snapshot.galleryEntries,entry=entries.find(g=>g.id===params.get('entry'))||entries[0];
@@ -258,21 +266,20 @@ function search(){
  for(const p of matches){const source=snapshot.sources[p.source].text.replace(/<!--[^]*?-->/g,'').replace(/[`#*|]/g,'');const index=Math.max(0,source.toLowerCase().indexOf(terms[0]));const link=document.createElement('a');link.href=route(p.id);link.append(text('strong',p.title),text('p','…'+source.slice(Math.max(0,index-35),index+135).replace(/\s+/g,' ')+'…'));link.onclick=()=>{$('#search').value='';search();};results.append(link);}
 }
 async function checkFreshness(){
- if(!snapshot||polling||document.hidden)return;polling=true;
- try {const response=await fetch('/api/freshness');if(!response.ok)throw Error();const state=await response.json();const stale=state.stale||state.snapshotId!==snapshot.metadata.snapshotId;$('#freshness').hidden=!stale;$('#freshness').textContent=stale?`Repository files have changed${state.changed.length?` (${state.changed.length} included source${state.changed.length===1?'':'s'})`:''}. Refresh to load the latest version.`:'';}
- catch{$('#freshness').hidden=false;$('#freshness').textContent='Freshness cannot be checked. The local server may be stopped; you are reading the last loaded snapshot.';}
+ if(!snapshot||polling||document.hidden||$('#refresh').disabled)return;polling=true;
+ try {const response=await fetch('/api/freshness');if(!response.ok)throw Error();const state=await response.json();const stale=state.stale||state.snapshotId!==snapshot.metadata.snapshotId;$('#freshness').hidden=!stale;$('#freshness-message').textContent=stale?`Repository files have changed${state.changed.length?` (${state.changed.length} included source${state.changed.length===1?'':'s'})`:''}. Refresh to load the latest version.`:'';}
+ catch{$('#freshness').hidden=false;$('#freshness-message').textContent='Freshness cannot be checked. The local server may be stopped; you are reading the last loaded snapshot.';}
  finally{polling=false;}
 }
 $('.skip').onclick=event=>{event.preventDefault();$('#reading').focus();$('#reading').scrollIntoView();};
 $('#search').addEventListener('input',search);
 $('#menu').onclick=()=>{const open=$('#sidebar').classList.toggle('open');$('#menu').setAttribute('aria-expanded',String(open));};
-$('#source-button').onclick=()=>{if(currentPage)location.hash=new URLSearchParams({source:currentPage.source,page:currentPage.id});};
 $('#snapshot-details').onclick=showSnapshot;
 $('#close-source').onclick=()=>$('#source-dialog').close();
 $('#source-dialog').addEventListener('close',()=>{if(new URLSearchParams(location.hash.slice(1)).has('source')){const params=new URLSearchParams(location.hash.slice(1));params.delete('source');history.replaceState(null,'',['system','gallery'].includes(params.get('section'))?'#'+params:route(currentPage?.id||'overview')); }});
 $('#download-source').onclick=()=>{const url=URL.createObjectURL(new Blob([downloadText],{type:'text/plain'}));const link=document.createElement('a');link.href=url;link.download=downloadName;link.click();URL.revokeObjectURL(url);};
-$('#refresh').onclick=async()=>{const button=$('#refresh');button.disabled=true;notice('Refreshing from repository sources…');try{const response=await fetch('/api/refresh',{method:'POST'});const result=await response.json();if(!response.ok)throw Error(result.error);snapshot=result;metadata();navigation();renderRoute();search();$('#freshness').hidden=true;notice('Updated from the repository.');}catch(error){notice('Refresh failed: '+error.message+'. The previous snapshot remains available.');}finally{button.disabled=false;}};
-document.addEventListener('click',event=>{if($('.system-drawer')&&!event.target.closest('.system-drawer,.diagram-tools,a,button,input,select,summary,#sidebar,.toolbar'))closeSystemDrawer();});
+$('#refresh').onclick=async()=>{const button=$('#refresh');button.disabled=true;$('#freshness-message').textContent='Refreshing from repository sources…';try{const response=await fetch('/api/refresh',{method:'POST'});const result=await response.json();if(!response.ok)throw Error(result.error);snapshot=result;metadata();navigation();renderRoute();search();$('#freshness').hidden=true;toast('Updated from the repository.');}catch(error){$('#freshness').hidden=false;$('#freshness-message').textContent='Refresh failed: '+error.message+'. The previous snapshot remains available.';}finally{button.disabled=false;}};
+document.addEventListener('click',event=>{if($('.system-drawer')&&!event.target.closest('.system-drawer,.appearance-control,.diagram-tools,a,button,input,select,summary,#sidebar,.toolbar'))closeSystemDrawer();});
 window.addEventListener('hashchange',renderRoute);
 window.addEventListener('focus',checkFreshness);
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){closeMenu();if(!$('#source-dialog').open)closeSystemDrawer();}});

@@ -27,3 +27,27 @@ body:has(.drawer-layout:not(.drawer-closed)) .workspace{padding-right:var(--draw
 .diagram-tools--compact .diagram-reset:hover { color: var(--accent); text-decoration: underline; }
 
 .diagram-heading-row{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-4)}.diagram-heading-row>h1,.diagram-heading-row>h2,.diagram-heading-row>h3{margin:0;min-width:0}.diagram-heading-row .diagram-tools--compact{margin:0;padding:0;flex-shrink:0}@media(max-width:500px){.diagram-heading-row{flex-wrap:wrap}.diagram-heading-row .diagram-tools--compact{margin-left:auto}}
+
+/* Status notifications: informational actionable alert and success toast. */
+.explorer-notification{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-6);font-size:var(--text-detail);line-height:1.6;background:var(--blue-soft);color:var(--ink);border-left:3px solid var(--accent);border-bottom:1px solid var(--blue-line)}
+.notification-icon{width:20px;height:20px;flex-shrink:0;margin-top:1px;color:var(--accent)}
+.notification-message{flex:1;min-width:0}
+.explorer-notification .notification-action{flex-shrink:0;color:var(--accent);font-weight:600;padding:0 var(--space-2);font-size:var(--text-detail)}
+.explorer-notification--success{position:fixed;top:var(--space-5);right:var(--space-5);width:360px;max-width:calc(100vw - var(--space-8));z-index:30;padding:var(--space-4);background:var(--success-surface);border:1px solid var(--success-border);border-left-width:3px;border-radius:var(--radius);box-shadow:0 4px 20px var(--shadow-sidebar)}
+.explorer-notification--success .notification-icon{color:var(--success-ink)}
+.explorer-notification .notification-dismiss{padding:0 var(--space-1);font-size:var(--text-section);color:var(--muted);line-height:1.5}
+@media(max-width:500px){.explorer-notification{flex-wrap:wrap}.explorer-notification .notification-action{margin-left:var(--space-7)}}
+
+.page-header.page-header--borderless{border-bottom:0;padding-bottom:0;margin-bottom:var(--space-4)}
+.explorer-notification .notification-action:disabled{opacity:.5;cursor:wait}
+
+/* Optional diagram appearance disclosure. Native popover supplies light dismissal. */
+.appearance-control{display:flex;justify-content:flex-end;margin:var(--space-2) 0}
+.appearance-trigger{border:0;background:transparent;color:var(--muted);padding:var(--space-1) var(--space-2);border-radius:var(--radius);font-size:var(--text-sm)}
+.appearance-trigger:hover,.appearance-trigger[aria-expanded=true]{background:var(--surface);color:var(--ink)}
+.appearance-panel{position:fixed;inset:auto;margin:0;width:240px;padding:var(--space-4);border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink);box-shadow:0 4px 20px var(--shadow-sidebar)}
+.appearance-panel .diagram-tools--compact{width:100%;margin:0;padding:0}
+
+.page-header--with-action{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4)}
+.page-header-copy{min-width:0}
+.page-header--with-action .appearance-control{flex-shrink:0;margin:0}

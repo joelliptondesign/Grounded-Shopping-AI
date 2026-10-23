@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "base": "aabaf541bc7f322d86a1ed0e11aaad7b00f03b65",
+  "base": "357feebea7872901e2597a225f07a1cf2cdedfe8",
   "groups": [
     {
       "documents": [
@@ -8,17 +8,14 @@
       ],
       "status": "reviewed",
       "disposition": "no-impact",
-      "reason": "Current owner guide and canonical control composition reviewed; hygiene removes retired styles and protects sizing interactions without changing product execution.",
+      "reason": "Reviewed header, shared alert/toast and global text-size popover changes. Owner guide documents saved sizing and interactions; removed obsolete shell rules. Runtime architecture is unchanged.",
       "evidence": [
-        "docs/explorer/manifest.json",
         "explorer/README.md",
         "explorer/client.js",
-        "explorer/snapshot.mjs",
-        "explorer/style.css",
-        "explorer/tests/snapshot.test.mjs"
+        "explorer/style.css"
       ],
       "reviewer": "Codex",
-      "fingerprint": "f5d207dedcc603b8ef987537b680c6f66bee7b843f69cd7f941092c87d379a76"
+      "fingerprint": "005e1d0400127ca840d5664c0b62ca57ee57a3320026efa833db07ce63f2d0a7"
     },
     {
       "documents": [
@@ -26,47 +23,29 @@
       ],
       "status": "reviewed",
       "disposition": "updated",
-      "reason": "Current owner guide and canonical control composition reviewed; hygiene removes retired styles and protects sizing interactions without changing product execution.",
+      "reason": "Reviewed header, shared alert/toast and global text-size popover changes. Owner guide documents saved sizing and interactions; removed obsolete shell rules. Runtime architecture is unchanged.",
       "evidence": [
-        "docs/explorer/manifest.json",
         "explorer/README.md",
         "explorer/client.js",
-        "explorer/snapshot.mjs",
-        "explorer/style.css",
-        "explorer/tests/snapshot.test.mjs"
+        "explorer/style.css"
       ],
       "reviewer": "Codex",
-      "fingerprint": "207dd65e80201b2473b772a9fb3e78d16fd6d88d67ddf7300f41b988b176abf2"
-    },
-    {
-      "documents": [
-        "docs/workflow/README.md"
-      ],
-      "status": "reviewed",
-      "disposition": "no-impact",
-      "reason": "Current owner guide and canonical control composition reviewed; hygiene removes retired styles and protects sizing interactions without changing product execution.",
-      "evidence": [
-        "docs/decisions/DR-0006-repository-explorer.md"
-      ],
-      "reviewer": "Codex",
-      "fingerprint": "fb95ef44259b2ca524870bb44b79f81a6e95e02b32369868516c3defe8413ad3"
+      "fingerprint": "85f80ec93e0685b97c4d38ebdeea6a214cc8015ae175816f084aa29d31d9bf98"
     }
   ],
   "projectContext": {
     "status": "reviewed",
-    "changed": true,
-    "reason": "Current context remains accurate for source-backed flow and drawers; cleanup preserves the documented boundaries.",
+    "changed": false,
+    "reason": "Explorer presentation refinements preserve existing product capabilities and purpose.",
     "reviewer": "Codex",
-    "fingerprint": "c83b3a6ffce2e7d80851c0853ee12b7e144f4c3aa3720bd4134f4305b5acbb5c"
+    "fingerprint": "efe17415c5f00553624e2581fbfd73686df23a552357685625fd6ff8629c22a6"
   },
   "decisionImpact": {
     "status": "reviewed",
-    "disposition": "update",
-    "reason": "The existing Explorer decision covers canonical shared components and interaction behavior; this pass repairs those behaviors without new product scope.",
+    "disposition": "none",
+    "reason": "Refines the existing shared Explorer design approach without a new architectural decision.",
     "reviewer": "Codex",
-    "records": [
-      "docs/decisions/DR-0006-repository-explorer.md"
-    ],
-    "fingerprint": "b6acbb00c9f4deaed4924976e1123a53d98c3d99361d643143f6e7506a791a1b"
+    "records": [],
+    "fingerprint": "79119829b0b47781431ea31c4ae1b316ef7f66a9f00357aca7e8d2a25205f85f"
   }
 }

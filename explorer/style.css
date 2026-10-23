@@ -229,46 +229,6 @@ button:focus-visible,a:focus-visible,input:focus-visible {
   margin-left: 280px;
 }
 
-.toolbar {
-  height: 76px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 36px;
-  background: var(--paper);
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  gap: 18px;
-}
-
-#breadcrumb {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.toolbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
-
-.local-label {
-  font-size: 10px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.local-label i {
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  border-radius: 100%;
-  background: #7461e8;
-  margin-right: 5px;
-}
-
 .quiet {
   border: 0;
   background: transparent;
@@ -508,14 +468,6 @@ article [id] {
   color: var(--accent);
 }
 
-#freshness {
-  background: var(--blue-soft);
-  border-bottom: 1px solid var(--blue-line);
-  padding: 12px 36px;
-  font-size: 12px;
-  color: var(--blue-ink);
-}
-
 #notice:not(:empty) {
   padding: 14px 36px;
   background: #eeedff;
@@ -620,15 +572,6 @@ article [id] {
   box-shadow: none;
   font-weight: 650;
   color: var(--ink);
-}
-
-.system-boundary {
-  padding: 0;
-  background: none;
-  border-radius: 0;
-  color: var(--muted);
-  font-size: 12px;
-  max-width: 780px;
 }
 
 .responsibility-excerpt {
@@ -743,18 +686,6 @@ article [id] {
     display: none;
   }
 
-  .local-label {
-    display: none;
-  }
-
-  .toolbar {
-    padding: 0 28px;
-  }
-
-  .toolbar-actions {
-    gap: 18px;
-  }
-
   .gallery-layout {
     grid-template-columns: minmax(360px,450px) minmax(180px,1fr);
     gap: 20px;
@@ -782,25 +713,6 @@ article [id] {
     display: block;
   }
 
-  .toolbar {
-    height: 65px;
-    padding: 0 17px;
-    gap: 10px;
-  }
-
-  #breadcrumb {
-    display: none;
-  }
-
-  .toolbar-actions {
-    gap: 14px;
-  }
-
-  .refresh {
-    font-size: 10px;
-    padding: 7px 9px;
-  }
-
   .reading-layout {
     padding: 28px 22px 70px;
   }
@@ -813,7 +725,7 @@ article [id] {
     font-size: 21px;
   }
 
-  #freshness,#notice:not(:empty) {
+  #notice:not(:empty) {
     padding: 12px 22px;
   }
 
@@ -847,16 +759,13 @@ article [id] {
 .reading-layout:has(.system-canvas) { display: block; max-width: var(--shell-max); padding: var(--space-3) var(--page-gutter) var(--space-7); }
 .reading-layout:has(.system-canvas) #reading { max-width: var(--content-max); margin: auto; }
 .reading-layout:has(.system-canvas) #page-meta { display: none; }
-body:has(.system-canvas) .toolbar { position: static; height: var(--toolbar-height); border: 0; }
-body:has(.system-canvas) .toolbar #breadcrumb { display: none; }
-body:has(.system-canvas) .toolbar-actions { margin-left: auto; }
 .system-canvas { margin: var(--space-5) auto; }
 .system-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
 .system-flow .architecture-caption { min-height: 48px; }
 .system-flow .architecture-node, .system-flow .architecture-caption { position: relative; z-index: 1; }
 .system-flow .architecture-node { margin: auto; }
 .flow-stage { width: 100%; padding: var(--space-7) 0 var(--space-5); margin: var(--space-7) 0 0; border-top: 1px solid var(--line); }
-.flow-stage:first-of-type { margin-top: 0; }
+.flow-stage:first-of-type { margin-top: 0; border-top: 0; }
 .flow-stage h2 { border: 0; padding: 0; margin: 0; font-size: var(--text-section); }
 .step-routes { display: contents; }
 .branch-label { position: absolute; transform: translateX(-50%); width: 108px; padding: var(--space-1) var(--space-2); background: var(--paper); color: var(--muted); text-align: center; font-size: var(--text-sm); line-height: 1.4; z-index: 2; }
@@ -882,3 +791,10 @@ body:has(.system-canvas) .toolbar-actions { margin-left: auto; }
  .system-flow .architecture-node { width: min(var(--architecture-node-width), 100%); }
  .branch-label { width: 64px; font-size: var(--text-xs); padding-inline: 2px; }
 }
+
+.snapshot-actions { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-1); margin-top: var(--space-2); }
+
+/* Shell-specific menu placement; header and notification visuals are shared. */
+.toolbar { display: none; align-items: center; height: var(--toolbar-height); padding: 0 var(--page-gutter); background: var(--paper); }
+@media(max-width:760px) { .toolbar { display: flex; } }
+@media(min-width:761px) and (max-width:1100px) { body:has(.drawer-layout) .toolbar { display: flex; } }
