@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "base": "357feebea7872901e2597a225f07a1cf2cdedfe8",
+  "base": "f2789db45ff30baf10dad639b49bd5870d3f4b11",
   "groups": [
     {
       "documents": [
@@ -8,14 +8,16 @@
       ],
       "status": "reviewed",
       "disposition": "no-impact",
-      "reason": "Reviewed header, shared alert/toast and global text-size popover changes. Owner guide documents saved sizing and interactions; removed obsolete shell rules. Runtime architecture is unchanged.",
+      "reason": "Canonical shared header spacing and responsive Menu rules reviewed; owner guide reflects the change. Runtime behavior is unchanged.",
       "evidence": [
         "explorer/README.md",
-        "explorer/client.js",
-        "explorer/style.css"
+        "explorer/design-system/explorer-components.css",
+        "explorer/design-system/provenance.json",
+        "explorer/design-system/workflow-tokens.css",
+        "explorer/index.html"
       ],
       "reviewer": "Codex",
-      "fingerprint": "005e1d0400127ca840d5664c0b62ca57ee57a3320026efa833db07ce63f2d0a7"
+      "fingerprint": "88200542e4161d25d5e9392d9bcdc6c97b62c6bbf6b218c287f351ce94b33e84"
     },
     {
       "documents": [
@@ -23,29 +25,31 @@
       ],
       "status": "reviewed",
       "disposition": "updated",
-      "reason": "Reviewed header, shared alert/toast and global text-size popover changes. Owner guide documents saved sizing and interactions; removed obsolete shell rules. Runtime architecture is unchanged.",
+      "reason": "Canonical shared header spacing and responsive Menu rules reviewed; owner guide reflects the change. Runtime behavior is unchanged.",
       "evidence": [
         "explorer/README.md",
-        "explorer/client.js",
-        "explorer/style.css"
+        "explorer/design-system/explorer-components.css",
+        "explorer/design-system/provenance.json",
+        "explorer/design-system/workflow-tokens.css",
+        "explorer/index.html"
       ],
       "reviewer": "Codex",
-      "fingerprint": "85f80ec93e0685b97c4d38ebdeea6a214cc8015ae175816f084aa29d31d9bf98"
+      "fingerprint": "8afe1fa99ec3e66c0f45b0026c727e4a1ab1f5632d45cc27f8238c08b06c5ba7"
     }
   ],
   "projectContext": {
     "status": "reviewed",
     "changed": false,
-    "reason": "Explorer presentation refinements preserve existing product capabilities and purpose.",
+    "reason": "Presentation refinement preserves product capabilities.",
     "reviewer": "Codex",
-    "fingerprint": "efe17415c5f00553624e2581fbfd73686df23a552357685625fd6ff8629c22a6"
+    "fingerprint": "b25bcc9d1aea029b9b875a05de72f90cf8d95a09c47bc384828ece5486351727"
   },
   "decisionImpact": {
     "status": "reviewed",
     "disposition": "none",
-    "reason": "Refines the existing shared Explorer design approach without a new architectural decision.",
+    "reason": "Existing shared-design approach retained.",
     "reviewer": "Codex",
     "records": [],
-    "fingerprint": "79119829b0b47781431ea31c4ae1b316ef7f66a9f00357aca7e8d2a25205f85f"
+    "fingerprint": "f4bc96edf5a570a51ceecf053ac888932e3a9f6b342dd9a25c31491c502f09d0"
   }
 }

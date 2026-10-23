@@ -77,3 +77,5 @@ Successful refresh hides the alert and shows a dismissible five-second success t
 Notification styling follows [Carbon notification guidance](https://www.carbondesignsystem.com/building-blocks/core/components/notification/guidelines): persistent informational feedback with one action, and a concise green success toast with icon and dismiss control. The canonical Explorer component stylesheet owns their tokens and presentation. The empty desktop toolbar is hidden so alerts start flush at the top of the content area; the responsive Menu remains accessible.
 
 Header/notification ownership: the shared `page-header--borderless` variant owns the System header treatment, and `explorer-notification` owns alert/toast visuals and disabled actions. Local CSS owns only responsive Menu placement. Retired toolbar status, breadcrumb and standalone refresh styles are removed.
+
+Page entry spacing uses the canonical explorer-page-layout component and --page-top-space token from Joel’s Workflow Explorer. Desktop headers start 48px below the content area; the mobile Menu uses the smaller shared entry spacing. Alerts remain flush at the top.
