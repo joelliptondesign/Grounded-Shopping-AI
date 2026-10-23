@@ -157,6 +157,7 @@ export async function createSnapshot(repo=root) {
     const value=sources[r.path];
     if(r.anchor && !value.headings?.some(h=>h.id===r.anchor))throw Error('Missing system documentation anchor: '+r.path+'#'+r.anchor);
     if(r.symbol){const index=value.text.split('\n').findIndex(line=>line.includes(r.symbol));if(index<0)throw Error('Missing system symbol: '+r.symbol);r.line=index+1;}
+    if(r.focus){if(typeof r.focus.match!=='string'||!r.focus.match||typeof r.focus.explanation!=='string'||!r.focus.explanation)throw Error('Invalid code explanation: '+r.path);const lines=value.text.split('\n'),index=lines.findIndex((line,i)=>i>=(r.line||1)-1&&line.includes(r.focus.match));if(index<0)throw Error('Missing explained code: '+r.path+' '+r.focus.match);r.focus.line=index+1;}
   }
   const previewAssets=Object.create(null);
   if(manifest.galleryEntries.length){const source='frontend/products/polar.png',bytes=await readPreviewImage(repo,source);hashes[source]=hash(bytes);previewAssets[source]=bytes.toString('base64');}

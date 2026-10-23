@@ -68,3 +68,12 @@ test('gallery validates explicit fixtures, hashes renderer/assets, and rejects m
  data.examples=[];await fs.writeFile(path.join(dir,'docs/explorer/examples.json'),JSON.stringify(data));await assert.rejects(()=>createSnapshot(dir),/Missing gallery example/);
  m.galleryEntries[0].renderer.path='engine/decision.py';assert.throws(()=>validateManifest(m),/Invalid gallery entry/);
 });
+
+
+test('step explanations resolve against source and reject stale code matches',async t=>{
+ const dir=await fixture();t.after(()=>fs.rm(dir,{recursive:true,force:true}));
+ const m=manifest();m.systemNodes=[{id:'receive',label:'Receive',group:'live',documentation:{path:'docs/PROJECT-STATE.md'},implementation:[{path:'api/server.py',symbol:'def take_turn',focus:{match:'history = session.history()',explanation:'Load the prior conversation before processing the request.'}}],relatedPages:['overview']}];
+ await fs.mkdir(path.join(dir,'api'));await fs.writeFile(path.join(dir,'docs/PROJECT-STATE.md'),'# Project');await fs.writeFile(path.join(dir,'api/server.py'),'def take_turn():\n    history = session.history()');await fs.writeFile(path.join(dir,'docs/explorer/manifest.json'),JSON.stringify(m));
+ assert.equal((await createSnapshot(dir)).systemNodes[0].implementation[0].focus.line,2);
+ await fs.writeFile(path.join(dir,'api/server.py'),'def take_turn():\n    return None');await assert.rejects(()=>createSnapshot(dir),/Missing explained code/);
+});

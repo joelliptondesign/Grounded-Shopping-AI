@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "base": "dc66b195a54b44ffe965d4b152416a588db91255",
+  "base": "aabaf541bc7f322d86a1ed0e11aaad7b00f03b65",
   "groups": [
     {
       "documents": [
@@ -8,40 +8,65 @@
       ],
       "status": "reviewed",
       "disposition": "no-impact",
-      "reason": "Reviewed Explorer and technical guides: consolidating stylesheet declarations preserves the documented appearance, source panel, gallery and responsive behavior.",
+      "reason": "Current owner guide and canonical control composition reviewed; hygiene removes retired styles and protects sizing interactions without changing product execution.",
       "evidence": [
-        "explorer/style.css"
+        "docs/explorer/manifest.json",
+        "explorer/README.md",
+        "explorer/client.js",
+        "explorer/snapshot.mjs",
+        "explorer/style.css",
+        "explorer/tests/snapshot.test.mjs"
       ],
       "reviewer": "Codex",
-      "fingerprint": "7bea0997ebb773be194a47b59d05d22c448e3dc93b51918e29ac5c120f133a8b"
+      "fingerprint": "f5d207dedcc603b8ef987537b680c6f66bee7b843f69cd7f941092c87d379a76"
     },
     {
       "documents": [
         "explorer/README.md"
       ],
       "status": "reviewed",
-      "disposition": "no-impact",
-      "reason": "Reviewed Explorer and technical guides: consolidating stylesheet declarations preserves the documented appearance, source panel, gallery and responsive behavior.",
+      "disposition": "updated",
+      "reason": "Current owner guide and canonical control composition reviewed; hygiene removes retired styles and protects sizing interactions without changing product execution.",
       "evidence": [
-        "explorer/style.css"
+        "docs/explorer/manifest.json",
+        "explorer/README.md",
+        "explorer/client.js",
+        "explorer/snapshot.mjs",
+        "explorer/style.css",
+        "explorer/tests/snapshot.test.mjs"
       ],
       "reviewer": "Codex",
-      "fingerprint": "12c3a7a65fb43f1041eec81e662b16888a2fe440d43c011b43469fc17f8a4c94"
+      "fingerprint": "207dd65e80201b2473b772a9fb3e78d16fd6d88d67ddf7300f41b988b176abf2"
+    },
+    {
+      "documents": [
+        "docs/workflow/README.md"
+      ],
+      "status": "reviewed",
+      "disposition": "no-impact",
+      "reason": "Current owner guide and canonical control composition reviewed; hygiene removes retired styles and protects sizing interactions without changing product execution.",
+      "evidence": [
+        "docs/decisions/DR-0006-repository-explorer.md"
+      ],
+      "reviewer": "Codex",
+      "fingerprint": "fb95ef44259b2ca524870bb44b79f81a6e95e02b32369868516c3defe8413ad3"
     }
   ],
   "projectContext": {
     "status": "reviewed",
-    "changed": false,
-    "reason": "Stylesheet ownership remains explorer/style.css; repository purpose, runtime boundaries and current project scope are unchanged.",
+    "changed": true,
+    "reason": "Current context remains accurate for source-backed flow and drawers; cleanup preserves the documented boundaries.",
     "reviewer": "Codex",
-    "fingerprint": "4d1a31b15106651283eba1f53fcef31eeecc38f4bb686587fee0e5ca590cd266"
+    "fingerprint": "c83b3a6ffce2e7d80851c0853ee12b7e144f4c3aa3720bd4134f4305b5acbb5c"
   },
   "decisionImpact": {
     "status": "reviewed",
-    "disposition": "none",
-    "reason": "Existing design and interactions are preserved; this consolidation introduces no architecture or product decision requiring a new record.",
+    "disposition": "update",
+    "reason": "The existing Explorer decision covers canonical shared components and interaction behavior; this pass repairs those behaviors without new product scope.",
     "reviewer": "Codex",
-    "records": [],
-    "fingerprint": "200526ab8220ba19397ce43ba3c033f9fe4ac41b1ea5540c202a7fa12e45bf84"
+    "records": [
+      "docs/decisions/DR-0006-repository-explorer.md"
+    ],
+    "fingerprint": "b6acbb00c9f4deaed4924976e1123a53d98c3d99361d643143f6e7506a791a1b"
   }
 }

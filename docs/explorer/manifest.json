@@ -161,7 +161,11 @@
       "implementation": [
         {
           "path": "api/server.py",
-          "symbol": "def _run_turn("
+          "symbol": "def _run_turn(",
+          "focus": {
+            "match": "history = session.history()",
+            "explanation": "Load the saved conversation before starting the engine turn. The following call passes that history and the current preferences into process_conversation_turn."
+          }
         },
         {
           "path": "api/sessions.py",
@@ -184,7 +188,11 @@
       "implementation": [
         {
           "path": "engine/preference_extraction.py",
-          "symbol": "def extract_preference_update("
+          "symbol": "def extract_preference_update(",
+          "focus": {
+            "match": "payload = {",
+            "explanation": "Package the saved preferences, recent conversation and latest message together. The model interprets this context; it does not independently remember the shopper."
+          }
         }
       ],
       "relatedPages": [
@@ -202,7 +210,11 @@
       "implementation": [
         {
           "path": "engine/conversation.py",
-          "symbol": "def process_conversation_turn("
+          "symbol": "def process_conversation_turn(",
+          "focus": {
+            "match": "preference_state = merge_preference_state(previous_state, update)",
+            "explanation": "Apply the interpreted changes to the existing preferences. Unchanged preferences remain available when application code chooses the next action."
+          }
         },
         {
           "path": "engine/response_strategy.py"
@@ -227,7 +239,11 @@
       "implementation": [
         {
           "path": "engine/decision.py",
-          "symbol": "def evaluate_decision("
+          "symbol": "def evaluate_decision(",
+          "focus": {
+            "match": "eligible, excluded = filter_eligible_skus",
+            "explanation": "Separate products that meet the hard requirements, then score only the eligible products. These operations run application code rather than a model call."
+          }
         },
         {
           "path": "engine/recovery.py"
@@ -249,7 +265,11 @@
       "implementation": [
         {
           "path": "engine/shopping_selection.py",
-          "symbol": "def select_shopping_products("
+          "symbol": "def select_shopping_products(",
+          "focus": {
+            "match": "candidates = decision_result.get",
+            "explanation": "Read the eligible ranked candidates. The next condition uses the deterministic fallback when selection is not allowed or no candidates are available."
+          }
         }
       ],
       "relatedPages": [
@@ -268,7 +288,11 @@
       "implementation": [
         {
           "path": "engine/presentation.py",
-          "symbol": "def build_turn_presentation("
+          "symbol": "def build_turn_presentation(",
+          "focus": {
+            "match": "def build_turn_presentation",
+            "explanation": "Choose the display from the completed turn. The intent and response strategy determine whether a comparison, clarification or another presentation is appropriate."
+          }
         }
       ],
       "relatedPages": [
@@ -286,7 +310,11 @@
       "implementation": [
         {
           "path": "engine/conversational_response.py",
-          "symbol": "def generate_turn_response("
+          "symbol": "def generate_turn_response(",
+          "focus": {
+            "match": "fallback = turn.get(\"response_text\")",
+            "explanation": "Retain prepared fallback copy before attempting generated wording. The function can return this copy when generation is unavailable or fails its checks."
+          }
         },
         {
           "path": "engine/grounding.py",
@@ -309,7 +337,11 @@
       "implementation": [
         {
           "path": "api/blocks.py",
-          "symbol": "def turn_to_blocks("
+          "symbol": "def turn_to_blocks(",
+          "focus": {
+            "match": "presentation = turn.get(\"presentation\")",
+            "explanation": "Read the engine\u2019s chosen presentation and its display type. The adapter converts that result into blocks for the frontend instead of choosing products again."
+          }
         },
         {
           "path": "api/turn_stream.py",
@@ -336,7 +368,11 @@
       "implementation": [
         {
           "path": "frontend/Rufus Shopping Agent.dc.html",
-          "symbol": "  renderVals() {"
+          "symbol": "  renderVals() {",
+          "focus": {
+            "match": "const blocks = globalThis.RufusRenderer.prepareBlocks(",
+            "explanation": "Pass the response blocks into the shared renderer. The following arguments supply product data and the actions available on the rendered cards and replies."
+          }
         },
         {
           "path": "frontend/renderer.js"
@@ -357,7 +393,11 @@
       "implementation": [
         {
           "path": "engine/data.py",
-          "symbol": "SKU_CATALOG ="
+          "symbol": "SKU_CATALOG =",
+          "focus": {
+            "match": "SKU_CATALOG =",
+            "explanation": "This local catalog supplies the represented product facts used by the engine. It is synthetic fixture data rather than a live inventory query."
+          }
         }
       ],
       "relatedPages": [
@@ -376,7 +416,11 @@
       "implementation": [
         {
           "path": "engine/review_data.py",
-          "symbol": "def review_slice("
+          "symbol": "def review_slice(",
+          "focus": {
+            "match": "def review_slice(",
+            "explanation": "This helper selects review evidence for the requested products. The evidence comes from the local synthetic review records."
+          }
         }
       ],
       "relatedPages": [
@@ -385,7 +429,7 @@
     },
     {
       "id": "demo",
-      "label": "Demo interactions",
+      "label": "Receive a Demo message",
       "group": "demo",
       "documentation": {
         "path": "frontend/README.md",
@@ -394,7 +438,11 @@
       "implementation": [
         {
           "path": "frontend/Rufus Shopping Agent.dc.html",
-          "symbol": "  submit(text) {"
+          "symbol": "  submit(text) {",
+          "focus": {
+            "match": "if (this.state.mode === \"live\")",
+            "explanation": "Choose the Live execution path only when the interface is in Live mode. Demo continues through the separate scripted browser behavior."
+          }
         }
       ],
       "relatedPages": [
@@ -412,12 +460,60 @@
       "implementation": [
         {
           "path": "frontend/Rufus Shopping Agent.dc.html",
-          "symbol": "registerProducts("
+          "symbol": "registerProducts(",
+          "focus": {
+            "match": "const chrome = LIVE_PRODUCT_PRESENTATION",
+            "explanation": "Look up presentation fields separately from the product data. The next lines merge those display fields into the card; they do not change the engine\u2019s eligibility rules."
+          }
         }
       ],
       "relatedPages": [
         "frontend",
         "governance"
+      ]
+    },
+    {
+      "id": "demo-route",
+      "label": "Choose a scripted response",
+      "group": "demo",
+      "documentation": {
+        "path": "frontend/README.md",
+        "anchor": "shopping-mode"
+      },
+      "implementation": [
+        {
+          "path": "frontend/Rufus Shopping Agent.dc.html",
+          "symbol": "  route(text) {",
+          "focus": {
+            "match": "const kind = this.classify(text);",
+            "explanation": "Classify the message with browser rules, then select a scripted response using the current Demo context. No model request is made."
+          }
+        }
+      ],
+      "relatedPages": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "demo-render",
+      "label": "Render the Demo response",
+      "group": "demo",
+      "documentation": {
+        "path": "frontend/README.md",
+        "anchor": "shopping-mode"
+      },
+      "implementation": [
+        {
+          "path": "frontend/Rufus Shopping Agent.dc.html",
+          "symbol": "  renderVals() {",
+          "focus": {
+            "match": "const blocks = globalThis.RufusRenderer.prepareBlocks(",
+            "explanation": "The shared renderer turns Demo response blocks into visible cards, comparisons and replies. Live uses the same rendering layer with different response data."
+          }
+        }
+      ],
+      "relatedPages": [
+        "frontend"
       ]
     }
   ],
@@ -541,6 +637,24 @@
       "source": {
         "path": "frontend/README.md"
       }
+    },
+    {
+      "to": "demo-route",
+      "label": "Scripted browser routing",
+      "source": {
+        "path": "frontend/README.md",
+        "anchor": "shopping-mode"
+      },
+      "from": "demo"
+    },
+    {
+      "to": "demo-render",
+      "label": "Prepared response blocks",
+      "source": {
+        "path": "frontend/README.md",
+        "anchor": "shopping-mode"
+      },
+      "from": "demo-route"
     }
   ],
   "galleryEntries": [

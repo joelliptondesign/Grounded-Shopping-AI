@@ -1,15 +1,7 @@
 /* Explorer design tokens and shared shell. Component rules are consolidated here;
    responsive changes follow the base components at the end of this file. */
 :root {
-  --ink: #202337;
-  --muted: #6b7085;
-  --paper: #ffffff;
-  --line: #e7e8f0;
-  --accent: #6350d8;
-  --soft: #eeedff;
-  --blue-soft: #edf2ff;
   --blue-ink: #4057a6;
-  --blue-line: #d6dfff;
   font: 15px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color: var(--ink);
   background: var(--paper);
@@ -152,7 +144,6 @@ button:focus-visible,a:focus-visible,input:focus-visible {
   font-weight: 550;
   margin-bottom: 3px;
 }
-
 
 .later {
   font-size: 10px;
@@ -640,119 +631,8 @@ article [id] {
   max-width: 780px;
 }
 
-.system-layout {
-  display: grid;
-  grid-template-columns: minmax(200px,.8fr) minmax(260px,1.5fr);
-  gap: 32px;
-  margin-top: 30px;
-}
-
-.system-map h2 {
-  border: 0;
-  padding: 0;
-  font-size: 11px;
-  color: var(--muted);
-  font-weight: 650;
-  margin: 22px 0 9px;
-}
-
-.system-node {
-  display: block;
-  text-decoration: none;
-  border: 0;
-  border-radius: 5px;
-  padding: 9px 12px;
-  margin: 2px 0;
-  font-size: 13px;
-  color: var(--ink);
-  line-height: 1.5;
-}
-
-.system-node:hover {
-  background: #f5f5f7;
-}
-
-.system-node[aria-current] {
-  border-color: #d6d9e3;
-  border: 0;
-  background: #eef0f3;
-  box-shadow: none;
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.system-detail {
-  align-self: start;
-  position: sticky;
-  top: 96px;
-  border: 0;
-  border-left: 1px solid var(--line);
-  border-radius: 0;
-  padding: 0 0 0 30px;
-}
-
-.system-detail h2 {
-  border: 0;
-  margin: 0 0 16px;
-  font-size: 20px;
-}
-
-.system-detail>a {
-  display: block;
-  font-size: 12px;
-  margin: 9px 0;
-}
-
 .responsibility-excerpt {
   font-size: 13px;
-}
-
-.system-edge {
-  border-left: 2px solid var(--line);
-  font-size: 12px;
-  border: 0;
-  padding: 0;
-  margin: 16px 0;
-}
-
-.system-edge p {
-  margin: 3px 0;
-  color: var(--muted);
-}
-
-.system-edge>a:last-child {
-  font-size: 10px;
-}
-
-.reading-layout:has(.system-layout) {
-  grid-template-columns: minmax(0,1fr);
-}
-
-.system-detail a {
-  color: var(--accent);
-  text-decoration-color: currentColor;
-}
-
-.system-detail a:hover {
-  color: #4c39b3;
-}
-
-.reading-layout:has(.system-layout) #page-meta .badge {
-  border-color: var(--line);
-  background: none;
-  border: 0;
-  padding: 0;
-  color: var(--muted);
-  letter-spacing: .5px;
-}
-
-.system-map h2:first-child {
-  margin-top: 0;
-}
-
-.system-detail h3 {
-  font-size: 13px;
-  margin: 26px 0 10px;
 }
 
 .system-tabs a[aria-current]::after {
@@ -937,18 +817,6 @@ article [id] {
     padding: 12px 22px;
   }
 
-  .system-layout {
-    grid-template-columns: 1fr;
-    gap: 26px;
-  }
-
-  .system-detail {
-    position: static;
-    border-left: 0;
-    border-top: 1px solid var(--line);
-    padding: 24px 0 0;
-  }
-
   .system-tabs a {
     padding: 0 2px 13px;
   }
@@ -973,4 +841,44 @@ article [id] {
     height: 925px;
   }
 
+}
+
+/* System composition. Shared design-system files own nodes, drawers and controls. */
+.reading-layout:has(.system-canvas) { display: block; max-width: var(--shell-max); padding: var(--space-3) var(--page-gutter) var(--space-7); }
+.reading-layout:has(.system-canvas) #reading { max-width: var(--content-max); margin: auto; }
+.reading-layout:has(.system-canvas) #page-meta { display: none; }
+body:has(.system-canvas) .toolbar { position: static; height: var(--toolbar-height); border: 0; }
+body:has(.system-canvas) .toolbar #breadcrumb { display: none; }
+body:has(.system-canvas) .toolbar-actions { margin-left: auto; }
+.system-canvas { margin: var(--space-5) auto; }
+.system-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+.system-flow .architecture-caption { min-height: 48px; }
+.system-flow .architecture-node, .system-flow .architecture-caption { position: relative; z-index: 1; }
+.system-flow .architecture-node { margin: auto; }
+.flow-stage { width: 100%; padding: var(--space-7) 0 var(--space-5); margin: var(--space-7) 0 0; border-top: 1px solid var(--line); }
+.flow-stage:first-of-type { margin-top: 0; }
+.flow-stage h2 { border: 0; padding: 0; margin: 0; font-size: var(--text-section); }
+.step-routes { display: contents; }
+.branch-label { position: absolute; transform: translateX(-50%); width: 108px; padding: var(--space-1) var(--space-2); background: var(--paper); color: var(--muted); text-align: center; font-size: var(--text-sm); line-height: 1.4; z-index: 2; }
+.system-drawer > a { display: block; font-size: var(--text-sm); margin: var(--space-2) 0; }
+.system-drawer h2 { padding: 0; border: 0; }
+.system-drawer p, .system-drawer li { font-size: var(--text-detail); }
+.system-drawer ul { text-align: left; }
+.system-code { margin: var(--space-5) 0; padding-top: var(--space-4); border-top: 1px solid var(--line); }
+.system-code > a { font-size: var(--text-sm); overflow-wrap: anywhere; }
+.system-code p { margin: var(--space-2) 0; color: var(--muted); }
+.system-code pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 360px; }
+.system-code .code-focus { display: block; background: var(--soft); outline: 1px solid var(--line); }
+.system-code summary { cursor: pointer; font-size: var(--text-sm); color: var(--accent); }
+.drawer-input { margin: var(--space-3) 0 var(--space-5); }
+.drawer-input h4 { font-size: var(--text-body); margin: 0 0 var(--space-2); }
+.drawer-input a { font-size: var(--text-sm); overflow-wrap: anywhere; }
+.system-tabs .prototype-link { margin-left: auto; color: var(--accent); white-space: nowrap; }
+.demo-step { padding: var(--space-5) 0; border-top: 1px solid var(--line); }
+.demo-step h2 { margin: 0 0 var(--space-3); padding: 0; border: 0; font-size: var(--text-section); }
+.demo-step a { font-size: var(--text-sm); overflow-wrap: anywhere; }
+@media(max-width:650px) {
+ .system-flow { padding-right: 96px; }
+ .system-flow .architecture-node { width: min(var(--architecture-node-width), 100%); }
+ .branch-label { width: 64px; font-size: var(--text-xs); padding-inline: 2px; }
 }

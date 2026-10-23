@@ -27,6 +27,12 @@ const server=http.createServer(async(req,res)=>{
     if(Object.hasOwn(localRuntimeFiles,url.pathname)||url.pathname==='/preview/runtime-resources.js'){
       res.writeHead(200,{'Content-Type':url.pathname.endsWith('.woff2')?'font/woff2':'text/javascript','Cache-Control':'public, max-age=3600','X-Content-Type-Options':'nosniff'});return res.end(await fs.readFile(path.join(output,url.pathname.split('/').pop())));
     }
+    if(url.pathname==='/source'){
+      const name=url.searchParams.get('path');if(!Object.hasOwn(snapshot.sources,name))return json(res,404,{error:'Source is not included in this snapshot'});
+      const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const source=snapshot.sources[name],rows=source.text.split('\n').map((line,i)=>`<div class="line" id="L${i+1}"><a href="#L${i+1}">${i+1}</a><code>${escape(line)}</code></div>`).join('');
+      res.writeHead(200,{'Content-Type':'text/html','Cache-Control':'no-store','Content-Security-Policy':"default-src 'none'; style-src 'self'; base-uri 'none'; frame-ancestors 'none'"});return res.end(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(name)} · Source</title><link rel="stylesheet" href="/design-system/source-view.css"><header><h1>${escape(name)}</h1><p>Inspected repository snapshot · ${escape(snapshot.metadata.revision.slice(0,8))} · ${escape(snapshot.metadata.generatedAt)}</p></header><main>${rows}</main></html>`);
+    }
     const previewFiles={'/preview/renderer.html':'frontend/Rufus Shopping Agent.dc.html','/preview/renderer.js':'frontend/renderer.js','/preview/preview-contract.js':'frontend/preview-contract.js','/preview/support.js':'frontend/support.js','/preview/image-slot.js':'frontend/image-slot.js'};
     if(previewFiles[url.pathname]){
       if(url.pathname==='/preview/renderer.html'&&url.searchParams.get('preview')!=='1')return json(res,400,{error:'Explicit preview mode required'});
@@ -36,7 +42,7 @@ const server=http.createServer(async(req,res)=>{
     if(url.pathname==='/preview/products/polar.png'){
       res.writeHead(200,{'Content-Type':'image/png','Cache-Control':'no-store'});return res.end(Buffer.from(snapshot.previewAssets['frontend/products/polar.png'],'base64'));
     }
-    const file={'/':'index.html','/index.html':'index.html','/client.js':'client.js','/style.css':'style.css'}[url.pathname];
+    const file={'/':'index.html','/index.html':'index.html','/client.js':'client.js','/style.css':'style.css','/design-system/workflow-tokens.css':'design-system/workflow-tokens.css','/design-system/explorer-components.css':'design-system/explorer-components.css','/design-system/source-view.css':'design-system/source-view.css'}[url.pathname];
     if(!file)return json(res,404,{error:'Not an explorer resource'});
     res.writeHead(200,{'Content-Type':file.endsWith('.css')?'text/css':file.endsWith('.js')?'text/javascript':'text/html','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"});
     res.end(await fs.readFile(path.join(output,file)));

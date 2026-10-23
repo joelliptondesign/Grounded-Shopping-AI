@@ -17,7 +17,7 @@ Dependencies and their lockfile belong to this directory. `node_modules/` is del
 
 ## Browse
 
-Overview presents Project Context. Documentation groups current source documents by topic, with tables, code blocks, anchors and rendered Mermaid diagrams. Search covers curated current pages and system node labels/implementation paths. System presents selectable Live, synthetic-evidence, presentation-fixture and separate Demo parts. Each part links to its responsibility document, related parts, and raw implementation sources. Stable node/view routes preserve browser history and source-panel selection. The map is curated explanation, not an observed runtime trace. UI Gallery uses the actual shopper document in an isolated same-origin frame. Ten named synthetic states cover recommendations, comparisons, suggested replies and a deliberate missing-product error. Switch examples, clear/reset the preview, inspect inputs and sources, and read controlled click events. The interface stays minimal with brand links and an active-tab underline.
+Overview presents Project Context. Documentation groups current source documents by topic, with tables, code blocks, anchors and rendered Mermaid diagrams. Search covers curated current pages and system node labels/implementation paths. System presents a top-down Live flow, alternate routes, supporting synthetic evidence and presentation assets, plus a separate Demo view. Select a node to open its nonmodal right drawer with the maintained responsibility explanation, relevant source files, highlighted important lines with step-specific explanations, and expandable implementation excerpts. Explanations are curated in the manifest; snapshot creation resolves their code matches against the declared file and fails when a match is missing. The default has no selected node. Close, Escape or empty canvas dismisses the drawer with an exit animation; reduced-motion preferences skip animation. The diagram remains available while inspecting details. Each part links to its responsibility document, related parts, and implementation source readers in separate tabs. Stable node/view routes preserve browser history and source-panel selection. The map is curated explanation, not an observed runtime trace. UI Gallery uses the actual shopper document in an isolated same-origin frame. Ten named synthetic states cover recommendations, comparisons, suggested replies and a deliberate missing-product error. Switch examples, clear/reset the preview, inspect inputs and sources, and read controlled click events. The interface stays minimal with brand links and an active-tab underline.
 
 View source opens the snapshot's original text and its SHA-256 hash. Implementation links and explicit linked historical/verification documents open the same source panel, labeled by classification. Included uncommitted content is visible. Snapshot provenance records HEAD, dirty status, generation time and included source hashes. These are identity/freshness details, not approval or correctness certification.
 
@@ -47,3 +47,25 @@ The local `/api/preview-audit` counter records attempted shopping session reques
 ## Pilot acceptance
 
 [Phase 6 checks and limits](../docs/explorer/PHASE-6-REPORT.md) cover core navigation, all gallery states, source inspection, keyboard/mobile use, refresh recovery and preserved Demo rendering. Pattern descriptions explain what to inspect; About this example retains fixture provenance. Content links use the brand color and the active pattern uses a thin tab underline. Broader accessibility and long-term browser reliability are not established by this bounded pass.
+
+
+## Shared Explorer design
+
+The Joel Knowledge Architecture Explorer is the authoritative owner of the page header, diagram, drawer and source-reader design. The generated assets under `explorer/design-system/` are synced copies, not a second design system. `provenance.json` records the owning directory and source hashes. Shopping keeps its own flow metadata, code explanations and shell/gallery composition. Do not restyle shared components with competing overrides here.
+
+To deliberately refresh from the canonical output directory:
+
+```sh
+node explorer/sync-design-system.mjs /Users/joellipton/Documents/Codex/2026-10-22/hmm/outputs
+node explorer/sync-design-system.mjs --check
+```
+
+The first command writes only the named generated assets and provenance. The check is read-only and also runs during builds, rejecting manual drift from the recorded hashes. It does not automatically pull later changes from the canonical directory. Both Explorers use the canonical CSS components; Shopping’s System keeps the same closed default, selection, slide-in/out dismissal, reduced-motion behavior and separate source-reader tab. Existing documentation and gallery source panels remain available.
+
+## System interaction contract
+
+Live flow is an interactive, top-down process diagram with divided stages. Alternate routes use labeled arrow lanes that reconnect to their destination. Selecting a node opens the nonmodal drawer; default routes have no selection. Close, Escape and empty canvas dismiss it with exit motion, or immediately under reduced-motion preferences. Evidence and display assets appear only in the consuming step’s drawer, with their role and source links.
+
+The compact diagram-size group sits on the right with its label left-aligned above the controls. Limits, default text size and node width come from shared tokens. The selection retains the chosen size; Reset restores the shared default. The canonical `diagram-tools--compact` variant owns its visual rules.
+
+Demo flow is an inline explanation without selectable nodes or a drawer. Open prototype opens the integrated shopping application at http://127.0.0.1:8000/ in a separate tab; start its documented Python server first. The application defaults to scripted Demo mode. Live mode is an explicit separate choice and can make model calls.

@@ -61,41 +61,106 @@ function documentPage(page,anchor){
  diagrams(serial).then(()=>{if(serial===renderSerial&&anchor){const target=document.getElementById(anchor);if(target&&$('#content').contains(target))target.scrollIntoView();else notice('This heading is not present in the current snapshot.');}});
 }
 function systemRoute(node,view='live'){return '#'+new URLSearchParams({section:'system',view,...(node?{node}:{})});}
-function sourceLink(reference,node,view){const a=text('a',reference.path+(reference.symbol?' · '+reference.symbol:'')+(reference.line?' · line '+reference.line:''));a.href='#'+new URLSearchParams({section:'system',view,node,source:reference.path});return a;}
+function sourceLink(reference,node,view){const a=text('a',reference.path+(reference.symbol?' · '+reference.symbol:'')+(reference.line?' · line '+reference.line:''));a.href='/source?'+new URLSearchParams({path:reference.path})+'#L'+(reference.focus?.line||reference.line||1);a.target='_blank';a.rel='noopener';return a;}
+let systemDrawerTimer,systemObserver;
+const systemScale={};
+function diagramScale(){const css=getComputedStyle(document.documentElement);return {min:parseFloat(css.getPropertyValue('--diagram-text-min')),max:parseFloat(css.getPropertyValue('--diagram-text-max')),initial:parseFloat(css.getPropertyValue('--diagram-text-default')),width:parseFloat(css.getPropertyValue('--architecture-node-width'))};}
+function closeSystemDrawer(){
+ const drawer=$('.system-drawer');if(!drawer||drawer.classList.contains('is-closing'))return;
+ drawer.classList.add('is-closing');document.querySelectorAll('.system-node[aria-current]').forEach(n=>n.removeAttribute('aria-current'));
+ const params=new URLSearchParams(location.hash.slice(1));const selectedId=params.get('node');params.delete('node');params.delete('source');history.replaceState(null,'','#'+params);
+ if(drawer.contains(document.activeElement))document.querySelector(`.system-node[data-node="${selectedId}"]`)?.focus({preventScroll:true});
+ const finish=()=>{if(drawer.isConnected){drawer.remove();$('.system-canvas')?.classList.add('drawer-closed');}};
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches)finish();else systemDrawerTimer=setTimeout(finish,parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--motion-duration'))+parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--motion-settle-buffer')));
+}
 function systemPage(params){
- ++renderSerial;currentPage=null;$('#source-button').disabled=true;selectedNavigation(null,'system');$('#breadcrumb').textContent='System';document.title='System · Grounded Shopping AI';$('#outline').replaceChildren();
+ clearTimeout(systemDrawerTimer);++renderSerial;currentPage=null;$('#source-button').disabled=true;selectedNavigation(null,'system');$('#breadcrumb').textContent='System';document.title='System · Grounded Shopping AI';$('#outline').replaceChildren();
  $('#page-meta').replaceChildren(text('span','Architecture','badge'));
- const content=$('#content');content.replaceChildren(text('h1','How the system fits together'));
- content.append(text('p','Follow a message through the system. Choose a part to see what it does, how it connects, and where it lives in the code.'));
+ const scroll=window.scrollY,previous=$('.system-canvas')?.dataset.view,focusedNode=document.activeElement?.dataset.node;
+ const content=$('#content');content.replaceChildren();const header=text('header','','page-header');header.append(text('h1','System','page-title'),text('p','Follow the shopping flow. Select a step to understand its role and the code that implements it.','page-intro'));content.append(header);
  const view=params.get('view')==='demo'?'demo':'live',tabs=text('nav','','system-tabs');tabs.setAttribute('aria-label','System views');
- for(const [id,label] of [['live','Live'],['demo','Demo']]){const a=text('a',label);a.href=systemRoute(null,id);if(view===id)a.setAttribute('aria-current','page');tabs.append(a);}content.append(tabs);
- content.append(text('p',view==='live'?'The Live path includes conversation handling, product selection, and response delivery.':'Demo runs the scripted shopping experience in the browser.','system-boundary'));
- const nodes=snapshot.systemNodes.filter(n=>view==='demo'?n.group==='demo':n.group!=='demo');
- const selected=nodes.find(n=>n.id===params.get('node'))||nodes[0];
- if(!selected){content.append(text('p','No system entries are available in this snapshot.'));return;}
- if(params.has('node')&&!nodes.some(n=>n.id===params.get('node')))notice('This node is not available in the selected view.');
- const layout=text('div','','system-layout'),map=text('nav','','system-map');map.setAttribute('aria-label','System parts');
- for(const group of view==='demo'?['demo']:['live','evidence','presentation']){
-  map.append(text('h2',group==='live'?'Live conversation':group==='evidence'?'Catalog and reviews':group==='presentation'?'UI assets':'Browser Demo'));
-  for(const n of nodes.filter(n=>n.group===group)){const a=text('a',n.label,'system-node');a.href=systemRoute(n.id,view);if(n.id===selected.id)a.setAttribute('aria-current','true');map.append(a);}
+ for(const [id,label] of [['live','Live flow'],['demo','Demo flow']]){const a=text('a',label);a.href=systemRoute(null,id);if(view===id)a.setAttribute('aria-current','page');tabs.append(a);}const prototype=text('a','Open prototype ↗','prototype-link');prototype.href='http://127.0.0.1:8000/';prototype.target='_blank';prototype.rel='noopener';tabs.append(prototype);content.append(tabs);
+ content.append(text('p',view==='live'?'Recommendations follow the main path. Questions, comparisons and recovery can take the alternate routes shown below.':'Demo runs scripted interactions in the browser, separately from the Live engine.','system-boundary'));
+ if(view==='demo'){
+  const explanation=text('div','','system-canvas demo-flow');explanation.dataset.view=view;
+  explanation.append(text('p','Demo mode is the scripted shopping experience. It uses browser rules and prepared responses rather than calling the Live engine. Use Open prototype to try the conversation; this page explains how Demo works.'));
+  for(const n of snapshot.systemNodes.filter(n=>n.group==='demo')){
+   const section=text('section','','demo-step');section.append(text('h2',n.label));
+   for(const r of n.implementation){if(r.focus)section.append(text('p',r.focus.explanation));section.append(sourceLink(r,n.id,'demo'));}
+   explanation.append(section);
+  }
+  const guide=text('a','Read the frontend guide →');guide.href=route('frontend','shopping-mode');explanation.append(guide);content.append(explanation);
+  if(params.has('node'))history.replaceState(null,'',systemRoute(null,'demo'));
+  window.scrollTo(0,0);return;
  }
- const detail=text('section','','system-detail');detail.setAttribute('aria-label','Selected system part');detail.append(text('h2',selected.label));
- const doc=snapshot.sources[selected.documentation.path];
- const page=snapshot.pages.find(p=>p.source===selected.documentation.path);
- let excerpt=doc.text;
- if(selected.documentation.anchor){const heading=doc.headings.find(h=>h.id===selected.documentation.anchor);const lines=doc.text.split('\n');const start=lines.findIndex(l=>l.replace(/^#+\s*/, '')===heading.title);let end=lines.findIndex((l,i)=>i>start&&/^## /.test(l));if(end<0)end=lines.length;excerpt=lines.slice(start+1,end).join('\n');}
- const paragraph=excerpt.split(/\n\s*\n/).find(p=>p.trim()&&!p.trim().startsWith('#')&&!p.trim().startsWith('```')&&!p.trim().startsWith('**Owner:'));
- if(paragraph)detail.append(text('p',paragraph.replace(/[`*]/g,''),'responsibility-excerpt'));
- const docLink=text('a','Read more in '+page.title+' →');docLink.href=route(page.id,selected.documentation.anchor);detail.append(docLink);
- detail.append(text('h3','Code'));
- for(const r of selected.implementation)detail.append(sourceLink(r,selected.id,view));
- const connections=snapshot.systemEdges.filter(e=>e.from===selected.id||e.to===selected.id);
- detail.append(text('h3','Relationships'));
- if(!connections.length)detail.append(text('p','This part belongs to the separate browser Demo path.'));
- for(const e of connections){const row=text('div','','system-edge');const otherId=e.from===selected.id?e.to:e.from,other=snapshot.systemNodes.find(n=>n.id===otherId);const a=text('a',(e.from===selected.id?'To ':'From ')+other.label);a.href=systemRoute(other.id,other.group==='demo'?'demo':'live');row.append(a,text('p',e.label));const evidence=text('a','Read more');const ep=snapshot.pages.find(p=>p.source===e.source.path);evidence.href=route(ep.id,e.source.anchor);row.append(evidence);detail.append(row);}
- detail.append(text('h3','Related documentation'));
- for(const id of selected.relatedPages){const p=snapshot.pages.find(p=>p.id===id),a=text('a',p.title);a.href=route(id);detail.append(a);}
- layout.append(map,detail);content.append(layout);window.scrollTo(0,0);
+ const nodes=snapshot.systemNodes.filter(n=>view==='demo'?n.group==='demo':n.group!=='demo');
+ const selected=nodes.find(n=>n.id===params.get('node'));
+ const canvas=text('div','','system-canvas drawer-layout'+(selected?'':' drawer-closed'));canvas.dataset.view=view;
+ const main=nodes.filter(n=>n.group===(view==='demo'?'demo':'live'));
+ const flow=text('nav','','system-flow clickable-map');flow.setAttribute('aria-label','Shopping flow');
+ function nodeLink(n){const a=text('a',n.label,'system-node architecture-node');a.href=systemRoute(n.id,view);a.dataset.node=n.id;if(selected?.id===n.id)a.setAttribute('aria-current','true');a.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();a.click();}});return a;}
+ const scale=diagramScale();systemScale[view]??=scale.initial;
+ const tools=text('div','','diagram-tools diagram-tools--compact'),buttons=text('div','','diagram-buttons'),output=text('output',systemScale[view]+'px');output.setAttribute('aria-live','polite');
+ tools.append(text('span','Diagram size'));const minus=text('button','−'),plus=text('button','+'),reset=text('button','Reset','diagram-reset');minus.setAttribute('aria-label','Smaller diagram');plus.setAttribute('aria-label','Larger diagram');
+ const updateScale=()=>{canvas.style.setProperty('--node-font',systemScale[view]+'px');canvas.style.setProperty('--architecture-node-width',scale.width*systemScale[view]/scale.initial+'px');output.textContent=systemScale[view]+'px';minus.disabled=systemScale[view]<=scale.min;plus.disabled=systemScale[view]>=scale.max;if(flow.querySelector('svg'))requestAnimationFrame(drawConnections);};
+ for(const button of [minus,plus,reset])button.type='button';minus.onclick=()=>{systemScale[view]=Math.max(scale.min,systemScale[view]-1);updateScale();};plus.onclick=()=>{systemScale[view]=Math.min(scale.max,systemScale[view]+1);updateScale();};reset.onclick=()=>{systemScale[view]=scale.initial;updateScale();};buttons.append(minus,output,plus,reset);tools.append(buttons);canvas.append(tools);updateScale();
+ main.forEach((n,i)=>{
+  const stage=view==='demo'?(i===0?'Browser Demo':null):({receive:'Message and routing',eligibility:'Recommendation selection',presentation:'Response and display'})[n.id];
+  if(stage){const divider=text('header','','flow-stage');divider.append(text('h2',stage));flow.append(divider);}
+  const step=text('div','','system-step');step.append(nodeLink(n));
+  const alternate=snapshot.systemEdges.filter(e=>e.from===n.id&&main.some(target=>target.id===e.to)&&main.findIndex(target=>target.id===e.to)!==i+1);
+  if(alternate.length){const routes=text('aside','','step-routes');routes.setAttribute('aria-label','Alternate paths from '+n.label);for(const e of alternate){const label=text('span',e.label,'branch-label');label.dataset.branchTo=e.to;routes.append(label);}step.append(routes);}
+  const next=main[i+1],edge=next&&snapshot.systemEdges.find(e=>e.from===n.id&&e.to===next.id);
+  if(edge){const connector=text('div',edge.label,'architecture-caption');step.append(connector);}
+  flow.append(step);
+ });canvas.append(flow);
+ content.append(canvas);
+ canvas.addEventListener('click',e=>{if(!e.target.closest('.diagram-tools,a,button,input,select,summary'))closeSystemDrawer();});
+ if(selected){
+  const detail=text('aside','','system-drawer');detail.setAttribute('aria-label','Selected system part');detail.setAttribute('tabindex','-1');
+  const close=text('button','Close ×','drawer-close');close.type='button';close.setAttribute('aria-label','Close step details');close.onclick=()=>{closeSystemDrawer();document.querySelector(`.system-node[data-node="${selected.id}"]`)?.focus();};detail.append(close,text('h2',selected.label));
+  const doc=snapshot.sources[selected.documentation.path],page=snapshot.pages.find(p=>p.source===selected.documentation.path);
+  let excerpt=doc.text;
+  if(selected.documentation.anchor){const h=doc.headings.find(h=>h.id===selected.documentation.anchor),lines=doc.text.split('\n'),start=lines.findIndex(l=>l.replace(/^#+\s*/,'')===h.title);let end=lines.findIndex((l,i)=>i>start&&/^## /.test(l));if(end<0)end=lines.length;excerpt=lines.slice(start+1,end).join('\n');}
+  const paragraph=excerpt.split(/\n\s*\n/).find(p=>p.trim()&&!/^(#|```|\*\*Owner:)/.test(p.trim()));
+  if(paragraph)detail.append(text('p',paragraph.replace(/[`*]/g,''),'responsibility-excerpt'));
+  const docLink=text('a','Read the step explanation →');docLink.href=route(page.id,selected.documentation.anchor);detail.append(docLink,text('h3','Relevant code'));
+  for(const r of selected.implementation){
+   const block=text('section','','system-code source-explanation');block.append(sourceLink(r,selected.id,view));
+   if(r.focus){const lineButton=text('button','Line '+r.focus.line,'line-reference');lineButton.type='button';lineButton.setAttribute('aria-pressed','false');block.append(lineButton,text('p',r.focus.explanation));const lines=snapshot.sources[r.path].text.split('\n'),start=Math.max(0,r.focus.line-2),pre=text('pre'),code=text('code');lines.slice(start,r.focus.line+8).forEach((line,i)=>{const span=text('span',`${start+i+1}  ${line}\n`,start+i+1===r.focus.line?'code-focus':'');code.append(span);});pre.append(code);const disclosure=text('details','','source-disclosure');disclosure.append(text('summary','Source excerpt'),pre);block.append(disclosure);lineButton.onclick=()=>{disclosure.open=true;lineButton.setAttribute('aria-pressed','true');};}
+   if(r.line){const lines=snapshot.sources[r.path].text.split('\n'),start=r.line-1;const excerpt=text('pre');excerpt.append(text('code',lines.slice(start,start+24).map((line,i)=>`${start+i+1}  ${line}`).join('\n')));const disclosure=text('details');disclosure.append(text('summary','Inspect implementation'),excerpt);block.append(disclosure);}
+   detail.append(block);
+  }
+  const supporting=snapshot.systemEdges.filter(e=>e.to===selected.id&&snapshot.systemNodes.some(n=>n.id===e.from&&['evidence','presentation'].includes(n.group)));
+  if(supporting.length){
+   detail.append(text('h3',selected.id==='render'?'Display assets':'Evidence used'));
+   for(const e of supporting){const input=snapshot.systemNodes.find(n=>n.id===e.from),section=text('section','','drawer-input');section.append(text('h4',input.label),text('p',e.label));
+    for(const r of input.implementation){if(r.focus)section.append(text('p',r.focus.explanation));section.append(sourceLink(r,selected.id,view));}detail.append(section);}
+  }
+  const connections=snapshot.systemEdges.filter(e=>(e.from===selected.id||e.to===selected.id)&&!supporting.includes(e));
+  if(connections.length){detail.append(text('h3','What connects here'));const list=text('ul');for(const e of connections){const other=snapshot.systemNodes.find(n=>n.id===(e.from===selected.id?e.to:e.from));list.append(text('li',(e.from===selected.id?'Sends to ':'Receives from ')+other.label+': '+e.label+'.'));}detail.append(list);}
+  detail.append(text('h3','Related documentation'));for(const id of selected.relatedPages){const p=snapshot.pages.find(p=>p.id===id),a=text('a',p.title);a.href=route(id);detail.append(a);}canvas.append(detail);
+ }
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('architecture-lines');svg.setAttribute('aria-hidden','true');flow.prepend(svg);
+ function drawConnections(){
+  const box=flow.getBoundingClientRect();svg.setAttribute('viewBox',`0 0 ${box.width} ${box.height}`);svg.replaceChildren();
+  const defs=document.createElementNS(svg.namespaceURI,'defs');defs.innerHTML='<marker id="shopping-flow-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" class="connector-head"/></marker>';svg.append(defs);
+  const branches=snapshot.systemEdges.filter(e=>main.some(n=>n.id===e.from)&&main.some(n=>n.id===e.to)&&main.findIndex(n=>n.id===e.to)>main.findIndex(n=>n.id===e.from)+1);
+  const nodeRect=id=>flow.querySelector(`.architecture-node[data-node="${id}"]`).getBoundingClientRect();
+  const draw=(d,e)=>{const line=document.createElementNS(svg.namespaceURI,'path');line.setAttribute('d',d);line.dataset.from=e.from;line.dataset.to=e.to;line.setAttribute('marker-end','url(#shopping-flow-head)');if([e.from,e.to].includes(selected?.id))line.classList.add('active-edge');svg.append(line);};
+  main.slice(0,-1).forEach((n,i)=>{const e=snapshot.systemEdges.find(e=>e.from===n.id&&e.to===main[i+1].id);if(!e)return;const a=nodeRect(n.id),b=nodeRect(main[i+1].id);draw(`M${a.left+a.width/2-box.left} ${a.bottom-box.top}V${b.top-box.top}`,e);});
+  branches.forEach((e,i)=>{
+   const a=nodeRect(e.from),b=nodeRect(e.to),available=box.width-(a.right-box.left),lane=a.right-box.left+available*(i+1)/(branches.length+1);
+   const y1=a.top+a.height/2-box.top,y2=b.top+b.height*(i+1)/(branches.length+1)-box.top;
+   draw(`M${a.right-box.left} ${y1}H${lane}V${y2}H${b.right-box.left}`,e);
+   const label=flow.querySelector(`.system-step:has([data-node="${e.from}"]) .branch-label[data-branch-to="${e.to}"]`);
+   if(label){const row=label.closest('.system-step').getBoundingClientRect();label.style.left=(lane-(row.left-box.left))+'px';label.style.top=(y1+24-(row.top-box.top))+'px';}
+  });
+ }
+
+ systemObserver=new ResizeObserver(drawConnections);systemObserver.observe(flow);requestAnimationFrame(drawConnections);
+ if(previous===view)window.scrollTo(0,scroll);else window.scrollTo(0,0);
+ if(focusedNode)document.querySelector(`.system-node[data-node="${selected?.id||focusedNode}"]`)?.focus({preventScroll:true});
 }
 function galleryRoute(entry,example){return '#'+new URLSearchParams({section:'gallery',entry,example});}
 function probeGallery(){
@@ -167,6 +232,7 @@ function showSnapshot(){
 }
 function renderRoute(){
  if(!snapshot)return;
+ systemObserver?.disconnect();systemObserver=null;clearTimeout(systemDrawerTimer);
  notice();closeMenu();
  const params=new URLSearchParams(location.hash.slice(1));
  if(params.has('source')&&params.get('section')==='gallery'){galleryPage(params);openSource(params.get('source'));return;}
@@ -206,7 +272,8 @@ $('#close-source').onclick=()=>$('#source-dialog').close();
 $('#source-dialog').addEventListener('close',()=>{if(new URLSearchParams(location.hash.slice(1)).has('source')){const params=new URLSearchParams(location.hash.slice(1));params.delete('source');history.replaceState(null,'',['system','gallery'].includes(params.get('section'))?'#'+params:route(currentPage?.id||'overview')); }});
 $('#download-source').onclick=()=>{const url=URL.createObjectURL(new Blob([downloadText],{type:'text/plain'}));const link=document.createElement('a');link.href=url;link.download=downloadName;link.click();URL.revokeObjectURL(url);};
 $('#refresh').onclick=async()=>{const button=$('#refresh');button.disabled=true;notice('Refreshing from repository sources…');try{const response=await fetch('/api/refresh',{method:'POST'});const result=await response.json();if(!response.ok)throw Error(result.error);snapshot=result;metadata();navigation();renderRoute();search();$('#freshness').hidden=true;notice('Updated from the repository.');}catch(error){notice('Refresh failed: '+error.message+'. The previous snapshot remains available.');}finally{button.disabled=false;}};
+document.addEventListener('click',event=>{if($('.system-drawer')&&!event.target.closest('.system-drawer,.diagram-tools,a,button,input,select,summary,#sidebar,.toolbar'))closeSystemDrawer();});
 window.addEventListener('hashchange',renderRoute);
 window.addEventListener('focus',checkFreshness);
-document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu();});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){closeMenu();if(!$('#source-dialog').open)closeSystemDrawer();}});
 try{const response=await fetch('/api/snapshot');if(!response.ok)throw Error('Snapshot could not load');snapshot=await response.json();metadata();navigation();renderRoute();checkFreshness();setInterval(checkFreshness,15000);}catch(error){$('#content').replaceChildren(text('h1','Explorer unavailable'),text('p',error.message));}
